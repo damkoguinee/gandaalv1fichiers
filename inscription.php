@@ -63,9 +63,14 @@ if (isset($_GET['enseignant'])) {
 								$mensualite=$mens['mensualite'];
 								$idact=$panier->h($valueact);
 								
-								$DB->insert('INSERT INTO inscriptactivites (idact, matinscrit, mensualite, promoact,  dateop) VALUES(?, ?, ?, ?, now())', array($valueact, $initiale.$matricule, $mensualite, $annee));
+								$DB->insert('INSERT INTO inscriptactivites (idact, matinscrit, mensualite, promoact,  dateop) VALUES(?, ?, ?, ?, now())', array($valueact, $matricule, $mensualite, $annee));
 							}
 						}?>
+						<div class="alert alert-success">
+							Elève ré-inscrit avec succèe!!! 
+							<a href="fiche_elevegen.php?fiche_eleve=<?=$matricule;?>&promo=<?=$_SESSION['promo'];?>" class="btn btn-info">Consulter la fiche élève</a>
+							<a href="comptabilite.php?eleve=<?=$matricule;?>" class="btn btn-info">Faire le Paiement</a>
+						</div>
 
 						<div class="alert alert-success">Reinscription reussie !!!</div><?php
 
