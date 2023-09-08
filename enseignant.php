@@ -757,7 +757,6 @@ if (isset($_SESSION['pseudo'])) {
 								$prodm=$DB->query("SELECT enseignant.matricule as matricule, nomen, prenomen, phone from enseignant inner join enseignantencours on enseignant.matricule=matriculens left join contact on enseignant.matricule=contact.matricule  inner join niveau on enseignant.matricule=niveau.matricule where nom='{$_SESSION['niveauf']}' and promo='{$_SESSION['promo']}'  order by(prenomen)");
 
 							}else{
-
 								$prodm=$DB->query("SELECT  *from enseignant inner join enseignantencours on enseignant.matricule=matriculens left join contact on enseignant.matricule=contact.matricule where promo='{$_SESSION['promo']}' order by(prenomen)");
 							}?>
 

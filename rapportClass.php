@@ -534,6 +534,17 @@ class Rapport
 			$niveauactu='lycee';
 			$classeactu='11ème Année Scientifique';
 
+		}elseif ($codef=='11SS') {
+			if ($codef=='11SS') {
+				$codefsuiv='12SS';
+			}else{
+				$codefsuiv='12eme S.S';
+			}
+			$niveau='lycee';
+			$classe='12ème Année Mathématiques';
+			$niveauactu='lycee';
+			$classeactu='11ème Année Sciences Sociales';
+
 		}elseif ($codef=='11se' or $codef=='11eme S.E') {
 
 			if ($codef=='11se') {
@@ -562,6 +573,20 @@ class Rapport
 			$niveauactu='lycee';
 			$classeactu='12ème Année Scientifique';
 
+		}elseif ($codef=='12SS') {
+
+			if ($codef=='12SS') {
+				$codefsuiv='TSS';
+			}else{
+				$codefsuiv='T S.S';
+			}
+
+			$codefsuiv='TSS';
+			$niveau='lycee';
+			$classe='Terminale SS';
+			$niveauactu='lycee';
+			$classeactu='12ème Année Sciences Sociales';
+
 		}elseif ($codef=='12se' or $codef=='12eme S.E') {
 
 			if ($codef=='12se') {
@@ -575,6 +600,45 @@ class Rapport
 			$classe='Terminale SE';
 			$niveauactu='lycee';
 			$classeactu='12ème Année Littéraire';
+		}elseif ($codef=='tse') {
+
+			if ($codef=='tse') {
+				$codefsuiv='tse';
+			}else{
+				$codefsuiv='T S.E';
+			}
+
+			$codefsuiv='tse';
+			$niveau='lycee';
+			$classe='Terminale SE';
+			$niveauactu='lycee';
+			$classeactu='Terminale Sciences expérimentales';
+		}elseif ($codef=='TSS') {
+
+			if ($codef=='TSS') {
+				$codefsuiv='TSS';
+			}else{
+				$codefsuiv='T S.E';
+			}
+
+			$codefsuiv='TSS';
+			$niveau='lycee';
+			$classe='Terminale SE';
+			$niveauactu='lycee';
+			$classeactu='Terminale Sciences Sociales';
+		}elseif ($codef=='tsm') {
+
+			if ($codef=='tsm') {
+				$codefsuiv='tsm';
+			}else{
+				$codefsuiv='T S.E';
+			}
+
+			$codefsuiv='tsm';
+			$niveau='lycee';
+			$classe='Terminale SE';
+			$niveauactu='lycee';
+			$classeactu='Terminale Sciences Maths';
 		}else{
 
 			$codefsuiv='';

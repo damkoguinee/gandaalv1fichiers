@@ -593,9 +593,7 @@ if (isset($_SESSION['pseudo'])) {
 														</select>
 
 													</div>
-													<input  type="hidden" value="1" class="form-select" type="number" name="auto">
-
-													
+													<input  type="hidden" value="5" class="form-select" type="number" name="auto">													
 												</div>
 
 												<div class="mb-1">

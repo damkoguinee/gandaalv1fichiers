@@ -5,7 +5,6 @@ if (isset($_GET['enseignant'])) {
 }else{
 	require 'headerv2.php';
 }
-
 if (isset($_SESSION['pseudo'])) {
 	if (isset($_GET['enseignant'])) {
 		require 'fiche_eleve.php';
@@ -215,13 +214,19 @@ if (isset($_SESSION['pseudo'])) {
 											}
 										}
 
-										$DB->insert('UPDATE elevepreinscription SET etat=? WHERE matricule = ?', array('traite', $initiale.$matricule));?>	
-
-										<div class="alert alert-success">Elève inscrit avec succèe!!!</div><?php
+										$DB->insert('UPDATE elevepreinscription SET etat=? WHERE matricule = ?', array('traite', $initiale.$matricule));
 
 										$_SESSION['matricule']=($matricule);
 										$_SESSION['etat']="reussi";
-										$etat=$_SESSION['etat'];
+										$etat=$_SESSION['etat'];?>
+
+										<div class="alert alert-success">
+											Elève inscrit avec succèe!!! 
+											<a href="fiche_elevegen.php?fiche_eleve=<?=$initiale.$matricule;?>&promo=<?=$_SESSION['promo'];?>" class="btn btn-info">Consulter la fiche élève</a>
+											<a href="comptabilite.php?eleve=<?=$initiale.$matricule;?>" class="btn btn-info">Faire le Paiement</a>
+										</div><?php
+
+										//header("Location:fiche_elevegen.php?affichage&fiche_eleve=".$_SESSION['matricule']);	
 
 									}
 
