@@ -376,7 +376,7 @@ if (isset($_SESSION['pseudo'])) {
 						$thoraire=$panier->h((($_POST['thoraire'])));
 
 						$prime=0;
-						$ss=0;
+						$ss=$panier->h((($_POST['ss'])));;
 
 						$agencebanq=$panier->h((($_POST['agenceb'])));
 						$numbanq=$panier->h((($_POST['numb'])));
@@ -403,7 +403,12 @@ if (isset($_SESSION['pseudo'])) {
 						}
 						$DB->insert('UPDATE enseignant SET matricule=?, nomen = ?, prenomen=?, sexe=?, numbanq=?, agencebanq=?, datenaiss=?, lieunaiss=?, embauche=?, adresse=? WHERE matricule = ?', array($matc, $nom, $prenom, $sexe, $numbanq, $agencebanq, $datenaiss, $lieunaiss, $embauche, $adresse, $_POST['mat']));
 						$DB->insert('UPDATE salaireens SET numpers=? WHERE numpers = ?', array($matc, $_POST['mat']));
-						$DB->insert('UPDATE ssocialens SET numpers=?, montant=? WHERE numpers = ?', array($matc, $ss, $_POST['mat']));
+						$prodss=$DB->querys("SELECT *FROM ssocialens WHERE numpers = '{$matc}' ");
+						if (empty($prodss['id'])) {
+							$DB->insert("INSERT INTO ssocialens (numpers,montant) VALUES (?,?) ",array($matc, $ss));
+						}else{
+							$DB->insert('UPDATE ssocialens SET numpers=?, montant=? WHERE numpers = ?', array($matc, $ss, $_POST['mat']));
+						}
 						$DB->insert('UPDATE prime SET numpersp=?, montantp=? WHERE numpersp = ?', array($matc, $prime, $_POST['mat']));
 						$DB->insert('UPDATE events SET codensp=? WHERE codensp = ?', array($matc, $_POST['mat']));						
 						$DB->insert('UPDATE enseignement SET codens=? WHERE codens = ?', array($matc, $_POST['mat']));

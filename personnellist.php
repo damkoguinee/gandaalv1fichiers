@@ -754,7 +754,13 @@ if (isset($_SESSION['pseudo'])) {
 
 						$DB->insert('UPDATE salairepers SET numpers=? WHERE numpers = ?', array($matc, $_POST['mat']));
 
-						$DB->insert('UPDATE ssocialpers SET numpers=?, montant=? WHERE numpers = ?', array($matc, $ss, $_POST['mat']));
+						$prodss=$DB->querys("SELECT *FROM ssocialpers WHERE numpers = '{$matc}' ");
+						if (empty($prodss['id'])) {
+							$DB->insert("INSERT INTO ssocialpers (numpers,montant) VALUES (?,?) ",array($matc, $ss));
+						}else{
+							$DB->insert('UPDATE ssocialpers SET numpers=?, montant=? WHERE numpers = ?', array($matc, $ss, $_POST['mat']));
+						}
+
 
 						//$DB->insert('UPDATE primepers SET numpersp=?, montantp=? WHERE numpersp = ?', array($matc, $prime, $_POST['mat']));
 
@@ -822,7 +828,7 @@ if (isset($_SESSION['pseudo'])) {
 
 							$DB->delete('DELETE FROM salairepers WHERE numpers = ?', array($_GET['del_pers']));
 
-							$DB->delete('DELETE FROM ssocialens WHERE numpers = ?', array($_GET['del_pers']));
+							$DB->delete('DELETE FROM ssocialpers WHERE numpers = ?', array($_GET['del_pers']));
 
 							$DB->delete('DELETE FROM primepers WHERE numpersp = ?', array($_GET['del_pers']));
 
