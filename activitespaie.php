@@ -50,19 +50,17 @@ if (isset($_SESSION['pseudo'])) {
 						$etat='actif';
 
 						if (isset($_GET['ideleve'])) {
-
 							$_SESSION['searchelevegen']=$_GET['ideleve'];
-
-							$prod=$DB->query("SELECT activitespaiehistorique.id as id, numeropaie, matp, montantp, moisp, idact, nomgr, dateop FROM activitespaiehistorique left join inscription on matricule=matp left join elevexterne on matex=matp where matp='{$_SESSION['searchelevegen']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
+							$prod=$DB->query("SELECT activitespaiehistorique.id as id, numeropaie, matp, montantp, moisp, idact, nomgr, dateop FROM activitespaiehistorique left join inscription on matricule=matp where matp='{$_SESSION['searchelevegen']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
 						}elseif (isset($_POST['idact']) and $_POST['idact']!='general'){
 
 							if (!empty($_SESSION['searchelevegen'])) {
 								
-								$prod=$DB->query("SELECT activitespaiehistorique.id as id, numeropaie, matp, montantp, moisp, idact, nomgr, dateop FROM activitespaiehistorique left join inscription on matricule=matp left join elevexterne on matex=matp where matp='{$_SESSION['searchelevegen']}' and idact='{$_POST['idact']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
+								$prod=$DB->query("SELECT activitespaiehistorique.id as id, numeropaie, matp, montantp, moisp, idact, nomgr, dateop FROM activitespaiehistorique left join inscription on matricule=matp where matp='{$_SESSION['searchelevegen']}' and idact='{$_POST['idact']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
 
 							}else{
 
-								$prod=$DB->query("SELECT activitespaiehistorique.id as id, numeropaie, matp, montantp, moisp, idact, nomgr, dateop FROM activitespaiehistorique left join inscription on matricule=matp left join elevexterne on matex=matp where idact='{$_POST['idact']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
+								$prod=$DB->query("SELECT activitespaiehistorique.id as id, numeropaie, matp, montantp, moisp, idact, nomgr, dateop FROM activitespaiehistorique left join inscription on matricule=matp where idact='{$_POST['idact']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
 							}
 
 						}else{

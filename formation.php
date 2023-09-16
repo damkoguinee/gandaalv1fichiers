@@ -391,7 +391,7 @@ if (isset($_SESSION['pseudo'])) {
 											<td><?=ucwords($formation->adresse);?></td>
 
 											<td>
-												<a class="btn btn-primary" href="ajout_eleve.php?fiche_eleve=<?=$formation->matricule;?>&promo=<?=$_SESSION['promo'];?>">+infos</a>
+												<a class="btn btn-primary" href="fiche_elevegen.php?fiche_eleve=<?=$formation->matricule;?>&promo=<?=$_SESSION['promo'];?>">+infos</a>
 											</td>
 
 										</tr><?php

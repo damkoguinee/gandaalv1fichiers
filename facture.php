@@ -134,6 +134,17 @@ body{
 </style>
 <page backtop="5mm" backleft="3mm" backright="1mm" backbottom="5mm"><?php
 
+$products=$DB->query('SELECT histopayefrais.matricule as matricule, montant, numpaie, tranche, nomel, prenomel, nomgr, codef FROM histopayefrais inner join eleve on eleve.matricule=histopayefrais.matricule inner join inscription on inscription.matricule=histopayefrais.matricule WHERE histopayefrais.famille= ? and annee=? order by(nomgr)', array($_GET['numfac'], $_SESSION['promo']));
+
+$nbre=sizeof($products);
+
+if ($nbre>1) {
+  $i=2;
+}else{
+  $i=1;
+}
+while($i<=2){
+
   require 'entete.php';
 
   $month = array(
@@ -300,11 +311,22 @@ body{
     </table><?php
   }
 
+  $pers1=$DB->querys('SELECT *from personnel inner join login on numpers=matricule where pseudo=:pseudo', array('pseudo'=>$_SESSION['pseudo']));
 
+  $pers2=$DB->querys('SELECT *from personnel inner join login on numpers=matricule where type=:type', array('type'=>'Proviseur'));?>
+  
 
+  <div  style="margin-top: 20px; color: #717375;"><label style="margin-left: 320px; font-size: 13px; font-style: italic;"><?=ucwords($pers1['type']);?></label></div>
 
+  <div class="pied" style="margin-top: 85px; color: #717375;"><label style="margin-left: 30px; font-size: 13px; font-style: italic;"><?=strtoupper($pers1['nom']).' '.ucwords($pers1['prenom']);?></label></div><?php 
+  if ($i==1) {?>
+    <div style="margin-top: 10px;border:dashed; "></div><?php
+  }
+  $i++;
+}?>
+</page><?php
+  //require 'signature.php';
 
-  require 'signature.php';
 
   
   $content = ob_get_clean();

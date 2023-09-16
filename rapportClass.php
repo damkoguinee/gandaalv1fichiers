@@ -118,7 +118,7 @@ class Rapport
 		$prod=$this->DB->querys("SELECT sum(montant) as montant, inscription.niveau as niveau FROM payement inner join inscription on payement.matricule=inscription.matricule where niveau='{$cursus}' and motif='{$etat}' and annee='{$promo}' and promo='{$promo}'");
 
 		if ($etat=='inscription' and $prod['niveau']=='creche') {
-			$fraisins=$this->fraisins(1,"inscription");
+			$fraisins=$this->fraisins(1,"inscription")['montant'];
 		}elseif ($etat=='inscription' and $prod['niveau']=='maternelle') {
 			$fraisins=$this->fraisins(2,"inscription")['montant'];
 		}elseif ($etat=='inscription' and $prod['niveau']=='primaire') {
@@ -142,8 +142,7 @@ class Rapport
 				$fraisins=0;
 			}
 		}
-
-		$apayer=$prodsansremise['nbre']*$fraisins+$totremise;
+		$apayer=($prodsansremise['nbre']*$fraisins)+$totremise;
 
 		$resteapayer=$apayer-$prod['montant'];
 

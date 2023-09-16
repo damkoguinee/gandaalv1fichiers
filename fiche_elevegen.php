@@ -174,7 +174,7 @@ require 'headerv2.php';?>
 
                                 <li class="fw-bold">Profession du Père <?=ucwords($fiche['profp']);?></li>
                                 <li class="fw-bold">Lieu de travail <?=ucwords($fiche['lieutp']);?></li>
-                                <li class="fw-bold">Profession du Père <?=ucwords($fiche['profp']);?></li>
+                                <li class="fw-bold">Profession de la mère <?=ucwords($fiche['profm']);?></li>
                                 <li class="fw-bold">Lieu de travail de la Mère <?=ucwords($fiche['lieutm']);?></li>
                                 <li class="fw-bold">Adresse/Parents <?=ucwords($fiche['adressep']);?></li>
                                 <li class="fw-bold"><label class="label">Tuteur</label> <?=ucwords($fiche['nomtut']);?></li>

@@ -178,22 +178,26 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
 
                             $prodacver = $DB->querys('SELECT id FROM accompte WHERE matricule=:mat and mois = :mois and anneescolaire=:promo', array('mat'=>$numeen, 'mois'=> $moisac, 'promo'=>$_SESSION['promo']));
 
-                            if (empty($prodacver)) {
+                            $DB->insert('INSERT INTO accompte(caisse, matricule, montant, mois, moischaine, typepaye, numcheque, anneescolaire, datepaye) VALUES(?, ?, ?, ?, ?, ?, ?, ?, now())',array($compte, $numeen, $montantac, $moisac, $moischaine,$typep, $numcheque, $_SESSION['promo']));
 
-                                $DB->insert('INSERT INTO accompte(caisse, matricule, montant, mois, moischaine, typepaye, numcheque, anneescolaire, datepaye) VALUES(?, ?, ?, ?, ?, ?, ?, ?, now())',array($compte, $numeen, $montantac, $moisac, $moischaine,$typep, $numcheque, $_SESSION['promo']));
+                            $DB->insert('INSERT INTO banque (id_banque, montant, libelles, numero, numeropaie, matriculeb, promob,  date_versement) VALUES(?, ?, ?, ?, ?, ?, ?, now())', array($compte, -$montantac, 'avance sur salaire', 'retav'.$numdec, $numcheque, $numeen, $_SESSION['promo']));
 
-                                $DB->insert('INSERT INTO banque (id_banque, montant, libelles, numero, numeropaie, matriculeb, promob,  date_versement) VALUES(?, ?, ?, ?, ?, ?, ?, now())', array($compte, -$montantac, 'avance sur salaire', 'retav'.$numdec, $numcheque, $numeen, $_SESSION['promo']));
-                            }else{
+                            // if (empty($prodacver)) {
 
-                                $DB->insert('UPDATE accompte SET montant=?, typepaye=?, datepaye=now() where matricule=? and mois=? and anneescolaire=?' ,array($montantac, $typep, $numeen, $moisac, $_SESSION['promo']));
+                            //     $DB->insert('INSERT INTO accompte(caisse, matricule, montant, mois, moischaine, typepaye, numcheque, anneescolaire, datepaye) VALUES(?, ?, ?, ?, ?, ?, ?, ?, now())',array($compte, $numeen, $montantac, $moisac, $moischaine,$typep, $numcheque, $_SESSION['promo']));
 
-                                $DB->insert('UPDATE banque SET id_banque=?, montant=?, date_versement=now() where numero=?', array($compte, -$montantac, 'retav'.$prodacver['id']));
-                            }
+                            //     $DB->insert('INSERT INTO banque (id_banque, montant, libelles, numero, numeropaie, matriculeb, promob,  date_versement) VALUES(?, ?, ?, ?, ?, ?, ?, now())', array($compte, -$montantac, 'avance sur salaire', 'retav'.$numdec, $numcheque, $numeen, $_SESSION['promo']));
+                            // }else{
+
+                            //     $DB->insert('UPDATE accompte SET montant=?, typepaye=?, datepaye=now() where matricule=? and mois=? and anneescolaire=?' ,array($montantac, $typep, $numeen, $moisac, $_SESSION['promo']));
+
+                            //     $DB->insert('UPDATE banque SET id_banque=?, montant=?, date_versement=now() where numero=?', array($compte, -$montantac, 'retav'.$prodacver['id']));
+                            // }
                         }
 
                     }
 
-                    $prodac = $DB->query('SELECT id, matricule, montant, mois, moischaine, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye FROM accompte WHERE matricule = :mat and anneescolaire=:promo ORDER BY(datepaye) DESC', array('mat'=> $numeen, 'promo'=>$_SESSION['promo']));
+                    $prodac = $DB->query('SELECT id, matricule, montant, mois, moischaine, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye, numcheque, typepaye FROM accompte WHERE matricule = :mat and anneescolaire=:promo ORDER BY(datepaye) DESC', array('mat'=> $numeen, 'promo'=>$_SESSION['promo']));
 
                     if (!empty($_SESSION['numeen'])) {
 
@@ -201,34 +205,52 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
 
                             <table class="table table-hover table-bordered table-striped table-responsive text-center mt-2">
                                 <thead>
-                                    <tr><th colspan="3">Liste des Avances</th></tr>
+                                    <tr><th colspan="6">Liste des Avances</th></tr>
 
                                     <tr>
-                                        <th>Mois de</th>
+                                        <th>N°</th>
+                                        <th>Date</th>
                                         <th>Montant</th>
+                                        <th>Paiement</th>
+                                        <th>N°Cheq/Bord.</th>
                                         <th></th>
                                     </tr>
                                 </thead>
 
                                 <tbody><?php
                                     $totmontant=0;
-                                    foreach ($prodac as $key => $paye) {
+                                    foreach ($panier->month as $valuem) {
+                                        $prodac = $DB->query("SELECT id, matricule, montant, mois, moischaine, DATE_FORMAT(datepaye, \"%d/%m/%Y\")AS datepaye, numcheque, typepaye FROM accompte WHERE moischaine = '{$valuem}' and matricule = '{$numeen}'  and anneescolaire = '{$_SESSION['promo']}' ORDER BY(datepaye) DESC ");
+                                        
+                                        if (!empty($prodac)) {?>
 
-                                        $totmontant+=$paye->montant;?>
+                                            <tr><th colspan="6" class="text-center bg-info">Période de <?=$valuem;?></th></tr><?php
+                                            $totmontantm=0; 
+                                            foreach ($prodac as $key => $paye) {
 
-                                        <tr>
-                                            <td><?=$paye->moischaine;?></td>
+                                                $totmontantm+=$paye->montant;
+                                                $totmontant+=$paye->montant;?>
 
-                                            <td><?=number_format($paye->montant,0,',',' ');?></td>
-
-                                            <td><a class="btn btn-danger" href="accompte.php?deleteac=<?=$paye->id;?>" onclick="return alerteS();">Supprimer</td>
-                                        </tr><?php
+                                                <tr>
+                                                    <td class="text-center"><?=$key+1;?></td>
+                                                    <td class="text-center"><?=$paye->datepaye;?></td>
+                                                    <td><?=number_format($paye->montant,0,',',' ');?></td>
+                                                    <td><?=$paye->typepaye;?></td>
+                                                    <td><?=$paye->numcheque;?></td>
+                                                    <td><a class="btn btn-danger" href="accompte.php?deleteac=<?=$paye->id;?>" onclick="return alerteS();">Supprimer</td>
+                                                </tr><?php
+                                            }?>
+                                            <tr>
+                                                <th colspan="2">Total avance mois</th>
+                                                <th><?=number_format($totmontantm,0,',',' ');?></th>
+                                            </tr><?php
+                                        }
                                     }?>
                                 </tbody>
 
                                 <tfoot>
-                                    <tr>
-                                        <th></th>
+                                    <tr class="bg-info">
+                                        <th colspan="2">Total Général</th>
                                         <th><?=number_format($totmontant,0,',',' ');?></th>
                                     </tr>
                                 </tfoot>

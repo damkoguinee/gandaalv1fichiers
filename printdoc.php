@@ -829,7 +829,7 @@ body{
     <table class="tablistebul">
       <thead>
 
-        <tr><th colspan="3" height="25">Frais de scolarité de <?=$_GET['nomel'].' N° matricule '.$_GET['scoltot'];?></th></tr>
+        <tr><th colspan="3" height="25">Frais de scolarité de <?=$_GET['nomel'].' Classe '.$_GET['groupel'].' matricule '.$_GET['scoltot'];?></th></tr>
 
         <tr>  
           <th height="25">Désignation</th>

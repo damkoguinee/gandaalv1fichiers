@@ -38,7 +38,7 @@
 
     }else{
 
-      $datenormale=(new DateTime($dates))->format('Y');
+      $datenormale="Année-Scolaire ".($_SESSION['promo']-1).'-'.$_SESSION['promo'];
     }
 
     
