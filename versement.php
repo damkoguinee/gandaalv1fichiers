@@ -68,7 +68,7 @@ if (isset($_SESSION['pseudo'])) {
 
         if (isset($_POST["valid"])) {
 
-          if (!empty($_POST["client"]) ) {?>
+          if (empty($_POST["client"]) ) {?>
 
             <div class="alert alert-danger">Les Champs sont vides</div><?php
 
@@ -111,6 +111,8 @@ if (isset($_SESSION['pseudo'])) {
 
               $DB->insert('INSERT INTO banque (id_banque, montant, libelles, numero, devise, taux, typep, personnel, numeropaie, banqcheque, date_versement, promob) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($compte, $montant, "Depot(".$motif.')', 'dep'.$max, $devise, $taux, $payement, $_SESSION['idpseudo'], $numcheque, $banquecheque, $dateop, $_SESSION['promo'])); 
             }
+
+            unset($_SESSION['searchclientvers']);
 
           }
 
@@ -172,15 +174,15 @@ if (isset($_SESSION['pseudo'])) {
           <form id="formulaire" class="form" method="POST" action="versement.php">
               <ol>          
                 <li><label>Elève*</label>
-                  <select type="text" name="client">
-                    <option></option>
-                    <option value="autres">Autres</option><?php 
+                  <select type="text" name="client" required>
+                    <?php 
 
                     if (!empty($_SESSION['searchclientvers'])) {?>
 
                         <option value="<?=$_SESSION['searchclientvers'];?>"><?=$panier->nomEleve($_SESSION['searchclientvers']);?></option><?php
                     }else{?>
-                        <option></option><?php 
+                        <option></option>
+                        <option value="autres">Autres</option><?php 
                     }
 
                     foreach($panier->listeEleve() as $product){?>
@@ -188,9 +190,9 @@ if (isset($_SESSION['pseudo'])) {
                     }?>
                   </select>
 
-                  <input style="width:400px;" id="search-user" type="text" name="clients" placeholder="rechercher un élève" />
+                  <input id="search-user" type="text" value="" placeholder="rechercher un élève" />
 
-                  <div style="color:white; background-color: black; font-size: 16px; margin-left: 300px;" id="result-search"></div>
+                  <div class="bg-danger" id="result-search"></div>
                 </li>
 
                 <li><label>Type de recette*</label>
@@ -409,7 +411,10 @@ if (isset($_SESSION['pseudo'])) {
 
             <td style="text-align: right; padding-right: 10px;"><?= $product->devisevers; ?></td>
             <td style="text-align: right; padding-right: 10px;"><?= $product->type_versement; ?></td>
-            <td style="text-align: center"><a class="btn btn-info" href="printversement.php?numdec=<?=$product->id;?>&idc=<?=$product->nom_client;?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a></td>
+            <td style="text-align: center" class="d-flex">
+              <a class="btn btn-info" href="printversement.php?numdec=<?=$product->id;?>&idc=<?=$product->nom_client;?>" target="_blank"><i class="fa-solid fa-file-pdf"></i></a> 
+              <a target="_blank" class="btn btn-warning" href="facture_recettes.php?matricule=<?=$product->nom_client;?>"><i class="fa-solid fa-file-pdf"></i></a>
+            </td>
 
             <td><?php if ($products['type']=='informaticien' or $products['type']=='comptable' or $products['type']=='admin') {?><a class="btn btn-danger" onclick="return alerteS();" href="versement.php?deletevers=<?=$product->numcmd;?>">Supprimer</a><?php };?></td>
             

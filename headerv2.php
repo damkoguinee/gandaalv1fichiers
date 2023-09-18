@@ -7,7 +7,8 @@ require '_header.php'
   <title>GANDAAL Gestion de Scolarite</title>
   <meta charset="utf-8">
   <meta content="Page par défaut" name="description">
-  <meta content="width=device-width, initial-scale=1" name="viewport">    
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <script src="https://kit.fontawesome.com/8df11ad090.js" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" charset="utf-8">

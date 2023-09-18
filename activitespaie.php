@@ -79,12 +79,12 @@ if (isset($_SESSION['pseudo'])) {
                                 		<div class="container-fluid">
 					        				<div class="row">
 
-					        					<div class="col">
+					        					<div class="col-sm-12 col-md-5">
 							        				<input class="form-control me-2" id="search-user" type="search" placeholder="Search élève" aria-label="Search" >
 				                					<div style="color:white; background-color: grey; font-size: 16px;" id="result-search"></div>
 							        				
 							        			</div>
-								        		<div class="col">
+								        		<div class="col-sm-10 col-md-5">
 								        			<form method="POST" action="">
 								        				<select class="form-select" name="idact" onchange="this.form.submit()"><?php 
 								        					if (isset($_POST['idact'])) {?>
@@ -104,7 +104,12 @@ if (isset($_SESSION['pseudo'])) {
 								        				</select>
 								        			</form>
 								        				
-								        		</div>							        			
+								        		</div>
+												<div class="col-sm-2 col-md-2"><?php 
+													if (isset($_GET['ideleve'])) {?>
+														<a target="_blank" class="btn btn-warning" href="facture_activites.php?matricule=<?=$_GET['ideleve'];?>"><i class="fa-solid fa-file-pdf"></i></a><?php
+													}?>
+												</div>
 							        		</div>
 							        	</div>
 							        </th>
@@ -139,7 +144,7 @@ if (isset($_SESSION['pseudo'])) {
 
                                     $montantcumul+=$value->montantp;
 
-                                    $dated=(new DateTime($value->dateop))->format("d/m/Y")?>
+                                    $dated=(new DateTime($value->dateop))->format("d/m/Y");?>
 
                                     <tr>
                                         <td><?=$key+1;?></td>

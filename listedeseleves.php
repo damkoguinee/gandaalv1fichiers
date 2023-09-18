@@ -61,7 +61,7 @@ if (isset($_SESSION['pseudo'])) {
                             $prod=$DB->query("SELECT * FROM activitespaiement left join inscription on matricule=matp left join elevexterne on matex=matp where moisp='{$_POST['moisp']}' and idact='{$_SESSION['listeeleve']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
                         }else{
 
-                            $prod=$DB->query("SELECT * FROM activitespaiement left join inscription on matricule=matp left join elevexterne on matex=matp where idact='{$_SESSION['listeeleve']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}'  order by(idact) ");
+                            $prod=$DB->query("SELECT * FROM activitespaiement left join inscription on matricule=matp left join elevexterne on matex=matp where idact='{$_SESSION['listeeleve']}' and anneep='{$_SESSION['promo']}' and annee='{$_SESSION['promo']}' GROUP BY matp  order by(idact) ");
                         }?>
 
                         <table class="table table-hover table-bordered table-striped table-responsive text-center">

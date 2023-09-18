@@ -136,7 +136,7 @@ if (isset($_SESSION['pseudo'])) {
 
 							$effectif=0;
 
-							$prodac=$DB->querys("SELECT count(id) as nbre, sum(montantp) as montant FROM activitespaiehistorique where promoact='{$_SESSION['promo']}' ");
+							$prodac=$DB->querys("SELECT count(id) as nbre, sum(montantp) as montant FROM activitespaiehistorique where anneep='{$_SESSION['promo']}' ");
 							$activitespaie=$prodac['montant'];
 
 							$prodvers=$DB->querys("SELECT count(id) as nbre, sum(montant*taux) as montant FROM versement where promo='{$_SESSION['promo']}' ");

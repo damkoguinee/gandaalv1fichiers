@@ -9,7 +9,8 @@ require '_header.php'
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
   <meta content="Page par défaut" name="description">
-  <meta content="width=device-width, initial-scale=1" name="viewport">    
+  <meta content="width=device-width, initial-scale=1" name="viewport"> 
+  <script src="https://kit.fontawesome.com/8df11ad090.js" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head><?php
