@@ -7,7 +7,7 @@
 
     <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="formation.php?form&note">Formations</a></div></div><?php 
      
-    if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='Directeur Général' or  $products['type']=='bibliothecaire' or  $products['type']=='comptable') {?>
+    if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="tranche.php?scol">Tranches</a></div></div>
 
@@ -17,7 +17,7 @@
     }
 		    	
 
-    if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='informaticien' or $products['type']=='Directeur Général' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='surveillant Général' or $products['type']=='comptable' or $products['type']=='coordonateur bloc B' or $products['type']=='secrétaire' or $products['type']=='bibliothecaire') {?> 
+    if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?> 
 
 
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="matiere.php?matiere">Matières</a></div></div>
@@ -32,16 +32,13 @@
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="enseignement.php?enseign">Cours</a></div></div><?php 
 	} 
 
-    if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='bibliothecaire') {?>
+    if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="etablissement.php?etab">Etablissement</a></div></div>
 
-        <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="etablissement.php?cloturer">Clôturer</a></div></div><?php
+        <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="etablissement.php?cloturer">Clôturer</a></div></div>
 
-        if ($products['niveau']>5) {?>
-
-            <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="historiquesup.php">Historique Sup</a></div></div><?php
-        }
+        <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="historiquesup.php">Historique Sup</a></div></div><?php
     }?>
 </div>
 

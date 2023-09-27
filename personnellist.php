@@ -236,9 +236,6 @@ if (isset($_SESSION['pseudo'])) {
 														<select class="form-select" type="number" name="auto" required="">
 															<option value="1">Niveau 1</option>
 															<option value="2">Niveau 2</option>
-															<option value="3">Niveau 3</option>
-															<option value="4">Niveau 4</option>
-															<option value="5">Niveau 5</option>
 														</select>  
 													</div>
 												</div>
@@ -636,7 +633,7 @@ if (isset($_SESSION['pseudo'])) {
 										</fieldset>
 									</form><?php
 
-									if ($products['type']=='admin' or $products['type']=='rh' or $products['type']=='bibliothecaire') {?>
+									if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
 										<form class="form my-4" method="POST" action="personnellist.php?modif_en=<?=$prodm['matricule'];?>">
 
@@ -880,7 +877,7 @@ if (isset($_SESSION['pseudo'])) {
 
 											<th colspan="4"><?php 
 
-											if ($products['type']=='admin' or $products['type']=='comptable' or $products['type']=='rh' or $products['type']=='informaticien' or $products['type']=='bibliothecaire') {?><a href="personnellist.php?ajout_en" class="btn btn-info">Ajouter un personnel</a><?php }?></th>
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?><a href="personnellist.php?ajout_en" class="btn btn-info">Ajouter un personnel</a><?php }?></th>
 										
 										</tr>
 									</form>
@@ -931,7 +928,7 @@ if (isset($_SESSION['pseudo'])) {
 
 												<td><?php 
 
-													if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='bibliothecaire' or $products['type']=='comptable') {?>
+													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 														<a onclick="return alerteM();" class="btn btn-warning" href="personnellist.php?modif_en=<?=$formation->matricule;?>">Modifier</a><?php 
 													}?>
 
@@ -939,7 +936,7 @@ if (isset($_SESSION['pseudo'])) {
 
 												<td><?php
 
-													if ($products['type']=='admin' or $products['type']=='informaticien') {?>
+													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
 														<a onclick="return alerteS();" class="btn btn-danger" href="enseignant.php?del_pers=<?=$formation->matricule;?>" onclick="return alerteS();">Supprimer</a><?php 
 													}?>

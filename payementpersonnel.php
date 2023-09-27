@@ -231,7 +231,7 @@ if (isset($_POST['mois'])) {
                     }
     
 
-                    $prodac=$DB->querys('SELECT montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$numeen, 'datet'=>$_SESSION['mois'], 'promo'=>$_SESSION['promo']));
+                    $prodac=$DB->querys('SELECT sum(montant) as montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$numeen, 'datet'=>$_SESSION['mois'], 'promo'=>$_SESSION['promo']));
 
                     if (empty($prodac)) {
                         $accompte=0;
@@ -299,7 +299,7 @@ if (isset($_POST['mois'])) {
 
                                 <td><?php 
 
-                                    if ($products['type']=='admin' or $products['type']=='comptable' ) {?>
+                                    if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
                                         <button class="btn  btn-primary" type="submit" name="payen" onclick="return alerteV();">Valider</button><?php 
                                     }?>
                                 </td>

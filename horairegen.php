@@ -189,7 +189,7 @@
 
                                 <td><?php 
 
-                                    if ($products['type']=='admin' or $products['type']=='bibliothecaire' or $products['type']=='informaticien' or $products['type']=='Directeur Général' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='coordonateur bloc B' or $products['type']=='Directeur du primaire'  or $products['type']=='secrétaire') {?>
+                                    if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
 
                                         <button class="btn btn-success" type="submit" name="confirm" onclick="return alerteV();">Confirmer</button></td><?php 
                                     }?>

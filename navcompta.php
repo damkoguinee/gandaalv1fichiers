@@ -1,6 +1,6 @@
 <div class="col-sm-12 col-md-2 pb-3 " style="background-color: #253553;"> <?php
 
-    if ($_SESSION['type']=='admin' or $_SESSION['type']=='fondateur' or $_SESSION['type']=='Administrateur Général'  or $_SESSION['type']=='informaticien' or $_SESSION['type']=='comptable' or $_SESSION['type']=='Directeur Général' or $_SESSION['type']=='bibliothecaire') {?>
+    if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="comptabilite.php?paye">Paiements Scolarité</a></div></div>
 
@@ -28,7 +28,7 @@
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="detteCreances.php?dep">Dettes/Créances</a></div></div><?php 
     }
 
-    if ($_SESSION['type']=='admin' or $_SESSION['type']=='fondation' or $_SESSION['type']=='fondateur' or $_SESSION['type']=='Administrateur Général' or $_SESSION['type']=='Directeur Général' or $_SESSION['type']=='comptable' or $_SESSION['type']=='bibliothecaire' or $_SESSION['type']=='informaticien') {?>
+    if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="banque.php?compta">Transfert des fonds</a></div></div>
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="synthesecompta.php?compta">Synthèse Générale</a></div></div><?php 
     }?>

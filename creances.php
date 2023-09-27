@@ -503,7 +503,7 @@ if (isset($_SESSION['pseudo'])) {
                             }?> 
                             <td class="text-end text-danger"><?= number_format($cumulsolde,0,',',' '); ?></td>         
                             <td><?php 
-                                if ($_SESSION['type']=='admin' or $_SESSION['type']=='comptable') {?>
+                                if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
                                     <a onClick="alerteS()" class="btn btn-danger" href="creances.php?deletedette=<?=$value->numcmd;?>">Annuler</a><?php 
                                 }?>
                             </td>          

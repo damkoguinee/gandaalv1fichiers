@@ -121,7 +121,7 @@ if (isset($_SESSION['pseudo'])) {
 								</ol>
 							</fieldset><?php 
 
-							if ($products['type']=='informaticien' or $products['type']=='comptable' or $products['type']=='admin') {?>
+							if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
 								<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutdep" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset><?php 
 							}?>
@@ -253,7 +253,7 @@ if (isset($_SESSION['pseudo'])) {
 				    	<table class="table table-hover table-bordered table-striped table-responsive text-center">
 				    		<thead class="">
 
-				    			<tr><th colspan="9"><?php if ($products['type']=='informaticien' or $products['type']=='comptable' or $products['type']=='admin') {?><a class="btn btn-info" href="depense.php?ajoutdep" style="color: white;">Effectuez un décaissement</a><?php }?></th>
+				    			<tr><th colspan="9"><?php if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?><a class="btn btn-info" href="depense.php?ajoutdep" style="color: white;">Effectuez un décaissement</a><?php }?></th>
 				    			</tr>
 
 			    				<tr>

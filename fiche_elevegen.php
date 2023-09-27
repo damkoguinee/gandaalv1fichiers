@@ -208,7 +208,7 @@ require 'headerv2.php';?>
 
                                 <a class="btn btn-primary" href="enseignement.php?matiereel=<?=$mat;?>">Enseignants</a><?php 
 
-                                if ($products['type']=='admin' or $products['type']=='fondation' or $products['type']=='fondateur' or $products['type']=='Admistrateur Général' or $products['type']=='comptable' or $products['type']=='informaticien' or $products['type']=='secrétaire') {?>
+                                if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                                     <a class="btn btn-danger" href="comptabilite.php?eleve=<?=$mat;?>">Mensualités</a><?php 
                                 }?>
@@ -223,7 +223,7 @@ require 'headerv2.php';?>
 
                                 <a class="btn btn-primary" href="document.php?docel=<?=$mat;?>&fiche_eleve=<?=$mat;?>&promo=<?=$_SESSION['promo'];?>" >Mes Documents</a><?php
 
-                                if ($products['type']=='admin' or $products['type']=='informaticien') {?>
+                                if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
 
                                     <a class="btn btn-danger" href="ajout_eleve.php?del_eleve=<?=$mat;?>" onclick="return alerteS();" >Supprimer</a><?php 
                                 }?>

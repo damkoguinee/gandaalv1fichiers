@@ -14,7 +14,7 @@ if (isset($_SESSION['pseudo'])) {
 				<div class="col-sm-12 col-md-10 p-0" ><?php
 
 					if (isset($_GET['ajout_t'])) {
-						if ($products['type']=='admin' or $products['type']=='informaticien') {?>
+						if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 							<form class="form bg-secondary my-2 p-4" method="POST" action="tranche.php">									
 								<div class="mb-1">
 									<label class="form-label">Nom de la tranche</label>
@@ -125,7 +125,7 @@ if (isset($_SESSION['pseudo'])) {
 
 											<td colspan="1"><?php 
 
-												if ($products['type']=='admin' or $products['type']=='informaticien') {?>
+												if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
 												<a class="btn btn-danger" href="tranche.php?del_scol=<?=$formation->id;?>" onclick="return alerteS();">Annuler</a><?php }?>
 											</td>

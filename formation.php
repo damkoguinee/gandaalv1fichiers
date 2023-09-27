@@ -2,7 +2,7 @@
 require 'headerv2.php';
 if (isset($_SESSION['pseudo'])) {
 				
-	if ($products['niveau']<1) {?>
+	if ($panier->users($_SESSION['matricule'])['niveau']<1) {?>
 
 		<div class="alert alert-warning">Des autorisations sont requises pour consulter cette page</div><?php
 
@@ -128,7 +128,8 @@ if (isset($_SESSION['pseudo'])) {
 
 										<th colspan="3"><?php 
 
-										if ($products['type']=='admin' or $products['type']=='bibliothecaire') {?><a class="btn btn-warning" href="formation.php?ajout_f" class="btn btn-warning">Ajouter une formation</a><?php }?></th>
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?><a class="btn btn-warning" href="formation.php?ajout_f" class="btn btn-warning">Ajouter une formation</a><?php }?>
+										</th>
 									</tr>
 															
 									<tr>
@@ -214,7 +215,7 @@ if (isset($_SESSION['pseudo'])) {
 															<a class="btn btn-primary" href="formation.php?voir_en=<?=$formation->codef;?>">Enseignants</a>
 														</td><?php
 
-														if ($products['niveau']>8) {?>
+														if ($panier->users($_SESSION['matricule'])['type']>8) {?>
 
 															<td>
 																<a class="btn btn-danger" href="formation.php?del_f=<?=$formation->codef;?>" onclick="return alerteS();">Supprimer</a>
@@ -522,7 +523,8 @@ if (isset($_SESSION['pseudo'])) {
 
 												<td colspan="2">
 
-													<a class="btn btn-primary" href="ajout_eleve.php?fiche_eleve=<?=$formation->matricule;?>&promo=<?=$_SESSION['promo'];?>">+Infos</a>
+													<a class="btn btn-primary" href="fiche_elevegen.php?fiche_eleve=<?=$formation->matricule;?>&promo=<?=$_SESSION['promo'];?>">+infos</a>
+													
 												</td>
 
 											</tr>

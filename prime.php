@@ -248,7 +248,7 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
                                             <td><input class="form-control" type="text" name="montantac" required="" />
                                                 <input class="form-control" type="hidden" name="mat" value="<?=$numeen;?>"></td>
 
-                                            <td><?php if ($prodlogin['type']=='comptable' or $prodlogin['type']=='admin')  {?><button class="btn btn-primary" type="submit" name="validac">Valider</button><?php }?></td>
+                                            <td><?php if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?><button class="btn btn-primary" type="submit" name="validac">Valider</button><?php }?></td>
                                         </tr>
 
                                     </form><?php

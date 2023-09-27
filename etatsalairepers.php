@@ -3,6 +3,15 @@
 <div class="container-fluid">
     <div class="row" style="overflow:auto;"><?php
 
+    if (isset($_GET['annuler_paie'])) {
+        $id_paie=$_GET['id_paie'];
+        $numdec_paie=$_GET['numdec_paie'];
+        $numdec_paie_banque="paiepers".$numdec_paie;
+        $DB->delete("DELETE FROM payepersonnel WHERE id = '{$id_paie}'  ");
+        // $DB->delete("DELETE FROM histopayenseignant WHERE numdec = '{$numdec_paie}'  ");
+        $DB->delete("DELETE FROM banque WHERE numero = '{$numdec_paie_banque}'  ");
+    }
+
     if (isset($_POST['paye'])) {
 
         $DB->insert('UPDATE payepersonnel SET etat=? where id=?' ,array('ok', $_POST['id']));
@@ -132,15 +141,15 @@
           $terme = strip_tags($terme); //pour supprimer les balises html dans la requête
           $terme = strtolower($terme);
 
-          $prodm =$DB->query('SELECT payepersonnel.id as id, personnel.numpers as matricule, prenom as prenomen, nom as nomen, phone, salaire, payepersonnel.montant as montant, typepaye, etat, mois, numbanq from personnel left join payepersonnel on payepersonnel.matricule=personnel.numpers inner join contact on personnel.numpers=contact.matricule inner join salairepers on salairepers.numpers=personnel.numpers WHERE typepaye LIKE? and (personnel.numpers LIKE? or nom LIKE ? or prenom LIKE ? or phone LIKE ?)',array($value, "%".$terme."%", "%".$terme."%", "%".$terme."%", "%".$terme."%"));
+          $prodm =$DB->query('SELECT payepersonnel.id as id, numdec, personnel.numpers as matricule, prenom as prenomen, nom as nomen, phone, salaire, payepersonnel.montant as montant, typepaye, etat, mois, numbanq from personnel left join payepersonnel on payepersonnel.matricule=personnel.numpers inner join contact on personnel.numpers=contact.matricule inner join salairepers on salairepers.numpers=personnel.numpers WHERE typepaye LIKE? and (personnel.numpers LIKE? or nom LIKE ? or prenom LIKE ? or phone LIKE ?)',array($value, "%".$terme."%", "%".$terme."%", "%".$terme."%", "%".$terme."%"));
           
         }elseif(isset($_POST['mois']) or isset($_POST['paye']) or isset($_POST['annul'])) {
 
-            $prodm=$DB->query('SELECT payepersonnel.id as id, personnel.numpers as matricule, prenom as prenomen, nom as nomen, phone, salaire, payepersonnel.montant as montant, typepaye, etat, mois, numbanq from personnel left join payepersonnel on payepersonnel.matricule=personnel.numpers inner join contact on personnel.numpers=contact.matricule inner join salairepers on salairepers.numpers=personnel.numpers where typepaye=:type and payepersonnel.promo=:promo and salairepers.promo=:promo1 and mois=:mois order by(etat)', array('type'=>$value, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo'],  'mois'=>$_SESSION['mois']));
+            $prodm=$DB->query('SELECT payepersonnel.id as id, numdec, personnel.numpers as matricule, prenom as prenomen, nom as nomen, phone, salaire, payepersonnel.montant as montant, typepaye, etat, mois, numbanq from personnel left join payepersonnel on payepersonnel.matricule=personnel.numpers inner join contact on personnel.numpers=contact.matricule inner join salairepers on salairepers.numpers=personnel.numpers where typepaye=:type and payepersonnel.promo=:promo and salairepers.promo=:promo1 and mois=:mois order by(etat)', array('type'=>$value, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo'],  'mois'=>$_SESSION['mois']));
 
         }else{
 
-            $prodm=$DB->query('SELECT payepersonnel.id as id, personnel.numpers as matricule, prenom as prenomen, nom as nomen, phone, salaire, payepersonnel.montant as montant, typepaye, etat, mois, numbanq from personnel left join payepersonnel on payepersonnel.matricule=personnel.numpers inner join contact on personnel.numpers=contact.matricule inner join salairepers on salairepers.numpers=personnel.numpers where typepaye=:type and payepersonnel.promo=:promo and salairepers.promo=:promo1 order by(etat)', array('type'=>$value, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo']));
+            $prodm=$DB->query('SELECT payepersonnel.id as id, numdec, personnel.numpers as matricule, prenom as prenomen, nom as nomen, phone, salaire, payepersonnel.montant as montant, typepaye, etat, mois, numbanq from personnel left join payepersonnel on payepersonnel.matricule=personnel.numpers inner join contact on personnel.numpers=contact.matricule inner join salairepers on salairepers.numpers=personnel.numpers where typepaye=:type and payepersonnel.promo=:promo and salairepers.promo=:promo1 order by(etat)', array('type'=>$value, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo']));
         }?>
 
         <tbody><?php
@@ -187,7 +196,10 @@
 
                                 <td><?=$formation->etat;?></td>
 
-                                <td><input type="hidden" name="id" value="<?=$formation->id;?>"><button calss="btn btn-primary" type="submit" name="annul">Annulé</button></td><?php
+                                <td>
+                                    <input type="hidden" name="id" value="<?=$formation->id;?>">
+                                    <!-- <button calss="btn btn-primary" type="submit" name="annul">Annulé</button> -->
+                                </td><?php
                             }else{?>
 
                                 <td><?php 
@@ -198,8 +210,14 @@
                                     }?>
                                 </td>
 
-                                <td><input type="hidden" name="id" value="<?=$formation->id;?>">
-                                <button calss="btn btn-primary " type="submit" name="paye">Payé</button></td><?php
+                                <td>
+                                    <input type="hidden" name="id" value="<?=$formation->id;?>">
+                                    <!-- <button calss="btn btn-primary " type="submit" name="paye">Payé</button> --><?php 
+                                    if ( ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") and isset($_POST['mois'])) {?>
+
+                                        <a href="?id_paie=<?=$formation->id;?>&numdec_paie=<?=$formation->numdec;?>&annuler_paie=<?=$formation->matricule;?>&moisnum=<?=$formation->mois;?>&mois=<?=$panier->moisbul();?>" class="btn btn-danger" onclick="return alerteS();">Annuler</a><?php 
+                                    }?>
+                                </td><?php
                             }?>
 
                         </tr>
@@ -220,3 +238,26 @@
         </tr>
     </tfoot>
 </table>
+
+<script type="text/javascript">
+
+    function alerteI(){
+        return(confirm('Etes-vous sûr de vouloir initialisé? Le nouveau réçu ne sera pas lié au réçu précédent'));
+    }
+
+    function alerteS(){
+        return(confirm('Etes-vous sûr de vouloir annuler ce paiement ?'));
+    }
+
+    function alerteSains(){
+        return(confirm('Etes-vous sûr de vouloir annuler cette inscription ?'));
+    }
+
+    function alerteSins(){
+        return(confirm('Etes-vous sûr de vouloir annuler ce paiement ?'));
+    }
+
+    function alerteV(){
+        return(confirm('Confirmer la validation ?'));
+    }
+</script>

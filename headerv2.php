@@ -121,50 +121,48 @@ require '_header.php'
                 </li>
 
                 <li class="nav-item"><?php 
-                  if ($products['type']!='enseignant'){?>
+                  if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
                     <a class="nav-link btn btn-danger text-light m-1" href="formation.php?form&note">Gestion</a> <?php
                   };?>
                 </li>
 
                 <li class="nav-item"><?php 
-                  if ($products['type']!='enseignant'){?> 
+                  if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?> 
                     <a class="nav-link btn btn-danger text-light m-1" href="ajout_eleve.php?ajoute&note">Scolarite</a><?php
                   };?>
                 </li>
 
                 <li class="nav-item"><?php 
-                  if ($products['type']!='enseignant'){?> 
+                  if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?> 
                     <a class="nav-link btn btn-danger text-light m-1" href="activitesgestion.php?ideleve">Activités</a><?php
                   };?>
                 </li>
                 <?php 
-                if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='informaticien' or $products['type']=='Directeur Général' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='surveillant Général' or $products['type']=="Conseille a l'éducation" or $products['type']=='coordonateur bloc B' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='secrétaire' or $products['type']=='enseignant' or $products['type']=='bibliothecaire') {?>
+                if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                   <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light m-1" href="note.php?note&note">Pédagogie</a>
                   </li><?php 
                 }
 
-                if ($products['type']=='admin' or $products['type']=='fondation' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='Directeur Général' or $products['type']=='comptable' or $products['type']=='bibliothecaire' or $products['type']=='secrétaire') {?>
+                if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                   <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light m-1" href="comptabilite.php?note">Comptabilite</a>
                   </li><?php 
                 }
 
-                if ($products['type']!='enseignant'){?>
+                if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
                   <li class="nav-item">
                   
                     <a class="nav-link btn btn-danger text-light m-1" href="rapport.php?rapport">Statistiques</a>
                   </li><?php
                 }
 
-                if ($products['type']!='enseignant'){
-                  
+                if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {                 
 
                   if ($products['niveau']>10) {?>
                     <li class="nav-item"><a class="nav-link btn btn-danger text-light m-1 " href="csv.php?save">Sauvegarde</a></li><?php
-
                   }
                 }?> 
               </ul>

@@ -10,12 +10,9 @@ if (isset($_SESSION['pseudo'])) {
 		require 'fiche_eleve.php';
 	}else{
     
-	    if ($products['niveau']<4) {?>
-
+	    if ($products['niveau']<=1) {?>
 	        <div class="alert alert-danger">Des autorisations sont requises pour consulter cette page</div><?php
-
 	    }else{?>
-
 	    	<div class="container-fluid">
 
 	    		<div class="row"><?php 
@@ -238,7 +235,7 @@ if (isset($_SESSION['pseudo'])) {
 
 							// fin inscription
 
-							if ($_SESSION['type']=='admin' or $_SESSION['type']=='fondateur' or $_SESSION['type']=='comptable' or $_SESSION['type']=='informaticien' or $_SESSION['type']=='secrétaire' or $_SESSION['type']=='bibliothecaire') {
+							if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {
 
 								if (isset($_POST['remise'])) {
 					                $_SESSION['bordereau']=$_POST['bord'];

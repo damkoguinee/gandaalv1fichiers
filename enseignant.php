@@ -204,9 +204,6 @@ if (isset($_SESSION['pseudo'])) {
 														<select class="form-select" type="number" name="auto" required="">
 															<option value="1">Niveau 1</option>
 															<option value="2">Niveau 2</option>
-															<option value="3">Niveau 3</option>
-															<option value="4">Niveau 4</option>
-															<option value="5">Niveau 5</option>
 														</select>  
 													</div>
 												</div>
@@ -692,7 +689,7 @@ if (isset($_SESSION['pseudo'])) {
 										<div class="alert alert-success">Opération éffectuée avec succée!!!</div><?php
 									}
 
-									if ($products['type']=='admin' or $products['type']=='rh' or $products['type']=='bibliothecaire') {
+									if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {
 										$prodsalaire=$DB->querys('SELECT  salaire, thoraire from salaireens where numpers=:mat and promo=:promo', array('mat'=>$_GET['modif_en'], 'promo'=>$_SESSION['promo']));?>
 
 										<form class="form my-4" method="POST" action="enseignant.php?modif_en=<?=$prodm['matricule'];?>">
@@ -790,7 +787,7 @@ if (isset($_SESSION['pseudo'])) {
 
 												<th colspan="3"><?php 
 
-													if ($products['type']=='admin' or $products['type']=='comptable' or $products['type']=='rh' or $products['type']=='informaticien' or $products['type']=='Proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='bibliothecaire') {?>
+													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 														<a href="enseignant.php?ajout_en" class="btn btn-info">Ajouter un enseignant</a>
 														<a href="enseignantconfig.php?ajout_en" class="btn btn-info">Configuration</a><?php
 													}?>
@@ -844,14 +841,14 @@ if (isset($_SESSION['pseudo'])) {
 
 													<td><?php 
 
-														if ($products['type']=='admin' or $products['type']=='bibliothecaire' or $products['type']=='comptable' or $products['type']=='Proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle') {?>
+														if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 															<a class="btn btn-warning" href="enseignant.php?modif_en=<?=$formation->matricule;?>&type=<?="enseignant";?>">Modifier</a><?php 
 														}?>
 													</td>
 
 													<td><?php
 
-														if ($products['type']=='admin') {?>
+														if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
 
 															<a class="btn btn-danger" href="enseignant.php?del_en=<?=$formation->matricule;?>" onclick="return alerteS();">Supprimer</a><?php
 														}?>

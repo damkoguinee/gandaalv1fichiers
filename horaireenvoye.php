@@ -191,7 +191,7 @@ if (isset($_SESSION['pseudo'])) {
 
                                         <td style="text-align: center;"><?=ucwords($value->nommat);?></td>
 
-                                        <td><a class="btn btn-danger" onclick="return alerteS();" href="horaireenvoye.php?deletec=<?=$value->numens;?>&datet=<?=$value->datet;?>&heuret=<?=$value->heured;?>">Supprimer</a></td>                                     
+                                        <td><a class="btn btn-danger" onclick="return alerteS();" href="horaireenvoye.php?deletec=<?=$value->numens;?>&datet=<?=$value->datet;?>&heuret=<?=$value->heured;?>">Annuler</a></td>                                     
                                         
                                     </tr>
                                 </tbody><?php

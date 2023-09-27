@@ -416,7 +416,7 @@ if (isset($_SESSION['pseudo'])) {
               <a target="_blank" class="btn btn-warning" href="facture_recettes.php?matricule=<?=$product->nom_client;?>"><i class="fa-solid fa-file-pdf"></i></a>
             </td>
 
-            <td><?php if ($products['type']=='informaticien' or $products['type']=='comptable' or $products['type']=='admin') {?><a class="btn btn-danger" onclick="return alerteS();" href="versement.php?deletevers=<?=$product->numcmd;?>">Supprimer</a><?php };?></td>
+            <td><?php if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?><a class="btn btn-danger" onclick="return alerteS();" href="versement.php?deletevers=<?=$product->numcmd;?>">Supprimer</a><?php };?></td>
             
           </tr><?php 
         }?>

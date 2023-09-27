@@ -26,7 +26,7 @@ if (isset($_SESSION['pseudo'])) {
 							$form=$DB->query('SELECT *from formation');
 						}
 
-						if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='Proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='surveillant Général' or $products['type']=='bibliothecaire') {?>
+						if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
 
 							<form id="formulaire" method="POST" action="matiere.php">
 
@@ -120,7 +120,7 @@ if (isset($_SESSION['pseudo'])) {
 
 					if(isset($_POST['ajoutem'])){	
 
-						if($_POST['nomm']!="" and $_POST['codem']!="" and $_POST['coefm']!="" and $_POST['codef']!="" ){
+						if($_POST['nomm']!="" and $_POST['coefm']!="" and $_POST['codef']!="" ){
 							
 							$codem=$panier->h($_POST['codem']);
 							$nommat=$_POST['nomm'];
@@ -357,7 +357,8 @@ if (isset($_SESSION['pseudo'])) {
 												<th><input   type = "submit" name = "s" value = "search"></th>
 												<th colspan="2"><?php 
 
-													if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='Proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='surveillant Général' or $products['type']=='bibliothecaire') {?><a href="matiere.php?ajout_m" style="color: white;">Ajouter une matière</a><?php }?><a style="margin-left: 10px;"href="printdoc.php?printmat=<?=$_GET['codefm'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a></th>
+													if ( ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" ) AND $panier->users($_SESSION['matricule'])['niveau']>1) {?><a href="matiere.php?ajout_m" style="color: white;">Ajouter une matière</a><?php }?><a style="margin-left: 10px;"href="printdoc.php?printmat=<?=$_GET['codefm'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
+												</th>
 										</tr>
 
 										</form>
@@ -393,12 +394,12 @@ if (isset($_SESSION['pseudo'])) {
 
 													<td colspan="2"><?php 
 
-														if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='Proviseur' or $products['type']=='DE/Censeur' or $products['type']=='surveillant Général' or $products['type']=='bibliothecaire') {?>
+														if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" ) {?>
 
 															<a href="matiere.php?modif_m=<?=$formation->codem;?>"><input type="button" value="Modifier" style="width: 40%; font-size: 16px; text-align: center; background-color: orange; color: white; cursor: pointer"></a><?php 
 														}
 
-														if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='bibliothecaire') {?>
+														if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" ) {?>
 
 															<a href="matiere.php?del_m=<?=$formation->codem;?>" onclick="return alerteS();"><input type="button" value="Supprimer" style="width: 40%; font-size: 16px; text-align: center; background-color: red; color: white; cursor: pointer"></a><?php 
 														}?>

@@ -376,7 +376,6 @@ if (isset($_SESSION['pseudo'])) {
 				    		<thead class="sticky-top bg-light text-center">
 
 				    			<form class="form">
-
 				    				<tr>
 				                    	<th colspan="5" >Liste des Cours <a class="btn btn-info" href="printdoc.php?enseigne" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
 
@@ -387,7 +386,7 @@ if (isset($_SESSION['pseudo'])) {
 
 				                    	<th colspan="2"><?php 
 
-											if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='bibliothecaire') {?><a class="btn btn-warning" href="enseignement.php?ajout_ens" style="color: white;">Ajouter un cours</a><?php }?>
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?><a class="btn btn-warning" href="enseignement.php?ajout_ens" style="color: white;">Ajouter un cours</a><?php }?>
 										</th>
 				                  </tr>
 
@@ -422,14 +421,14 @@ if (isset($_SESSION['pseudo'])) {
 
 				                        <td><?php 
 
-											if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='bibliothecaire') {?>
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" ) {	?>
 				                        		<a class="btn btn-warning" href="enseignement.php?modif_ens=<?=$formation->codens;?>&codem=<?=$formation->codem;?>&nomgr=<?=$formation->nomgr;?>" >Modifier</a><?php 
 				                        	}?>
 				                        </td>
 
 				                        <td><?php 
 
-											if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='bibliothecaire') {?>
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
 
 				                        		<a class="btn btn-success" href="enseignement.php?dupliq_f&nomgr=<?=$formation->nomgr;?>&codef=<?=$formation->codef;?>&codem=<?=$formation->codem;?>&codens=<?=$formation->codens;?>" onclick="return alerteV();">Reporter</a><?php
 				                        	}?>
@@ -437,8 +436,7 @@ if (isset($_SESSION['pseudo'])) {
 
 				                        <td><?php
 
-											if ($products['type']=='admin' or $products['type']=='informaticien' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='bibliothecaire') {?>
-
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
 				                        		<a class="btn btn-danger" href="enseignement.php?del_ens=<?=$formation->id;?>&matricule=<?=$formation->codens;?>" onclick="return alerteS();">Annuler</a><?php
 				                        	}?>
 				                        </td>

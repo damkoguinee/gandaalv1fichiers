@@ -42,7 +42,7 @@ if (isset($_SESSION['pseudo'])) {?>
 						
 						if ($products['type']!='admin') {
 
-							if ($products['type']=='Secretaire' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='informaticien') {
+							if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {
 
 								if (!empty($_SESSION['niveauf'])) {
 
@@ -111,7 +111,7 @@ if (isset($_SESSION['pseudo'])) {?>
 
 							$prodens=$DB->querys('SELECT codens from enseignement where codem=:codem and nomgr=:classe and promo=:promo', array('codem'=>$_SESSION['matn'], 'classe'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
-							if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='informaticien') {
+							if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {
 
 								$_SESSION['ens']=$prodens['codens'];
 
@@ -157,7 +157,7 @@ if (isset($_SESSION['pseudo'])) {?>
 
 						if (isset($_POST['groupe']) or isset($_POST['semestren']) or isset($_POST['matn']) or isset($_POST['devoir'])) {	
 
-							if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='informaticien') {
+							if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {
 
 
 								$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where  enseignement.nomgr=:nom and enseignement.promo=:promo order by(nommat)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
@@ -491,8 +491,7 @@ if (isset($_SESSION['pseudo'])) {?>
 
 											<td><?php
 
-											  	if ($products['type']=='admin' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire') {?>
-
+											if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
 											  		<a class="btn  btn-danger" href="note.php?del_note=<?=$matricule->matricule;?>&iddev=<?=$devoir->id;?>&promo=<?=$_SESSION['promo'];?>&note" onclick="return alerteS();">Supprimer</a><?php
 											  	}?>
 										  	</td><?php

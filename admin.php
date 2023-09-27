@@ -1,43 +1,159 @@
 <?php
-require 'header.php';
+require 'headerv3.php';?>
 
-require 'navformation.php';
+<div class="container-fluid">
+    <div class="row"><?php 
+    
+        if (isset($_POST['matricule'])) {            
+            $matricule=$_POST['matricule'];
+            $identifiant=$_POST['identifiant'];
+            $password=$_POST['password'];
+            $passwordInit=$_POST['passwordInit'];
+            $role=$_POST["role"];
+            $level=$_POST["level"];
 
-if (isset($_GET['licence'])) {
+            if (empty($password)) {
+                $mdp=$passwordInit;
+            }else{
+                $mdp=$mdp=password_hash($password, PASSWORD_DEFAULT);
+            }
+            $roletab=[];
+            foreach ($role as $value_role) {
+                $roletab [] = $value_role." , ";
+            }
+            $valeurs_role = join($roletab);
+            
+           $DB->insert("UPDATE login SET pseudo = '{$identifiant}', mdp = '{$mdp}', niveau = '{$level}' , role = '{$valeurs_role}' WHERE matricule = '{$matricule}'  ");
+        }
+        ?>
+        <table class="table table-hover table-bordered table-striped table-responsive align-middle">
+            <thead class="sticky-top bg-secondary">
+                <tr><th colspan="9">Gestion des accès utilsateurs</th></tr>
+                <tr>
+                    <th colspan="9">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <form class="form d-flex" action="" method="GET">
+                                        <input class="form-control me-2" id="search-user" type="search" name="search" placeholder="Recherchez un utilsateur" onchange="this.form.submit()" >
+                                        <button class="btn btn-primary" type="submit" name="searchValid">Recherchez</button>
+                                    </form>
+                                    
+                                </div>						        			
+                            </div>
+                        </div>
+                    </th>
+                </tr>
 
-    $products = $DB->querys('SELECT * FROM licence ');?>
+                <tr>
+                    <th scope="col" class="text-center">N°</th>
+                    <th scope="col">Matricule</th>
+                    <th scope="col">Prénom & Nom</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">identifiant</th>
+                    <th scope="col">Mot de Passe</th>
+                    <th scope="col">Role</th>                                   
+                    <th scope="col">Niveau</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
 
-    <div>
+            <tbody><?php 
 
-        <form id="formulaire" method="post" action="admin.php" style="width: 50%; height: 200px;">
-            <ol>
-                <li><label>Selectionnez la licence</label>
-                    <select name="licence" required="">
-                        <option></option>
-                        <option value="<?=$products['num_licence'];?>"><?=$products['num_licence'];?></option>
-                    </select>
-                </li>
+                $montantcumul=0;
+                if (isset($_GET["search"])) {
+                    $search=$_GET["search"];
+                    $utilsateurs = $DB->query("SELECT *FROM login inner join personnel on numpers=matricule WHERE (personnel.nom LIKE ? or prenom LIKE ? or matricule LIKE ?)  order by(matricule) limit 50 " , array("%".$search."%", "%".$search."%", "%".$search."%"));
+                }else{
+                    $utilsateurs = $DB->query("SELECT *FROM login inner join personnel on numpers=matricule  order by(matricule) limit 50 ");
+                }
 
-                <li><label>Selectionnez la date de fin</label>
-                    <input type="date" name="datel" required="" value="<?=$products['date_fin'];?>">
-                </li>
-            </ol>
+                foreach ($utilsateurs as $key => $value) {
+                    $nom = "";?>
 
-            <fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutef" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+                    <form action="" method="POST">
 
-        </form>
-    </div><?php
-}
+                        <tr>
+                            <td><?=$key+1;?></td>
+                            <td><?=$value->matricule;?></td>
+                            <td><?=$panier->nomPersonnel($value->matricule);?></td>
+                            <td><?=$value->type;?></td>
+                            <td><input class="form-control" type="text" name="identifiant" value="<?=$value->pseudo;?>"></td>                                        
+                            <td>
+                                <input class="form-control" type="text" name="password">
+                                <input class="form-control" type="hidden" name="passwordInit" value="<?=$value->mdp;?>">
+                                <input class="form-control" type="hidden" name="matricule" value="<?=$value->matricule;?>">
+                            </td>    
+                            <td>
+                                <select class="form-select" type="text" name="role[]"multiple>
+                                    <option selected value="<?=$value->role;?>"><?=$value->role;?></option>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                    <option value="ROLE_RESPONSABLE">ROLE_RESPONSABLE</option>
+                                    <option value="ROLE_PERSONNEL">ROLE_PERSONNEL</option>
+                                    <option value="ROLE_COMPTABLE">ROLE_COMPTABLE</option>
+                                    <option value="ROLE_ENSEIGNANT">ROLE_ENSEIGNANT</option>
+                                    <option value="ROLE_ELEVE">ROLE_ELEVE</option>
+                                    <option value="ROLE_PARENT">ROLE_PARENT</option>
+                                </select>
 
-if (!isset($_POST['licence'])) {
+                            </td>  
+                            <td>
+                                <select class="form-select" type="text" name="level">
+                                    <option value="<?=$value->niveau;?>"><?=$value->niveau;?></option>
+                                    <option value="2">2</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </td>
+                            <td><button class="btn btn-primary" type="submit" name="valid">Valider</button></td>
+                        </tr>
+                    </form><?php 
+                }?>
+            </tbody>
+        </table>
 
-}else{
+    </div>
+</div>
 
-    $datel = $_POST['datel'];
-    $licence=$_POST['licence']; 
-    $DB->insert('UPDATE licence SET date_fin = ? WHERE num_licence = ?', array($datel, $licence));?>
+<?php require 'footer.php';?>
 
-    <div class="alerteV">Votre licence est desormais valable jusqu'au <?=$datel;?></div><?php
+<script type="text/javascript">
+    function alerteS(){
+        return(confirm('Valider la suppression'));
+    }
 
+    function alerteV(){
+        return(confirm('Confirmer la validation'));
+    }
 
-}
+    function focus(){
+        document.getElementById('pointeur').focus();
+    }
+
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#search-user').keyup(function(){
+            $('#result-search').html("");
+
+            var utilisateur = $(this).val();
+
+            if (utilisateur!='') {
+                $.ajax({
+                    type: 'GET',
+                    url: 'searchelevegen.php?searchRole',
+                    data: 'user=' + encodeURIComponent(utilisateur),
+                    success: function(data){
+                        if(data != ""){
+                          $('#result-search').append(data);
+                        }else{
+                          document.getElementById('result-search').innerHTML = "<div style='font-size: 20px; text-align: center; margin-top: 10px'>Aucun utilisateur</div>"
+                        }
+                    }
+                })
+            }
+      
+        });
+    });
+</script>
+

@@ -145,7 +145,7 @@ if (isset($_SESSION['pseudo'])) {
 
 					// fin inscription
 
-					if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='comptable' or $products['type']=='informaticien' or $products['type']=='secrétaire' or $products['type']=='bibliothecaire') {?>
+					if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 						
 						<form class="mt-1" id="formulaire" method="POST" action="preinscription.php" enctype="multipart/form-data" style="display: flex; flex-wrap: wrap;">
 

@@ -303,7 +303,7 @@
 
                     $prodh=$DB->querys('SELECT sum(heuret) as heuret from horairet where numens=:mat and date_format(datet,\'%m\')=:datet and annees=:promo', array('mat'=>$numeen, 'datet'=>$cmois, 'promo'=>$_SESSION['promo']));
 
-                    $prodac=$DB->querys('SELECT montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$numeen, 'datet'=>$_SESSION['moisp'], 'promo'=>$_SESSION['promo']));
+                    $prodac=$DB->querys('SELECT sum(montant) as montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$numeen, 'datet'=>$_SESSION['moisp'], 'promo'=>$_SESSION['promo']));
 
                     if (empty($prodac)) {
                         $accompte=0;
@@ -370,7 +370,7 @@
 
                                 <td><?php 
 
-                                    if ($products['type']=='admin' or $products['type']=='comptable' ) {?>
+                                    if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
                                         <button class="btn  btn-primary" type="submit" name="payen" onclick="return alerteV();">Valider</button><?php 
                                     }?>
                                 </td>

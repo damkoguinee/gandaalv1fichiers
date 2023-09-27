@@ -133,14 +133,14 @@ require '_header.php'
                   };?>
                 </li>
                 <?php 
-                if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='informaticien' or $products['type']=='Directeur Général' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='surveillant Général' or $products['type']=="Conseille a l'éducation" or $products['type']=='coordonateur bloc B' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='secrétaire' or $products['type']=='enseignant' or $products['type']=='bibliothecaire') {?>
+                if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                   <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light m-1" href="note.php?note&note">Pédagogie</a>
                   </li><?php 
                 }
 
-                if ($products['type']=='admin' or $products['type']=='fondation' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='Directeur Général' or $products['type']=='comptable' or $products['type']=='informaticien' or $products['type']=='secrétaire') {?>
+                if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                   <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light m-1" href="comptabilite.php?note">Comptabilite</a>

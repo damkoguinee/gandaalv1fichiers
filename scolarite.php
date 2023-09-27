@@ -236,10 +236,10 @@ if (isset($_SESSION['pseudo'])) {
 
 											<td colspan="1"><?php 
 
-												if ($products['type']=='admin' or $products['type']=='informaticien') {?>
+												if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
-												<a class="btn btn-danger" href="scolarite.php?del_scol=<?=$formation->id;?>" onclick="return alerteS();">Supprimer</a><?php 
-											}?>
+													<a class="btn btn-danger" href="scolarite.php?del_scol=<?=$formation->id;?>" onclick="return alerteS();">Annuler</a><?php 
+												}?>
 											</td>
 
 										</tr><?php

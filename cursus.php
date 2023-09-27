@@ -14,7 +14,7 @@ if (isset($_SESSION['pseudo'])) {
 				<div class="col-sm-12 col-md-10" style="overflow:auto;"><?php
 					if (isset($_GET['ajout_c'])) {
 
-						if ($products['type']=='admin' or $products['type']=='informaticien') {?>
+						if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 							<form class="form mx-2 py-2 bg-light" method="POST" action="cursus.php">
 
 							    <legend>Ajouter un cursus scolaire</legend>

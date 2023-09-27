@@ -14,21 +14,21 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
 
             }else{
                 if (isset($_GET['payeem'])) {
-                    $_SESSION['numeen']=array();
+                    $_SESSION['numeen_accompte']=array();
                 }
 
                 if (isset($_POST['numeen'])) {
 
-                    $_SESSION['numeen']=$_POST['numeen'];
-                    $numeen=$_SESSION['numeen'];
+                    $_SESSION['numeen_accompte']=$_POST['numeen'];
+                    $numeen=$_SESSION['numeen_accompte'];
 
                 }elseif (isset($_POST['validac'])) {
 
-                    $numeen=$_SESSION['numeen'];
+                    $numeen=$_SESSION['numeen_accompte'];
 
                 }elseif (isset($_POST['montantac'])) {
 
-                    $numeen=$_SESSION['numeen'];
+                    $numeen=$_SESSION['numeen_accompte'];
 
                 }else{
 
@@ -39,32 +39,33 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
                 
                 if (isset($_GET['delepayeens'])) {
 
-                    $numeen=$_SESSION['numeen'];
+                    $numeen=$_SESSION['numeen_accompte'];
                 }
 
-                if (isset($_GET['deleteac'])) {
+                if (isset($_GET['deleteac']) or isset($_POST['validac']) or isset($_POST['montantac']) ) {
 
-                    $numeen=$_SESSION['numeen'];
+                    $numeen=$_SESSION['numeen_accompte'];
                 }
 
                 if (isset($_POST['numeen']) or !empty($numeen)  or isset($_POST['validac']) or isset($_POST['montantac']) or isset($_GET['deleteac'])) {
 
                     if (isset($_POST['numeen']) or isset($_POST['validac']) or isset($_POST['montantac']) or isset($_GET['deleteac'])) {
 
-                        if (isset($_POST['numeen'])) {
+                        if (!empty($_SESSION['typel'])) {
                            
-                            if ($_POST['type']=='personnel') {
+                            if ($_SESSION['typel']=='personnel') {
                                 
                                 $products=$DB->querys('SELECT numpers as mat, nom as nomen, prenom as prenomen, date_format(datenaiss,\'%d/%m/%Y \') as naissance, phone, email from personnel inner join contact on numpers=matricule where numpers=:matp', array('matp'=>$numeen));
+                                
                             }else{
 
                                 $products=$DB->querys('SELECT enseignant.matricule as mat, nomen, prenomen, date_format(naissance,\'%d/%m/%Y \') as naissance, phone, email from enseignant inner join contact on enseignant.matricule=contact.matricule where enseignant.matricule=:mat', array('mat'=>$numeen));
 
                             }
                         }else{
-                            $products=$DB->querys('SELECT enseignant.matricule as mat, nomen, prenomen, date_format(naissance,\'%d/%m/%Y \') as naissance, phone, email from enseignant inner join contact on enseignant.matricule=contact.matricule where enseignant.matricule=:mat', array('mat'=>$numeen));
-
+                            $products=$DB->querys('SELECT enseignant.matricule as mat, nomen, prenomen, date_format(naissance,\'%d/%m/%Y \') as naissance, phone, email from enseignant left join contact on enseignant.matricule=contact.matricule where enseignant.matricule=:mat', array('mat'=>$numeen));
                         }
+
 
                         
                     }
@@ -96,7 +97,6 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
 
                             <div class="mb-1"><?php
                                 if (isset($_POST['numeen']) or isset($_POST['validac']) or isset($_POST['montantac']) or isset($_GET['deleteac'])) {
-
                                     require 'fichepersonnel.php';
                                 }?>
                             </div></legend>
@@ -199,7 +199,62 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
 
                     $prodac = $DB->query('SELECT id, matricule, montant, mois, moischaine, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye, numcheque, typepaye FROM accompte WHERE matricule = :mat and anneescolaire=:promo ORDER BY(datepaye) DESC', array('mat'=> $numeen, 'promo'=>$_SESSION['promo']));
 
-                    if (!empty($_SESSION['numeen'])) {
+                    if (!empty($_SESSION['numeen_accompte'])) {?>
+                        <div class="row mx-0 p-0" style="overflow: auto; height:250px;">
+
+                            <table class="table table-hover table-bordered table-striped table-responsive text-center">
+                                <thead>
+                                    <tr><th colspan="6">Enregistrer une avance sur salaire</th></tr>
+
+                                    <tr>
+                                        <th>Mois</th>
+                                        <th>Saisir Montant</th>
+                                        <th>Type de Paie</th>
+                                        <th>N°Chèque/Bord</th>
+                                        <th>C. debiter</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody><?php
+
+                                    foreach ($month as $key => $value) {?>
+
+                                        <form action="accompte.php" method="post" id="formulaire" class="form">
+
+                                            <tr>
+                                                <td><?=$value;?><input class="form-control" type="hidden" name="moisac" value="<?=$key;?>"><input class="form-control" type="hidden" name="moischaine" value="<?=$value;?>"></td>
+
+                                                <td><input class="form-control" type="text" name="montantac" required="" />
+                                                    <input class="form-control" type="hidden" name="mat" value="<?=$numeen;?>"></td>
+
+                                                <td><select class="form-select" name="typep" required="">
+                                                    <option value=""></option><?php 
+                                                    foreach ($panier->modep as $value) {?>
+                                                        <option value="<?=$value;?>"><?=$value;?></option><?php 
+                                                    }?></select>
+                                                </td>
+
+                                                <td><input class="form-control" type="text" name="numcheque" /></td>
+
+                                                <td><select  class="form-select" name="compte" required="">
+                                                    <option></option><?php
+                                                    $type='Banque';
+
+                                                    foreach($panier->nomBanque() as $product){?>
+
+                                                        <option value="<?=$product->id;?>"><?=strtoupper($product->nomb);?></option><?php
+                                                    }?>
+                                                </select></td>
+
+                                                <td><?php if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?><button class="btn btn-primary" type="submit" name="validac">Valider</button><?php }?></td>
+                                            </tr>
+
+                                        </form><?php
+                                    }?>
+                                </tbody>
+                            </table>
+                        </div><?php 
 
                         if (!empty($prodac)) {?>
 
@@ -255,60 +310,7 @@ $prodlogin = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo
                                     </tr>
                                 </tfoot>
                             </table><?php
-                        }?>
-
-                        <table class="table table-hover table-bordered table-striped table-responsive text-center">
-                            <thead>
-                                <tr><th colspan="6">Plan de Paiements</th></tr>
-
-                                <tr>
-                                    <th>Mois</th>
-                                    <th>Saisir Montant</th>
-                                    <th>Type de Paie</th>
-                                    <th>N°Chèque/Bord</th>
-                                    <th>C. debiter</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody><?php
-
-                                foreach ($month as $key => $value) {?>
-
-                                    <form action="accompte.php" method="post" id="formulaire" class="form">
-
-                                        <tr>
-                                            <td><?=$value;?><input class="form-control" type="hidden" name="moisac" value="<?=$key;?>"><input class="form-control" type="hidden" name="moischaine" value="<?=$value;?>"></td>
-
-                                            <td><input class="form-control" type="text" name="montantac" required="" />
-                                                <input class="form-control" type="hidden" name="mat" value="<?=$numeen;?>"></td>
-
-                                            <td><select class="form-select" name="typep" required="">
-                                                <option value=""></option><?php 
-                                                foreach ($panier->modep as $value) {?>
-                                                    <option value="<?=$value;?>"><?=$value;?></option><?php 
-                                                }?></select>
-                                            </td>
-
-                                            <td><input class="form-control" type="text" name="numcheque" /></td>
-
-                                            <td><select  class="form-select" name="compte" required="">
-                                                <option></option><?php
-                                                $type='Banque';
-
-                                                foreach($panier->nomBanque() as $product){?>
-
-                                                    <option value="<?=$product->id;?>"><?=strtoupper($product->nomb);?></option><?php
-                                                }?>
-                                            </select></td>
-
-                                            <td><?php if ($prodlogin['type']=='comptable' or $prodlogin['type']=='admin')  {?><button class="btn btn-primary" type="submit" name="validac">Valider</button><?php }?></td>
-                                        </tr>
-
-                                    </form><?php
-                                }?>
-                            </tbody>
-                        </table><?php 
+                        }
                     }?>
 
                 </div><?php

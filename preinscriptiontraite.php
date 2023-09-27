@@ -106,7 +106,7 @@ if (isset($_GET['enseignant'])) {
 
 								<td><?php
 
-									if ($products['type']=='admin' or $products['type']=='comptable'  or $products['type']=='bibliothecaire') {?>
+									if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
 										<a class="btn btn-danger" href="preinscriptiontraite.php?del=<?=$eleve->matricule;?>" onclick="return alerteS();">Supprimer</a><?php 
 									}?>

@@ -449,21 +449,21 @@ require 'headerv2.php';?>
 
 												<td><?php 
 
-													if ($_SESSION['type']=='admin' or $_SESSION['type']=='bibliothecaire') {?>
+													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" ) {?>
 														<a class="btn btn-warning"  href="groupe.php?modif_f&nomgr=<?=$formation->nomgr;?>">Modifier</a><?php
 													};?>
 												</td>
 
 												<td><?php 
 
-													if ($_SESSION['type']=='admin' or $_SESSION['type']=='informaticien' or $_SESSION['type']=='bibliothecaire' or $_SESSION['type']=='proviseur' or $_SESSION['type']=='DE/Censeur' or $_SESSION['type']=='Directeur du primaire') {?>
+													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 														<a class="btn btn-warning" href="groupe.php?dupliq_f&nomgr=<?=$formation->nomgr;?>&niveau=<?=$formation->niveau;?>&codef=<?=$formation->codef;?>" onclick="return alerteV();">Reporter</a><?php
 													};?>
 												</td>
 
 												<td><?php
 
-													if ($_SESSION['type']=='admin') {?>
+													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" ) {?>
 														
 														<a class="btn btn-danger" href="groupe.php?del_gr=<?=$formation->id;?>" onclick="return alerteS();">Supprimer</a><?php
 													}?>

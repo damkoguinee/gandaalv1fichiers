@@ -5,7 +5,7 @@
 
     if (!empty($_SESSION['pseudo'])) {
         
-        if ($products['niveau']<4) {?>
+        if ($products['niveau']<=1) {?>
 
             <div class="alert alert-danger">Des autorisations sont requises pour consulter cette page</div><?php
 
@@ -135,7 +135,7 @@
                                             }
                                         }
                                         
-                                        if ($_SESSION["type"]=='comptable' or $_SESSION["type"]=='admin' or $_SESSION["type"]=='bibliothecaire') {?>
+                                        if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
                                             <form action="comptabilite.php?elevef" method="post" id="formulaire" style="background-color: grey; margin: 0px; margin-top: 10px;"><?php
 
@@ -313,13 +313,13 @@
 
                                                 if ($_SESSION['etab']=='Complexe Scolaire la Plume') {
 
-                                                    if ($prodlogin['type']=='secrétaire' or $prodlogin['type']=='comptable' or $prodlogin['type']=='admin')  {?>
+                                                    if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
                                                         <fieldset><input type="reset" value="Annuler" id="form" style="cursor: pointer;" /><input type="submit" value="Valider" name="payel" id="form" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset><?php 
                                                     }
                                                 }else{
 
-                                                    if ($prodlogin['type']=='comptable' or $prodlogin['type']=='informaticien' or $prodlogin['type']=='admin')  {?>
+                                                    if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
                                                         <fieldset><input type="reset" value="Annuler" id="form" style="cursor: pointer;" /><input type="submit" value="Valider" name="payel" id="form" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset><?php 
                                                     }
@@ -785,13 +785,13 @@
 
                                                                         if ($_SESSION['etab']=='Complexe Scolaire la Plume') {
 
-                                                                            if ($prodlogin['type']=='secrétaire' or $prodlogin['type']=='comptable' or $prodlogin['type']=='admin')  {?>
+                                                                            if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
                                                                                 <a class="btn btn-danger" href="comptabilite.php?delepaye=<?=$paye->famille;?>&matr=<?=$numel;?>&tranche=<?=$paye->tranche;?>&montant=<?=$paye->montant;?>" onclick="return alerteS();"><input type="button" value="Annuler paiement" ></a><?php 
                                                                             }
                                                                         }else{
 
-                                                                            if ($prodlogin['type']=='comptable' or $prodlogin['type']=='informaticien' or $prodlogin['type']=='admin')  {?>
+                                                                            if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPATBLE")=="true") {?>
 
                                                                                 <a class="btn btn-danger" href="comptabilite.php?delepaye=<?=$paye->famille;?>&matr=<?=$numel;?>&tranche=<?=$paye->tranche;?>&montant=<?=$paye->montant;?>" onclick="return alerteS();">Annuler Paiement</a><?php 
                                                                             }
@@ -840,13 +840,13 @@
 
                                                             if ($_SESSION['etab']=='Complexe Scolaire la Plume') {
 
-                                                                if ($prodlogin['type']=='secrétaire' or $prodlogin['type']=='comptable' or $prodlogin['type']=='admin')  {?>
+                                                                if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
                                                                     <a class="btn btn-danger" href="comptabilite.php?delins=<?=$numel;?>" onclick="return alerteSins();">Annuler paie</a><?php 
                                                                 }
                                                             }else{
 
-                                                                if ($prodlogin['type']=='comptable' or $prodlogin['type']=='informaticien' or $prodlogin['type']=='admin')  {?>
+                                                                if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
                                                                     <a class="btn btn-danger" href="comptabilite.php?delins=<?=$numel;?>" onclick="return alerteSins();">Annuler paie</a><?php 
                                                                 }

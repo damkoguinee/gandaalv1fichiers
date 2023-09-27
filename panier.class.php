@@ -901,7 +901,6 @@ class panier{
 			
 
 		}elseif ($this->print()=='classe') {
-
 			$prodevents=$this->DB->query("SELECT events.id as id, nommat, codem, nomgrp, nomen, prenomen, codensp, name, debut, fin, lieu FROM events inner join matiere on codemp=codem inner join enseignant on matricule=codensp WHERE debut>=:debut and fin<=:fin and nomgrp=:code order by(debut)", array('debut'=>$firsday->format('Y-m-d 00:00:00'), 'fin'=>$end->format('Y-m-d 23:59:59'), 'code'=>$param));
 		}else{
 			$prodevents=array();
@@ -1380,5 +1379,20 @@ class panier{
 		$montantins=$prodajust['montant']+($this->cumulDettes($devise)+$prodins['montant']+$prodscol['montant']+$prodact['montant']+$prodvers['montant']+$montantbu)-($montantdec+$montantens+$montantpers+$montantacc+$this->cumulCreances($devise));
 
 		return $montantins;
+	}
+
+	public function users($matricule){
+		$role=$this->DB->querys("SELECT *FROM login where matricule = '{$matricule}' ");
+		return $role;
+	}
+
+	public function searchRole($motRechercher){
+		$chaine = $this->users($_SESSION['matricule'])['role'];
+		if (stripos($chaine, $motRechercher) !== false) {
+			$response="true";
+		} else {
+			$response="false";
+		}
+		return $response;
 	}
 }

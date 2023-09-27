@@ -137,7 +137,7 @@ if (isset($_SESSION['pseudo'])) {
 
 				<div><?php 
 
-					if ($products['type']=='admin' or $products['type']=='fondation' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='Directeur Général' or $products['type']=='comptable') {
+					if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {
 
 						$etatscol='actif';
 						$abandon=$DB->query("SELECT inscription.matricule as matricule, nomel, prenomel, nomgr from inscription inner join eleve on eleve.matricule=inscription.matricule where etatscol!='{$etatscol}' and annee='{$promo}'");

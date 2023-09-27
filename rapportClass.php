@@ -37,7 +37,12 @@ class Rapport
 		}elseif ($etat=='inscription' and $prod['niveau']=='lycee') {
 			$fraisins=$this->fraisins(5,"inscription")['montant'];
 		}else{
-			$fraisins=0;			
+			if ($this->infoEtablissement()['nom']=='Groupe Scolaire Prive Franco-Guineen La Pepiniere "BIKAZ"') {
+				$fraisins=2000000;			
+			}else{
+				$fraisins=0;			
+
+			}
 		}
 
 		if ($prod['niveau']=='creche') {
@@ -51,7 +56,12 @@ class Rapport
 		}elseif ($prod['niveau']=='lycee') {
 			$fraisreins=$this->fraisins(5,"reinscription")['montant'];
 		}else{
-			$fraisreins=0;
+			if ($this->infoEtablissement()['nom']=='Groupe Scolaire Prive Franco-Guineen La Pepiniere "BIKAZ"') {
+				$fraisreins=1500000;			
+			}else{
+				$fraisreins=0;			
+
+			}
 		}
 
 

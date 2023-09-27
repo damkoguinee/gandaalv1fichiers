@@ -153,7 +153,7 @@ if (isset($_SESSION['pseudo'])) {
                                         <td><?=number_format($value->montantp,0,',',' ');?></td>
                                         <td><?=$dated;?></td><?php
 
-                                		if ($products['type']=='admin' or $products['type']=='comptable') {?>
+										if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
                                         	<td><a class="btn btn-danger" href="?delete=<?=$value->id;?>&matp=<?=$value->matp;?>&promo=<?=$_SESSION['promo'];?>&idactvoir=<?=$value->idact;?>&moisp=<?=$value->moisp;?>&montantp=<?=$value->montantp;?>&numeropaie=<?=$value->numeropaie;?>" onclick="return alerteV();">Annuler</a></td><?php 
                                         }?>
                                     </tr><?php 
