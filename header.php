@@ -4,7 +4,9 @@ require '_header.php'
 <html>
 <head>
   <title>GANDAAL Gestion de Scolarite</title>
-  <meta charset="utf-8">    
+  <meta charset="utf-8"> 
+  <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">   
   <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" charset="utf-8">
 </head><?php

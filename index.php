@@ -5,9 +5,11 @@
     <head>
       <title>GANDAAL Gestion de Scolarite</title>
       <meta charset="utf-8">
-        <script src="https://kit.fontawesome.com/8df11ad090.js" crossorigin="anonymous"></script>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+      <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
+
+        <!-- <script src="https://kit.fontawesome.com/8df11ad090.js" crossorigin="anonymous"></script> -->
+      <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> --> 
     </head>
 
     <body style="background-color: #253553;"><?php

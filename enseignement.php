@@ -1,5 +1,5 @@
 <?php
-require 'headerv2.php';
+require 'headerv3.php';
 
 if (isset($_SESSION['pseudo'])) {
     
@@ -14,7 +14,7 @@ if (isset($_SESSION['pseudo'])) {
 
 		    	require 'navformation.php';?>
 
-				<div class="col-sm-12 col-md-8" style="overflow: auto;"><?php 
+				<div class="col-sm-12 col-md-10" style="overflow: auto;"><?php 
 
 					if (isset($_GET['ajout_ens']) or isset($_POST['codef'])) {
 
@@ -46,109 +46,97 @@ if (isset($_SESSION['pseudo'])) {
 							$prodmat=$DB->query('SELECT *from matiere ');
 						}?>
 
-						<form id="formulaire" method="POST" action="enseignement.php">
+						<form class="form bg-light p-2" method="POST" action="">
+							<div class="mb-1">
+								<label class="form-label">Code formation</label>
+								<select class="form-select" type="text" name="codef" required="" class="form-control" onchange="this.form.submit()"><?php 
 
-						    <fieldset><legend>Ajouter un Cours</legend>
-						    	<ol>
+									if (isset($_POST['codef'])) {?>
 
-									<li>
+										<option><?=$_POST['codef'];?></option><?php
 
-										<label>Code formation</label>
-										<select type="text" name="codef" required="" class="form-control" onchange="this.form.submit()"><?php 
+									}else{?>
 
-									    if (isset($_POST['codef'])) {?>
+										<option></option><?php						    	
+									}
 
-									    	<option><?=$_POST['codef'];?></option><?php
+									foreach ($form as $codef) {
+										if ($codef->classe=='1') {?>
 
-									    }else{?>
+											<option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ère année '.$codef->nomf;?></option><?php
 
-									    	<option></option><?php						    	
-									    }
+										}elseif($codef->classe=='petite section' or $codef->classe=='moyenne section' or $codef->classe=='grande section' or $codef->classe=='terminale'){?>
 
-										    foreach ($form as $codef) {
-										    	if ($codef->classe=='1') {?>
+											<option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' '.$codef->nomf;?></option><?php
 
-						                            <option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ère année '.$codef->nomf;?></option><?php
+										}else{?>
 
-												}elseif($codef->classe=='petite section' or $codef->classe=='moyenne section' or $codef->classe=='grande section' or $codef->classe=='terminale'){?>
+											<option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ème année '.$codef->nomf;?></option><?php
+										}
 
-						                            <option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' '.$codef->nomf;?></option><?php
+									}?>
+								</select>
+							</div>
+							<div class="mb-1">
+								<label class="form-label">Matières</label>
+								<div class="d-flex justify-content-between">
+									<select class="form-select" type="text" name="nomm[]" multiple required="" class="form-control">
+										<option></option><?php
+										foreach ($prodmat as $codef) {?>
 
-												}else{?>
+											<option value="<?=$codef->codem;?>"><?=$codef->nommat;?></option><?php
+											
+										}?>
+									</select>
 
-						                            <option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ème année '.$codef->nomf;?></option><?php
-												}
+									<a href="matiere.php?ajout_m">Ajouter une matière</a>
+								</div>
+							</div>
+							<div class="mb-1">
+								<label class="form-label">Classe</label>
+								<select class="form-select" type="text" name="nomg" required="" class="form-control">
+									<option></option><?php
+									foreach ($prodgroup as $codef) {?>
 
-										    }?>
-										</select>
+										<option value="<?=$codef->nomgr;?>"><?=$codef->nomgr;?></option><?php
+										
+									}?>
+								</select>
+							</div>
+							<div class="mb-1">
+								<label class="form-label">Enseignant</label>
+								<div class="d-flex justify-content-between">
 
-									</li>
+									<select class="form-select" type="text" name="prof" required="">
+										<option></option><?php
+										foreach ($prodprof as $prof) {?>
 
-									<li>
+											<option value="<?=$prof->matricule;?>"><?=ucfirst(strtolower($prof->prenomen)).' '.strtoupper($prof->nomen);?></option><?php
 
-										<label>Matières</label>
-										<select type="text" name="nomm[]" multiple required="" class="form-control">
-									    	<option></option><?php
-										    foreach ($prodmat as $codef) {?>
+										}?>
+									</select>
 
-						                        <option value="<?=$codef->codem;?>"><?=$codef->nommat;?></option><?php
-						                        
-										    }?>
-										</select>
+									<a  href="enseignant.php?ajout_en">Ajouter enseignant</a>
+								</div>
+							</div>
 
-										<a href="matiere.php?ajout_m">Ajouter une matière</a>
-									</li>
+							<div class="mb-1">
+								<label class="form-label">Année-Scolaire</label>
 
-									<li>
+								<select class="form-select" type="text" name="promo" required=""><?php
+									
+									$annee=date("Y")+1;
 
-										<label>Classe</label>
-										<select type="text" name="nomg" required="" class="form-control">
-									    	<option></option><?php
-										    foreach ($prodgroup as $codef) {?>
+									for($i=($_SESSION['promo']-1);$i<=$annee ;$i++){
+										$j=$i+1;?>
 
-						                        <option value="<?=$codef->nomgr;?>"><?=$codef->nomgr;?></option><?php
-						                        
-										    }?>
-										</select>
+										<option value="<?=$j;?>"><?=$i.'-'.$j;?></option><?php
 
-									</li>
-
-									<li>
-
-										<label>Enseignant</label>
-										<select type="text" name="prof" required="">
-									    	<option></option><?php
-										    foreach ($prodprof as $prof) {?>
-
-										    	<option value="<?=$prof->matricule;?>"><?=ucfirst(strtolower($prof->prenomen)).' '.strtoupper($prof->nomen);?></option><?php
-
-										    }?>
-										</select>
-
-									    <a href="enseignant.php?ajout_en">Ajouter enseignant</a>
-
-									</li>
-
-									<li><label>Année-Scolaire</label>
-
-							            <select type="text" name="promo" required=""><?php
-							              
-								            $annee=date("Y")+1;
-
-								            for($i=($_SESSION['promo']-1);$i<=$annee ;$i++){
-								            	$j=$i+1;?>
-
-								             	<option value="<?=$j;?>"><?=$i.'-'.$j;?></option><?php
-
-								            }?>
-								        </select>
-							            
-							        </li>
-
-								</ol>
-							</fieldset>
-
-							<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutens" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+									}?>
+								</select>
+							</div>
+							
+							<button class="btn btn-primary" type="submit" name="ajoutens" onclick="return alerteV();">Ajouter</button>
 						</form><?php
 					}
 
@@ -222,10 +210,11 @@ if (isset($_SESSION['pseudo'])) {
 						    <fieldset><legend>Modifier un enseignant</legend>
 						    	<ol>
 
-									<li>
+									
 
-										<label>Enseignant</label>
-										<select type="text" name="prof" required="">
+										<div class="mb-1">
+											<label class="form-label">Enseignant</label>
+										<select class="form-select" type="text" name="prof" required="">
 									    	<option value="<?=$prodm['matricule'];?>"><?=strtoupper($prodm['nomen']).' '.ucfirst(strtolower($prodm['prenomen']));?></option><?php
 										    foreach ($prodprof as $prof) {?>
 
@@ -240,7 +229,7 @@ if (isset($_SESSION['pseudo'])) {
 
 									    <input type="hidden" name="codem" value="<?=$prodm['codem'];?>">
 
-									</li>
+									
 
 								</ol>
 
@@ -412,7 +401,7 @@ if (isset($_SESSION['pseudo'])) {
 
 									<tr>
 										<td class="text-center"><?=$key+1;?></td>
-										<td><a href="formation.php?voir_elg=<?=$formation->nomgr;?>"><?=$formation->nomgr;?></a></td>
+										<td><a class="btn btn-info" href="formation.php?voir_elg=<?=$formation->nomgr;?>"><?=$formation->nomgr;?></a></td>
 										<td><?=ucwords($formation->nomf);?></td>
 
 										<td><?=ucwords($formation->nommat);?></td>

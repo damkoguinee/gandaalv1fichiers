@@ -1,5 +1,5 @@
 <?php
-require 'headerv2.php';?>
+require 'headerv3.php';?>
 
 <div class="container-fluid">
 	<div class="row"><?php 
@@ -44,59 +44,59 @@ require 'headerv2.php';?>
 
 						
 					}?>
-					<form id="formulaire" method="POST" action="groupe.php">
+					<form class="form bg-light p-2" method="POST" action="">
 
 						<fieldset><legend>Ajouter une Classe</legend>
-							<ol>
+						
 
-								<li>
-									<label>Formation</label>
-									<select type="text" name="codef" required="" onchange="this.form.submit()"><?php
-										if (isset($_POST['codef'])) {?>
+							<div class="mb-1">
+								<label class="form-label">Formation</label>
+								<select class="form-select" type="text" name="codef" required="" onchange="this.form.submit()"><?php
+									if (isset($_POST['codef'])) {?>
 
-											<option value="<?=$_POST['codef'];?>"><?=$_POST['codef'];?></option><?php
+										<option value="<?=$_POST['codef'];?>"><?=$_POST['codef'];?></option><?php
+									}else{?>
+
+										<option></option><?php
+									}
+									foreach ($form as $codef) {
+										if ($codef->classe=='1') {?>
+
+											<option value="<?=$codef->codef;?>"><?=$codef->classe.' ère';?></option><?php
+
+										}elseif($codef->classe=="2nde"){?>
+
+											<option value="<?=$codef->codef;?>"><?=$codef->classe;?></option><?php
+
+										}elseif(($codef->classe>=2 and $codef->classe<=20)){?>
+
+											<option value="<?=$codef->codef;?>"><?=$codef->classe.'eme '.$codef->nomf;?></option><?php
+
+										}elseif ($codef->niveau=='maternelle' or $codef->niveau=='primaire') {?>
+
+											<option value="<?=$codef->codef;?>"><?=$codef->classe;?></option><?php
+	
 										}else{?>
 
-											<option></option><?php
+											<option value="<?=$codef->codef;?>"><?=$codef->classe.' '.$codef->nomf;?></option><?php
 										}
-										foreach ($form as $codef) {
-											if ($codef->classe=='1') {?>
 
-												<option value="<?=$codef->codef;?>"><?=$codef->classe.' ère';?></option><?php
+									}?>
+								</select>
 
-											}elseif($codef->classe=="2nde"){?>
+								<input class="form-control" type="hidden" name="niveau" value="<?=$_SESSION['nivclass'];?>">
 
-												<option value="<?=$codef->codef;?>"><?=$codef->classe;?></option><?php
+							</div>
 
-											}elseif(($codef->classe>=2 and $codef->classe<=20)){?>
+								<div class="mb-1">
+									<label class="form-label">Nom de la Classe</label>
+									<input class="form-control" type="text" name="nomg" required=""/>
+								</div>
 
-												<option value="<?=$codef->codef;?>"><?=$codef->classe.'eme '.$codef->nomf;?></option><?php
+								<div class="mb-1">
 
-											}elseif ($codef->niveau=='maternelle' or $codef->niveau=='primaire') {?>
-
-												<option value="<?=$codef->codef;?>"><?=$codef->classe;?></option><?php
-		
-											}else{?>
-
-												<option value="<?=$codef->codef;?>"><?=$codef->classe.' '.$codef->nomf;?></option><?php
-											}
-
-										}?>
-									</select>
-
-									<input type="hidden" name="niveau" value="<?=$_SESSION['nivclass'];?>">
-
-								</li>
-
-								<li>
-									<label>Nom de la Classe</label>
-									<input type="text" name="nomg" required=""/>
-								</li>
-
-								<li>
-
-									<label>Prof Coordinateur</label>
-									<select type="text" name="prof" required="">
+									<label class="form-label">Prof Coordinateur</label>
+									<select class="form-select" type="text" name="prof" required="">
 										<option></option><?php
 										foreach ($prodprof as $prof) {?>
 
@@ -104,11 +104,11 @@ require 'headerv2.php';?>
 
 										}?>
 									</select>
-								</li>
+								</div>
 
-								<li><label>Année-Scolaire</label>
+								<div class="mb-1"><label class="form-label">Année-Scolaire</label>
 
-									<select type="text" name="promo" required="">
+									<select class="form-select" type="text" name="promo" required="">
 										<option value="<?=$_SESSION['promo'];?>"><?=($_SESSION['promo']-1).'-'.$_SESSION['promo'];?></option><?php
 									
 										$annee=date("Y")+1;
@@ -121,12 +121,12 @@ require 'headerv2.php';?>
 										}?>
 									</select>
 									
-								</li>
+								</div>
 							</ol>
 
 						</fieldset>
-
-						<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutegr" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+						<button class="btn btn-light" type="reset" name="annuldec" style="cursor: pointer;">Annuler</button>
+						<button 	class="btn btn-primary" type="submit" name="ajoutegr" onclick="return alerteV();">Ajouter</button>
 					</form><?php
 				}
 
@@ -171,15 +171,15 @@ require 'headerv2.php';?>
 
 							<fieldset><legend>Modifier le nom de la Classe</legend>
 								<ol>
-									<li>
-										<label for="">Nom de la Classe</label>
-										<input type="text" name="classeup" value="<?=$prodm['nomgr'];?>"/>
-										<input type="hidden" name="classe" value="<?=$prodm['nomgr'];?>"/>									
-									</li>
+									<div class="mb-1">
+										<label class="form-label" for="">Nom de la Classe</label>
+										<input class="form-control" type="text" name="classeup" value="<?=$prodm['nomgr'];?>"/>
+										<input class="form-control" type="hidden" name="classe" value="<?=$prodm['nomgr'];?>"/>									
+									</div>
 								</ol>
 
 							</fieldset>
-							<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Modifier" name="modifgr" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+							<fieldset><input class="form-control" type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input class="form-control" type="submit" value="Modifier" name="modifgr" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
 						</form>
 					</div><?php
 				}

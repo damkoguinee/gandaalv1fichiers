@@ -7,9 +7,7 @@ require 'headerv2.php'
 
             require 'navnote.php';?>
 
-            <div class="col-sm-12 col-md-10" style="overflow: auto;"><?php 
-
-		
+            <div class="col-sm-12 col-md-10" style="overflow: auto;"><?php 		
 	
 				if (isset($_GET['deleteEvent'])) {
 
@@ -37,6 +35,10 @@ require 'headerv2.php'
 					$lieu=$panier->h($_POST['lieu']);
 					$promo=$panier->h($_POST['promo']);
 
+					$jours=(new dateTime($debut))->format("w");
+					$mois=(new dateTime($debut))->format("m");
+					$semaine=(new dateTime($debut))->format("W");
+
 					$debutperiod=(new DateTime($debut))->format('Y-m-d');
 
 					$DB->delete('DELETE FROM events WHERE codemp = ? and nomgrp=? and codensp=? and DATE_FORMAT(debut, \'%H:%i\')=? and DATE_FORMAT(fin, \'%H:%i\')=? and promo=?', array($nomm, $nomg, $prof, $hdebut, $hfin, $_SESSION['promo']));
@@ -51,14 +53,16 @@ require 'headerv2.php'
 							$fin=$periode.' '.$_POST['hfin'];
 							$i+=6;
 
-							$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, lieu, promo) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $lieu, $promo));
+							$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, lieu, promo, moisEvent, semaineEvent, joursEvent) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $lieu, $promo, $mois, $semaine, $jours));
 
 							$i++;
 						}
 					}else{
 
-						$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, promo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $promo));
-					}
+						$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, promo, moisEvent, semaineEvent, joursEvent) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $promo, $mois, $semaine, $jours));
+					}?>
+
+					<div class="alert alert-success">Cours ajouté avec succèe!!!</div><?php
 					/*
 
 					if ($_POST['periode']=='periodique') {
@@ -78,9 +82,6 @@ require 'headerv2.php'
 						$DB->insert("UPDATE events SET codefp=?, codemp=?, nomgrp=?, codensp=?, name=?, debut=?, fin=?, lieu=?, promo=? WHERE id=?",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $lieu, $promo, $_POST['id']));
 					}
 					*/
-					
-
-					header("Location: planing.php");
 				}
 
 				if (isset($_POST['ajoutevent'])) {
@@ -97,6 +98,10 @@ require 'headerv2.php'
 						$fin=$_POST['datee'].' '.$_POST['hfin'];
 						$lieu=$panier->h($_POST['lieu']);
 						$promo=$panier->h($_POST['promo']);
+
+						$jours=(new dateTime($debut))->format("w");
+						$mois=(new dateTime($debut))->format("m");
+						$semaine=(new dateTime($debut))->format("W");
 
 						$prodprofverif=$DB->querys('SELECT * from events where codensp=:code and debut=:debut and promo=:promo', array('code'=>$prof, 'debut'=>$debut, 'promo'=>$promo));
 
@@ -116,16 +121,18 @@ require 'headerv2.php'
 									$fin=$periode.' '.$_POST['hfin'];
 									$i+=6;
 
-									$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, lieu, promo) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $lieu, $promo));
+									$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, lieu, promo, moisEvent, semaineEvent, joursEvent) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $lieu, $promo, $mois, $semaine, $jours));
 
 									$i++;
 								}
 							}else{
 
-								$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, promo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $promo));
-							}
+								$DB->insert("INSERT INTO events (codefp, codemp, nomgrp, codensp, name, debut, fin, promo, moisEvent, semaineEvent, joursEvent) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?)",array($codef, $nomm, $nomg, $prof, $titre, $debut, $fin, $promo, $mois, $semaine, $jours));
+							}?>
 
-							//header("Location: planing.php");
+							<div class="alert alert-success">Cours ajouté avec succèe!!!</div><?php
+
+							
 						}else{?>
 
 							<div class="alert alert-warning">Ce Cours est déjà planifié <a href="planing.php">Retour</a></div><?php
@@ -144,47 +151,48 @@ require 'headerv2.php'
 
 				$event=$panier->find($_GET['id']);?>
 
-				<form id="formulaire" method="POST">
+				<form class="form bg-light p-2" method="POST">
 
 					<fieldset><legend><?='Modification '.ucwords($panier->h($event['name']));?>
-						<a href="event.php?deleteEvent=<?=$event['id'];?>" onclick="return alerteS();" style="margin-left: 30px; font-size: 20px; background-color: red; color: white; cursor: pointer">Supprimer</a>
-						<a href="event.php?deleteEventout=<?=$event['id'];?>&codem=<?=$panier->h($event['codemp']);?>&nomgr=<?=$panier->h($event['nomgrp']);?>&ense=<?=$panier->h($event['codensp']);?>&hdebut=<?=(new DateTime($event['debut']))->format('H:i');?>&hfin=<?=(new DateTime($event['fin']))->format('H:i');?>" onclick="return alerteS();" style="margin-left: 30px; font-size: 20px; background-color: red; color: white; cursor: pointer">Tout Supprimer</a>
+						<a class="btn btn-warning" href="event.php?deleteEvent=<?=$event['id'];?>" onclick="return alerteS();">Supprimer</a>
+						<a class="btn btn-danger" href="event.php?deleteEventout=<?=$event['id'];?>&codem=<?=$panier->h($event['codemp']);?>&nomgr=<?=$panier->h($event['nomgrp']);?>&ense=<?=$panier->h($event['codensp']);?>&hdebut=<?=(new DateTime($event['debut']))->format('H:i');?>&hfin=<?=(new DateTime($event['fin']))->format('H:i');?>" onclick="return alerteS();">Tout Supprimer</a>
 						</legend>
 
-						<ol>
+						<div class="d-flex juqtify-content-between mb-1 ">
 
-							<li>
 
-								<label>Matières</label>
-								<select type="text" name="nomm">
-							    	<option value="<?=$panier->h($event['codemp']);?>"><?=ucwords($panier->h($event['codemp']));?></option><?php
-								    foreach ($prodprof as $codef) {?>
+							<div class="m-2">
 
-				                        <option value="<?=$codef->codem;?>"><?=$codef->nommat.' '.$codef->codef;?></option><?php
-				                        
-								    }?>
+								<label class="form-label">Matières</label>
+								<select class="form-select" type="text" name="nomm">
+									<option value="<?=$panier->h($event['codemp']);?>"><?=ucwords($panier->nomMatiere($event['codemp']));?></option><?php
+									foreach ($prodprof as $codef) {?>
+
+										<option value="<?=$codef->codem;?>"><?=$codef->nommat.' '.$codef->codef;?></option><?php
+										
+									}?>
 								</select>
-							</li>
+							</div>
 
-							<li>
+							<div class="m-2">
 
-								<label>Classe</label>
-								<select type="text" name="nomg">
-							    	<option value="<?=$panier->h($event['nomgrp']);?>"><?=ucwords($panier->h($event['nomgrp']));?></option><?php
-								    foreach ($prodprof as $codef) {?>
+								<label class="form-label">Classe</label>
+								<select class="form-select" type="text" name="nomg">
+									<option value="<?=$panier->h($event['nomgrp']);?>"><?=ucwords($panier->h($event['nomgrp']));?></option><?php
+									foreach ($prodprof as $codef) {?>
 
-				                        <option value="<?=$codef->nomgr;?>"><?=$codef->nomgr;?></option><?php
-				                        
-								    }?>
+										<option value="<?=$codef->nomgr;?>"><?=$codef->nomgr;?></option><?php
+										
+									}?>
 								</select>
 
-							</li>
+							</div>
 
-							<li>
+							<div class="m-2">
 
-								<label>Enseignant</label>
-								<select type="text" name="prof">
-							    	<option value="<?=$panier->h($event['codensp']);?>"><?=ucwords($panier->h($event['codensp']));?></option><?php
+								<label class="form-label">Enseignant</label>
+								<select class="form-select" type="text" name="prof">
+							    	<option value="<?=$panier->h($event['codensp']);?>"><?=ucwords($panier->nomEnseignant($event['codensp']));?></option><?php
 								    foreach ($prodprof as $prof) {?>
 
 								    	<option value="<?=$prof->matricule;?>"><?=ucfirst(strtolower($prof->prenomen)).' '.strtoupper($prof->nomen);?></option><?php
@@ -192,27 +200,29 @@ require 'headerv2.php'
 								    }?>
 								</select>
 
-							</li>
+							</div>
 
-							<li><label>Titre:</label><input type="text" name="titre" value="<?=ucwords($panier->h($event['name']));?>"><input type="hidden" name="id" value="<?=$event['id'];?>"><input type="hidden" name="codef" value="<?=$event['codefp'];?>"/></li>
+							<div class="m-2"><label class="form-label">Titre:</label><input class="form-control" type="text" name="titre" value="<?=ucwords($panier->h($event['name']));?>"><input class="form-control" type="hidden" name="id" value="<?=$event['id'];?>"><input class="form-control" type="hidden" name="codef" value="<?=$event['codefp'];?>"/></div>
+						</div>
+						<div class="d-flex juqtify-content-between mb-1 ">
+							<div class="m-2"><label class="form-label">Date:</label><input class="form-control" type="date" name="datee" value="<?=(new DateTime($event['debut']))->format('Y-m-d');?>"></div>
 
-							<li><label>Date:</label><input type="date" name="datee" value="<?=(new DateTime($event['debut']))->format('Y-m-d');?>"></li>
+							<div class="m-2"><label class="form-label">Heure de début:</label><input class="form-control" type="time" name="hdebut" value="<?=(new DateTime($event['debut']))->format('H:i');?>"><input class="form-control" type="hidden" name="ddebut" value="<?=(new DateTime($event['debut']))->format('Y-m-d');?>"></div>
 
-							<li><label>Heure de démarrage:</label><input type="time" name="hdebut" value="<?=(new DateTime($event['debut']))->format('H:i');?>"><input type="hidden" name="ddebut" value="<?=(new DateTime($event['debut']))->format('Y-m-d');?>"></li>
+							<div class="m-2"><label class="form-label">Heure de fin:</label><input class="form-control" type="time" name="hfin" value="<?=(new DateTime($event['fin']))->format('H:i');?>"><input class="form-control" type="hidden" name="dfin" value="<?=(new DateTime($event['fin']))->format('Y-m-d');?>"></div>
 
-							<li><label>Heure de fin:</label><input type="time" name="hfin" value="<?=(new DateTime($event['fin']))->format('H:i');?>"><input type="hidden" name="dfin" value="<?=(new DateTime($event['fin']))->format('Y-m-d');?>"></li>
-
-							<li><label>Lieu:</label><input type="text" name="lieu" value="<?=$event['lieu'];?>"></li>
-
-							<li><label>Fréquence</label><select type="text" name="periode" required="">
+							<div class="m-2"><label class="form-label">Lieu:</label><input class="form-control" type="text" name="lieu" value="<?=$event['lieu'];?>"></div>
+						</div>
+						<div class="d-flex juqtify-content-between mb-1 ">
+							<div class="m-2"><label class="form-label">Fréquence</label><select class="form-select" type="text" name="periode" required="">
 								<option></option>
 								<option value="periodique">Périodique</option>
 								<option value="jour defini">Jour défini</option></select>
-							</li>
+							</div>
 
-							<li><label>Année-Scolaire</label>
+							<div class="m-2"><label class="form-label">Année-Scolaire</label>
 
-					            <select type="text" name="promo" required=""><?php
+					            <select class="form-select" type="text" name="promo" required=""><?php
 					              
 						            $annee=date("Y")+1;
 
@@ -224,11 +234,10 @@ require 'headerv2.php'
 						            }?>
 						        </select>
 					            
-					        </li>
-						</ol>
+					        </div>
+						</div>
 					</fieldset>
-
-					<fieldset><input type="reset" value="Annuler" id="form" style="cursor: pointer;" /><input type="submit" value="Valider" name="validevent" id="form" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+					<button class="btn btn-primary" type="submit" name="validevent" id="form" onclick="return alerteV();">Modifier</button>
 				</form><?php
 			}
 
@@ -239,6 +248,8 @@ require 'headerv2.php'
 					$_SESSION['codefevent']=$_POST['codef'];
 
 					$prodgroup=$DB->query("SELECT nomgr from groupe where promo='{$_SESSION['promo']}' and codef='{$_SESSION['codefevent']}' order by(codef)");
+				}else{
+					$_SESSION['codefevent']="";
 				}
 
 
@@ -266,127 +277,135 @@ require 'headerv2.php'
 					$prodmat=$DB->query('SELECT *from matiere ');
 				}?>
 
-				<form id="formulaire" method="POST">
+				<form class="form bg-light p-2" method="POST">
+					<div class="d-flex juqtify-content-between mb-1 ">
+						<div class="m-1">
+							<label class="form-label">Code formation</label>
+							<select class="form-select" type="text" name="codef" required="" class="form-control" onchange="this.form.submit()"><?php 
 
-					<fieldset>
+							if (isset($_POST['codef'])) {?>
 
-						<ol>
-							<li>
+								<option><?=$_POST['codef'];?></option><?php
 
-								<label>Code formation</label>
-								<select type="text" name="codef" required="" class="form-control" onchange="this.form.submit()"><?php 
+							}else{?>
 
-							    if (isset($_POST['codef'])) {?>
+								<option></option><?php						    	
+							}
 
-							    	<option><?=$_POST['codef'];?></option><?php
+								foreach ($form as $codef) {
+									if ($codef->classe=='1') {?>
 
-							    }else{?>
+										<option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ère année '.$codef->nomf;?></option><?php
 
-							    	<option></option><?php						    	
-							    }
+									}elseif($codef->classe=='petite section' or $codef->classe=='moyenne section' or $codef->classe=='grande section' or $codef->classe=='terminale'){?>
 
-								    foreach ($form as $codef) {
-								    	if ($codef->classe=='1') {?>
+										<option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' '.$codef->nomf;?></option><?php
 
-				                            <option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ère année '.$codef->nomf;?></option><?php
+									}else{?>
 
-										}elseif($codef->classe=='petite section' or $codef->classe=='moyenne section' or $codef->classe=='grande section' or $codef->classe=='terminale'){?>
+										<option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ème année '.$codef->nomf;?></option><?php
+									}
 
-				                            <option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' '.$codef->nomf;?></option><?php
+								}?>
+							</select>
+						</div>
 
-										}else{?>
+						<div class="m-1">
 
-				                            <option value="<?=$codef->codef;?>"><?=' '.$codef->classe.' ème année '.$codef->nomf;?></option><?php
-										}
+							<label class="form-label">Matières</label>
+							<select class="form-select" type="text" name="nomm" required="" class="form-control">
+								<option></option><?php
+								foreach ($prodmat as $codef) {?>
 
-								    }?>
-								</select>
+									<option value="<?=$codef->codem;?>"><?=$codef->nommat;?></option><?php
+									
+								}?>
+							</select>
 
-							</li>
+							<a href="matiere.php?ajout_m">Ajouter une matière</a>
+						</div>
 
-							<li>
+						<div class="m-1">
+							<label class="form-label">Classe</label>
+							<select class="form-select" type="text" name="nomg" required="" class="form-control">
+								<option></option><?php
+								foreach ($prodgroup as $codef) {?>
 
-								<label>Matières</label>
-								<select type="text" name="nomm" required="" class="form-control">
-							    	<option></option><?php
-								    foreach ($prodmat as $codef) {?>
+									<option value="<?=$codef->nomgr;?>"><?=$codef->nomgr;?></option><?php
+									
+								}?>
+							</select>
+						</div>
 
-				                        <option value="<?=$codef->codem;?>"><?=$codef->nommat;?></option><?php
-				                        
-								    }?>
-								</select>
 
-								<a href="matiere.php?ajout_m">Ajouter une matière</a>
-							</li>
+					</div>
 
-							<li>
+					<div class="d-flex juqtify-content-between mb-1">
+						<div class="m-1">
 
-								<label>Classe</label>
-								<select type="text" name="nomg" required="" class="form-control">
-							    	<option></option><?php
-								    foreach ($prodgroup as $codef) {?>
+							<label class="form-label">Enseignant</label>
+							<select class="form-select" type="text" name="prof" required="">
+								<option></option><?php
+								foreach ($prodprof as $prof) {?>
 
-				                        <option value="<?=$codef->nomgr;?>"><?=$codef->nomgr;?></option><?php
-				                        
-								    }?>
-								</select>
+									<option value="<?=$prof->matricule;?>"><?=$panier->nomEnseignant($prof->matricule);?></option><?php
 
-							</li>
+								}?>
+							</select>
+							<a href="enseignant.php?ajout_en">Ajouter enseignant</a>
+						</div>
 
-							<li>
+						<div class="m-1"><label class="form-label">Titre:</label><select class="form-select" type="text" name="titre" required="">
+							<option value="cours">Cours</option>
+							<option value="td">travaux dirigés</option>
+							<option value="ds">Dévoir Surveillé</option></select>
+						</div>
+					</div>
+					<div class="d-flex juqtify-content-between mb-1">
 
-								<label>Enseignant</label>
-								<select type="text" name="prof" required="">
-							    	<option></option><?php
-								    foreach ($prodprof as $prof) {?>
+						<div class="m-1">
+							<label class="form-label">Date:</label>
+							<input class="form-control" type="date" name="datee" required="">
+						</div>
 
-								    	<option value="<?=$prof->matricule;?>"><?=$panier->nomEnseignant($prof->matricule);?></option><?php
+						<div class="m-1">
+							<label class="form-label">Heure de début</label>
+							<input class="form-control" type="time" name="hdebut" required="">
+						</div>
 
-								    }?>
-								</select>
+						<div class="m-1">
+							<label class="form-label">Heure de fin</label>
+							<input class="form-control" type="time" name="hfin" required="">
+						</div>
+					</div>
 
-							    <a href="enseignant.php?ajout_en">Ajouter enseignant</a>
+					<div class="d-flex juqtify-content-between mb-1">
 
-							</li>
+						<div class="m-1"><label class="form-label">Lieu:</label><input class="form-control" type="text" name="lieu" value="classe" ></div>
 
-							<li><label>Titre:</label><select type="text" name="titre" required="">
-								<option value="cours">Cours</option>
-								<option value="td">travaux dirigés</option>
-								<option value="ds">Dévoir Surveillé</option></select>
-							</li>
+						<div class="m-1"><label class="form-label">Fréquence</label><select class="form-select" type="text" name="periode">
+							<option value="periodique">Périodique</option>
+							<option value="jour defini">Jour défini</option></select>
+						</div>
 
-							<li><label>Date:</label><input type="date" name="datee" required=""></li>
+						<div class="m-1"><label class="form-label">Année-Scolaire</label>
 
-							<li><label>Heure de début:</label><input type="time" name="hdebut" required=""></li>
+							<select class="form-select" type="text" name="promo" required=""><?php
+								
+								$annee=date("Y")+1;
 
-							<li><label>Heure de fin:</label><input type="time" name="hfin" required=""></li>
+								for($i=($_SESSION['promo']-1);$i<=$annee ;$i++){
+									$j=$i+1;?>
 
-							<li><label>Lieu:</label><input type="text" name="lieu" value="classe" ></li>
+									<option value="<?=$j;?>"><?=$i.'-'.$j;?></option><?php
 
-							<li><label>Fréquence</label><select type="text" name="periode">
-								<option value="periodique">Périodique</option>
-								<option value="jour defini">Jour défini</option></select>
-							</li>
-
-							<li><label>Année-Scolaire</label>
-
-					            <select type="text" name="promo" required=""><?php
-					              
-						            $annee=date("Y")+1;
-
-						            for($i=($_SESSION['promo']-1);$i<=$annee ;$i++){
-						            	$j=$i+1;?>
-
-						             	<option value="<?=$j;?>"><?=$i.'-'.$j;?></option><?php
-
-						            }?>
-						        </select>
-					            
-					        </li>
-						</ol>
-					</fieldset>
-
-					<fieldset><input type="reset" value="Annuler" id="form" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutevent" id="form" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+								}?>
+							</select>
+							
+						</div>
+					</div>
+					<button class="btn btn-light" type="reset" id="form">Annuler</button>
+					<button class="btn btn-primary" type="submit" name="ajoutevent" id="form" onclick="return alerteV();">Ajouter</button>
 				</form><?php
 			}?>
 		</div>

@@ -5,8 +5,8 @@
     <head>
       <title>GANDAAL Gestion de Scolarite</title>
       <meta charset="utf-8">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+  		<link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
     </head>
 
 	<body><?php
@@ -94,7 +94,9 @@
 		            <div class="copyright"><img src="img/copyright.jpg" height="40"> </div>	
 		        </div>
 	    	</div>    	
-		</div>    	
+		</div> <?php 
+		
+		require_once("footer.php");?>
 	</body>
 	
 </html>

@@ -19,6 +19,6 @@ foreach ($prod as $value) {
         $role="ROLE_PERSONNEL";
     }
 
-	$DB->insert("UPDATE login SET role='{$role}' where matricule='{$value->matricule}'")
+	$DB->insert("UPDATE login SET role = '{$role}' where matricule='{$value->matricule}'")
 	;
 }

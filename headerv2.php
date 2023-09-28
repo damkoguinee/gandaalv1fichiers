@@ -8,10 +8,11 @@ require '_header.php'
   <meta charset="utf-8">
   <meta content="Page par défaut" name="description">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <script src="https://kit.fontawesome.com/8df11ad090.js" crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" charset="utf-8">
+
 </head><?php
 
   if (!empty($_SESSION['pseudo'])) {
@@ -122,47 +123,47 @@ require '_header.php'
 
                 <li class="nav-item"><?php 
                   if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
-                    <a class="nav-link btn btn-danger text-light m-1" href="formation.php?form&note">Gestion</a> <?php
+                    <a class="nav-link active btn btn-danger text-light m-1" href="formation.php?form&note">Gestion</a> <?php
                   };?>
                 </li>
 
                 <li class="nav-item"><?php 
                   if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?> 
-                    <a class="nav-link btn btn-danger text-light m-1" href="ajout_eleve.php?ajoute&note">Scolarite</a><?php
+                    <a class="nav-link active btn btn-danger text-light m-1" href="ajout_eleve.php?ajoute&note">Scolarite</a><?php
                   };?>
                 </li>
 
                 <li class="nav-item"><?php 
                   if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?> 
-                    <a class="nav-link btn btn-danger text-light m-1" href="activitesgestion.php?ideleve">Activités</a><?php
+                    <a class="nav-link active btn btn-danger text-light m-1" href="activitesgestion.php?ideleve">Activités</a><?php
                   };?>
                 </li>
                 <?php 
                 if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                   <li class="nav-item">
-                    <a class="nav-link btn btn-danger text-light m-1" href="note.php?note&note">Pédagogie</a>
+                    <a class="nav-link active btn btn-danger text-light m-1" href="note.php?note&note">Pédagogie</a>
                   </li><?php 
                 }
 
                 if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                   <li class="nav-item">
-                    <a class="nav-link btn btn-danger text-light m-1" href="comptabilite.php?note">Comptabilite</a>
+                    <a class="nav-link active btn btn-danger text-light m-1" href="comptabilite.php?note">Comptabilite</a>
                   </li><?php 
                 }
 
                 if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
                   <li class="nav-item">
                   
-                    <a class="nav-link btn btn-danger text-light m-1" href="rapport.php?rapport">Statistiques</a>
+                    <a class="nav-link active btn btn-danger text-light m-1" href="rapport.php?rapport">Statistiques</a>
                   </li><?php
                 }
 
                 if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {                 
 
                   if ($products['niveau']>10) {?>
-                    <li class="nav-item"><a class="nav-link btn btn-danger text-light m-1 " href="csv.php?save">Sauvegarde</a></li><?php
+                    <li class="nav-item"><a class="nav-link active btn btn-danger text-light m-1 " href="csv.php?save">Sauvegarde</a></li><?php
                   }
                 }?> 
               </ul>
