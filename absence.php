@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require 'headerv2.php';
 
 if (isset($_SESSION['pseudo'])) {
     
@@ -7,135 +7,135 @@ if (isset($_SESSION['pseudo'])) {
 
         <div class="alertes">Des autorisations sont requises pour consulter cette page</div><?php
 
-    }else{
+    }else{?>
+		<div class="container-fluid">
+			<div class="row"><?php 
 
-    	require 'navabsence.php';?>
+    			require 'navabsence.php';?>
+        		<div class="col-sm-12 col-md-10"><?php
 
-    	
+					if (isset($_GET['abs']) or isset($_POST['semestren']) or isset($_POST['groupe']) or isset($_POST['matn']) or isset($_POST['hdebut']) or isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']) or isset($_GET['appel']) or isset($_POST['retard']) or isset($_POST['exclus'])) {
 
-        <div><?php
+					if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='coordonateur bloc B') {
 
-        	if (isset($_GET['abs']) or isset($_POST['semestren']) or isset($_POST['groupe']) or isset($_POST['matn']) or isset($_POST['hdebut']) or isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']) or isset($_GET['appel']) or isset($_POST['retard']) or isset($_POST['exclus'])) {
+						
+						$prodgroup=$DB->query('SELECT groupe.nomgr as nomgr from groupe where promo=:promo order by(codef) desc', array('promo'=>$_SESSION['promo']));
 
-			if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='coordonateur bloc B') {
+					}elseif ($products['type']=='eleve') {
 
-				
-				$prodgroup=$DB->query('SELECT groupe.nomgr as nomgr from groupe where promo=:promo order by(codef) desc', array('promo'=>$_SESSION['promo']));
+						$prodgroup=$DB->query('SELECT groupe.nomgr as nomgr from groupe where promo=:promo order by(codef) desc', array('promo'=>$_SESSION['promo']));
 
-			}elseif ($products['type']=='eleve') {
+					}else{
 
-				$prodgroup=$DB->query('SELECT groupe.nomgr as nomgr from groupe where promo=:promo order by(codef) desc', array('promo'=>$_SESSION['promo']));
+						
 
-			}else{
+						$prodgroup=$DB->query('SELECT groupe.nomgr as nomgr from groupe inner join enseignement on groupe.nomgr=enseignement.nomgr where enseignement.codens=:code and groupe.promo=:promo order by(groupe.id) desc', array('code'=>$products['matricule'], 'promo'=>$_SESSION['promo']));
 
-				
+					}
 
-				$prodgroup=$DB->query('SELECT groupe.nomgr as nomgr from groupe inner join enseignement on groupe.nomgr=enseignement.nomgr where enseignement.codens=:code and groupe.promo=:promo order by(groupe.id) desc', array('code'=>$products['matricule'], 'promo'=>$_SESSION['promo']));
+					if (isset($_POST['groupe'])){
 
-			}
+						$_SESSION['groupe']=$_POST['groupe'];
+						$_SESSION['semestre']="Choisissez le ";
+						$_SESSION['matn']="Choisissez la matière";
+						$_SESSION['hdebut']="Ajouter Heure de debut";
+						$_SESSION['nheure']="Ajouter le nbre dheures";
+					}
 
-			if (isset($_POST['groupe'])){
+					if (isset($_POST['semestren'])){
 
-				$_SESSION['groupe']=$_POST['groupe'];
-				$_SESSION['semestre']="Choisissez le ";
-				$_SESSION['matn']="Choisissez la matière";
-				$_SESSION['hdebut']="Ajouter Heure de debut";
-				$_SESSION['nheure']="Ajouter le nbre dheures";
-			}
+						$_SESSION['semestre']=$_POST['semestren'];
+						$_SESSION['matn']="CChoisissez la matière";
+						$_SESSION['hdebut']="Ajouter Heure de debut";
+						$_SESSION['nheure']="Ajouter le nbre dheures";				
+					}
 
-			if (isset($_POST['semestren'])){
+					if (isset($_POST['matn'])){
 
-				$_SESSION['semestre']=$_POST['semestren'];
-				$_SESSION['matn']="CChoisissez la matière";
-				$_SESSION['hdebut']="Ajouter Heure de debut";
-				$_SESSION['nheure']="Ajouter le nbre dheures";				
-			}
+						$_SESSION['matn']=$_POST['matn'];
+						$_SESSION['hdebut']="Ajouter Heure de debut";
 
-			if (isset($_POST['matn'])){
+						$matiere=$DB->querys('SELECT nommat from matiere where codem=:codem', array('codem'=>$_POST['matn']));
 
-				$_SESSION['matn']=$_POST['matn'];
-				$_SESSION['hdebut']="Ajouter Heure de debut";
+						$_SESSION['matn1']=$matiere['nommat'];
 
-				$matiere=$DB->querys('SELECT nommat from matiere where codem=:codem', array('codem'=>$_POST['matn']));
+						$prodens=$DB->querys('SELECT codens from enseignement where codem=:codem and promo=:promo', array('codem'=>$_SESSION['matn'], 'promo'=>$_SESSION['promo']));
 
-				$_SESSION['matn1']=$matiere['nommat'];
+						if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='coordonateur bloc B') {
 
-				$prodens=$DB->querys('SELECT codens from enseignement where codem=:codem and promo=:promo', array('codem'=>$_SESSION['matn'], 'promo'=>$_SESSION['promo']));
+							$_SESSION['ens']=$products['matricule'];
+							$numens=$_SESSION['ens'];
 
-				if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='coordonateur bloc B') {
+						}elseif ($products['type']=='eleve') {
+							$_SESSION['$ens']=$prodens['codens'];
 
-					$_SESSION['ens']=$products['matricule'];
-					$numens=$_SESSION['ens'];
+							$numens=$_SESSION['$ens'];
 
-				}elseif ($products['type']=='eleve') {
-					$_SESSION['$ens']=$prodens['codens'];
+						}else{
 
-					$numens=$_SESSION['$ens'];
+							
 
-				}else{
+						}
+					}
 
-					
+					if (isset($_POST['hdebut'])){
 
+						$_SESSION['hdebut']=$_POST['hdebut'];
+
+						$prodens=$DB->querys('SELECT codens from enseignement where codem=:codem and promo=:promo', array('codem'=>$_SESSION['matn'], 'promo'=>$_SESSION['promo']));
+						
+						if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='eleve' or $products['type']=='coordonateur bloc B') {
+
+							$_SESSION['$ens']=$prodens['codens'];
+
+							$numens=$_SESSION['$ens'];
+
+							
+
+						}else{
+
+							$_SESSION['ens']=$products['matricule'];
+							$numens=$_SESSION['ens'];
+
+						}
+					}
+
+					if (isset($_POST['nheure'])){
+
+						$_SESSION['nheure']=$_POST['nheure'];
+					}
+
+					if (isset($_POST['groupe']) or isset($_POST['semestren']) or isset($_POST['matn']) or isset($_POST['hdebut'])) {	
+
+						if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='coordonateur bloc B') {
+
+							$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where  enseignement.nomgr=:nom and enseignement.promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+
+							
+						}elseif ($products['type']=='eleve') {
+
+							$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where  enseignement.nomgr=:nom and enseignement.promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+
+						}else{
+
+							
+
+							$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where enseignant.matricule=:mat and enseignement.nomgr=:nom and enseignement.promo=:promo', array('mat'=>$products['matricule'], 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+
+							
+
+						}
+
+					}
 				}
-			}
 
-			if (isset($_POST['hdebut'])){
+				require 'formabsence.php';
 
-				$_SESSION['hdebut']=$_POST['hdebut'];
+				if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']) or isset($_POST['appel']) or isset($_POST['retard']) or isset($_POST['exclus'])) {
 
-				$prodens=$DB->querys('SELECT codens from enseignement where codem=:codem and promo=:promo', array('codem'=>$_SESSION['matn'], 'promo'=>$_SESSION['promo']));
-				
-				if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='proviseur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='eleve' or $products['type']=='coordonateur bloc B') {
-
-					$_SESSION['$ens']=$prodens['codens'];
-
-					$numens=$_SESSION['$ens'];
-
-					
-
-				}else{
-
-					$_SESSION['ens']=$products['matricule'];
-					$numens=$_SESSION['ens'];
-
-				}
-			}
-
-			if (isset($_POST['nheure'])){
-
-				$_SESSION['nheure']=$_POST['nheure'];
-			}
-
-			if (isset($_POST['groupe']) or isset($_POST['semestren']) or isset($_POST['matn']) or isset($_POST['hdebut'])) {	
-
-				if ($products['type']=='admin' or $products['type']=='Secretaire' or $products['type']=='Admistrateur General' or $products['type']=='DE/Censeur' or $products['type']=='Directeur du primaire' or $products['type']=='Proviseur' or $products['type']=='Conseille a l\'éducation' or $products['type']=='Surveillant general' or $products['type']=='Comptable' or $products['type']=='coordonateur bloc B') {
-
-					$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where  enseignement.nomgr=:nom and enseignement.promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
-
-					
-				}elseif ($products['type']=='eleve') {
-
-					$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where  enseignement.nomgr=:nom and enseignement.promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
-
-				}else{
-
-					
-
-					$prodm=$DB->query('SELECT  matiere.codem as codem, nommat from enseignement inner join matiere on enseignement.codem=matiere.codem inner join enseignant on enseignement.codens=enseignant.matricule where enseignant.matricule=:mat and enseignement.nomgr=:nom and enseignement.promo=:promo', array('mat'=>$products['matricule'], 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
-
-					
-
-				}
-
-			}
-		}
-
-        require 'formabsence.php';
-
-		if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']) or isset($_POST['appel']) or isset($_POST['retard']) or isset($_POST['exclus'])) {
-
-			require 'ajout_absence.php';
-		}?>
-    </div><?php
+					require 'ajout_absence.php';
+				}?>
+    		</div>
+		</div><?php
 	}
 }

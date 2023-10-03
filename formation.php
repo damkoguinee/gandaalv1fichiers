@@ -474,8 +474,6 @@ if (isset($_SESSION['pseudo'])) {
 				    		<thead>
 				    			<tr>
 				    				<th colspan="5" class="info">Liste des <?=$_SESSION['typeel'].' en '.$prodf['nomgr'];?> <a class="btn btn-info" href="printdoc.php?voir_elg=<?=$prodf['nomgr'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a></th>
-
-				    				<th colspan="2"><a class="btn btn-warning" href="ajout_eleve.php?ajoute">Ajouter <?=$_SESSION['typeel'];?></a></th>
 				    			</tr>
 
 								<tr>

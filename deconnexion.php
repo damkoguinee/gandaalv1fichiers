@@ -3,5 +3,5 @@ session_start();
 $_SESSION = array();
 session_destroy();
 
-header("Location: form_connexion.php?");
+header("Location: form_connexion.php?form_connexion");
 ?>    

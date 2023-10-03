@@ -26,13 +26,13 @@ foreach ($prodmat as $matricule) {
         $moyeng=$totm1/$coefm1;        
 
 
-        $DB->insert('INSERT INTO rangel(matricule, moyenne, rang) values( ?, ?, ?)', array($matricule->matricule, $moyeng, 1));
+        $DB->insert('INSERT INTO rangel(matricule, moyenne, rang, pseudo) values( ?, ?, ?, ?)', array($matricule->matricule, $moyeng, 1, $_SESSION['pseudo']));
 
-        $produ=$DB->query('SELECT  moyenne, matricule from rangel order by(moyenne)desc');
+        $produ=$DB->query("SELECT  moyenne, matricule from rangel where pseudo='{$_SESSION['pseudo']}' order by(moyenne)desc");
 
         foreach ($produ as $key => $value) {
 
-          $DB->insert('UPDATE rangel SET rang = ? where matricule=?', array($key+1, $value->matricule));
+          $DB->insert('UPDATE rangel SET rang = ? where matricule=? and pseudo=?', array($key+1, $value->matricule, $_SESSION['pseudo']));
         
         }
 
@@ -45,7 +45,7 @@ foreach ($prodmat as $matricule) {
 
 foreach ($prodmat as $matricule) {
 
-    $prodrg=$DB->query('SELECT  rang, matricule from rangel where matricule=:matr', array('matr'=>$matricule->matricule));
+    $prodrg=$DB->query("SELECT  rang, matricule from rangel where matricule='{$matricule->matricule}' and pseudo='{$_SESSION['pseudo']}'");
 
     if (!empty($prodrg)) {
 
@@ -62,4 +62,4 @@ foreach ($prodmat as $matricule) {
         </tr><?php
     }
 }
-$DB->delete('DELETE FROM rangel'); // Pour supprimer imediatement la liste des admis
+$DB->delete("DELETE FROM rangel where pseudo='{$_SESSION['pseudo']}'"); // Pour supprimer imediatement la liste des admis

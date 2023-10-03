@@ -820,7 +820,9 @@ if (isset($_SESSION['pseudo'])) {
 						if (isset($_GET['del_pers'])) {
 
 							$DB->delete('DELETE FROM personnel WHERE numpers = ?', array($_GET['del_pers']));
+							
 							$DB->delete('DELETE FROM contact WHERE matricule = ?', array($_GET['del_pers']));
+
 							$DB->delete('DELETE FROM login WHERE matricule = ?', array($_GET['del_pers']));
 
 							$DB->delete('DELETE FROM salairepers WHERE numpers = ?', array($_GET['del_pers']));
@@ -938,7 +940,7 @@ if (isset($_SESSION['pseudo'])) {
 
 													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
-														<a onclick="return alerteS();" class="btn btn-danger" href="enseignant.php?del_pers=<?=$formation->matricule;?>" onclick="return alerteS();">Supprimer</a><?php 
+														<a onclick="return alerteS();" class="btn btn-danger" href="?del_pers=<?=$formation->matricule;?>" onclick="return alerteS();">Supprimer</a><?php 
 													}?>
 												</td>
 

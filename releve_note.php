@@ -151,13 +151,13 @@ foreach ($prodmat as $eleve) {
       $moyeng=0;
     }
 
-    $DB->insert('INSERT INTO rangel(matricule, moyenne, rang) values( ?, ?, ?)', array($eleve->matricule, $moyeng, 1));
+    $DB->insert('INSERT INTO rangel(matricule, moyenne, rang, pseudo) values( ?, ?, ?, ?)', array($eleve->matricule, $moyeng, 1, $_SESSION['pseudo']));
 
-    $produ=$DB->query('SELECT  moyenne, matricule from rangel order by(moyenne)desc');
+    $produ=$DB->query("SELECT  moyenne, matricule from rangel where pseudo='{$_SESSION['pseudo']}' order by(moyenne)desc");
 
     foreach ($produ as $key => $value) {
 
-      $DB->insert('UPDATE rangel SET rang = ? where matricule=?', array($key+1, $value->matricule));
+      $DB->insert('UPDATE rangel SET rang = ? where matricule=? and pseudo=?', array($key+1, $value->matricule, $_SESSION['pseudo']));
     
     }
 
@@ -207,7 +207,22 @@ if (isset($_GET['mensuel'])) {
 
           <div style="width: 80%; background-color: white; color: #717375; border: 0.5px solid grey; border-style: dotted; margin-top:25px;">
 
-            <div style="width: 100%; text-align: center; font-size: 16px; font-weight: bold; background-color: white;">BULLETIN DE NOTES <?=strtoupper($panier->moisbul());?></div>
+            <div style="width: 100%; text-align: center; font-size: 16px; font-weight: bold; background-color: white;">BULLETIN DE NOTES <?php
+
+              if ($_SESSION['niveauclasse']!='primaire' and $_SESSION['promo']!='2022') {
+                if ($etab['nom']=='Complexe Scolaire la Plume') {?>
+
+                  <?=strtoupper($panier->module($_SESSION['mois'])[0]);?><?php 
+
+                }else{?>
+
+                  <?=strtoupper($panier->moisbul());?><?php 
+
+                }
+              }else{?>
+
+                <?=strtoupper($panier->moisbul());?><?php 
+              }?></div>
 
             <div style="width: 100%; text-align: center; font-size: 16px; font-weight: bold; background-color: white;">Année-Scolaire <?=$fiche['annee']-1;?> - <?=$fiche['annee'];?></div><?php
 
@@ -306,72 +321,142 @@ if (isset($_GET['mensuel'])) {
                       $prod1=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))) as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and DATE_FORMAT(datedev, \'%m\')=:sem and devoir.promo=:promo order by(prenomel)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>$_SESSION['mois'], 'promo'=>$_SESSION['promo']));
                     }else{
                       $prod1=$DB->query('SELECT ((sum(compo*devoir.coefcom)/sum(devoir.coefcom))) as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and DATE_FORMAT(datedev, \'%m\')=:sem and devoir.promo=:promo order by(prenomel)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>$_SESSION['mois'], 'promo'=>$_SESSION['promo']));
-                    };?>
+                    }
 
-                    
+                    if ($_SESSION['niveauclasse']!='primaire') {
 
-                    <tr>
-                      <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
-                      <td style="text-align: center;"><?=$matiere->coef;?></td><?php
-
-                      $coefmat+=$matiere->coef;
-                      $coefmatc+=$matiere->coef;
-                              
-                      foreach ($prod1 as $moyenne) {
-
-                        if ($_SESSION['niveauclasse']!='primaire') {
-                          if ($moyenne->mgen==0) {
-                            $appreciation='';
-                          }elseif ($moyenne->mgen>0 and $moyenne->mgen<=5) {
-                            $appreciation='Faible';
-                          }elseif ($moyenne->mgen>5 and $moyenne->mgen<10) {
-                            $appreciation='Insuffisant';
-                          }elseif ($moyenne->mgen>=10 and $moyenne->mgen<11) {
-                            $appreciation='Passable';
-                          }elseif ($moyenne->mgen>=11 and $moyenne->mgen<14) {
-                            $appreciation='Assez-bien';
-                          }elseif ($moyenne->mgen>=14 and $moyenne->mgen<16) {
-                            $appreciation='Bien';
-                          }elseif ($moyenne->mgen>=16 and $moyenne->mgen<=20) {
-                            $appreciation='Très-Bien';
-                          }else{
-                          }
-                        }else{
-
-                          if ($moyenne->mgen==0) {
-                            $appreciation='';
-                          }elseif ($moyenne->mgen>0 and $moyenne->mgen<5) {
-                            $appreciation='Insuffisant';
-                          }elseif ($moyenne->mgen>=5 and $moyenne->mgen<6) {
-                            $appreciation='Passable';
-                          }elseif ($moyenne->mgen>=6 and $moyenne->mgen<8) {
-                            $appreciation='Assez-Bien';
-                          }elseif ($moyenne->mgen>=8 and $moyenne->mgen<10) {
-                            $appreciation='Bien';
-                          }elseif ($moyenne->mgen==10) {
-                            $appreciation='Très-Bien';
-                          }else{
-                          }
-
-                        }
-
-                        $tota=($moyenne->mgen*$moyenne->coefm);
-                        $tot1+=$tota;
-                        $tot1c+=$tota;
-
-                        $coefint+=$moyenne->coefm;
-                        $coefintc+=$moyenne->coefm;
+                      if ($matiere->coef>0) {?>
 
 
-                        ?>
+                        <tr>
+                          <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
+                          <td style="text-align: center;"><?=$matiere->coef;?></td><?php
 
-                        <td style="text-align: center;"><?=number_format($moyenne->mgen,2,',',' ');?></td>
+                          $coefmat+=$matiere->coef;
+                          $coefmatc+=$matiere->coef;
+                                  
+                          foreach ($prod1 as $moyenne) {
 
-                        <td style="text-align: center;"><?=number_format($tota,2,',',' ');?></td>
-                        <td style="text-align: left; padding-left: 10px;"><?=$appreciation;?></td>
+                            if ($_SESSION['niveauclasse']!='primaire') {
+                              if ($moyenne->mgen==0) {
+                                $appreciation='';
+                              }elseif ($moyenne->mgen>0 and $moyenne->mgen<=5) {
+                                $appreciation='Faible';
+                              }elseif ($moyenne->mgen>5 and $moyenne->mgen<10) {
+                                $appreciation='Insuffisant';
+                              }elseif ($moyenne->mgen>=10 and $moyenne->mgen<11) {
+                                $appreciation='Passable';
+                              }elseif ($moyenne->mgen>=11 and $moyenne->mgen<14) {
+                                $appreciation='Assez-bien';
+                              }elseif ($moyenne->mgen>=14 and $moyenne->mgen<16) {
+                                $appreciation='Bien';
+                              }elseif ($moyenne->mgen>=16 and $moyenne->mgen<=20) {
+                                $appreciation='Très-Bien';
+                              }else{
+                              }
+                            }else{
+
+                              if ($moyenne->mgen==0) {
+                                $appreciation='';
+                              }elseif ($moyenne->mgen>0 and $moyenne->mgen<5) {
+                                $appreciation='Insuffisant';
+                              }elseif ($moyenne->mgen>=5 and $moyenne->mgen<6) {
+                                $appreciation='Passable';
+                              }elseif ($moyenne->mgen>=6 and $moyenne->mgen<8) {
+                                $appreciation='Assez-Bien';
+                              }elseif ($moyenne->mgen>=8 and $moyenne->mgen<10) {
+                                $appreciation='Bien';
+                              }elseif ($moyenne->mgen==10) {
+                                $appreciation='Très-Bien';
+                              }else{
+                              }
+
+                            }
+
+                            $tota=($moyenne->mgen*$moyenne->coefm);
+                            $tot1+=$tota;
+                            $tot1c+=$tota;
+
+                            $coefint+=$moyenne->coefm;
+                            $coefintc+=$moyenne->coefm;
+
+
+                            ?>
+
+                            <td style="text-align: center;"><?=number_format($moyenne->mgen,2,',',' ');?></td>
+
+                            <td style="text-align: center;"><?=number_format($tota,2,',',' ');?></td>
+                            <td style="text-align: left; padding-left: 10px;"><?=$appreciation;?></td><?php
+                          }?>
                         </tr><?php
                       }
+                    }else{?>
+
+                      <tr>
+                        <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
+                        <td style="text-align: center;"><?=$matiere->coef;?></td><?php
+
+                        $coefmat+=$matiere->coef;
+                        $coefmatc+=$matiere->coef;
+                                
+                        foreach ($prod1 as $moyenne) {
+
+                          if ($_SESSION['niveauclasse']!='primaire') {
+                            if ($moyenne->mgen==0) {
+                              $appreciation='';
+                            }elseif ($moyenne->mgen>0 and $moyenne->mgen<=5) {
+                              $appreciation='Faible';
+                            }elseif ($moyenne->mgen>5 and $moyenne->mgen<10) {
+                              $appreciation='Insuffisant';
+                            }elseif ($moyenne->mgen>=10 and $moyenne->mgen<11) {
+                              $appreciation='Passable';
+                            }elseif ($moyenne->mgen>=11 and $moyenne->mgen<14) {
+                              $appreciation='Assez-bien';
+                            }elseif ($moyenne->mgen>=14 and $moyenne->mgen<16) {
+                              $appreciation='Bien';
+                            }elseif ($moyenne->mgen>=16 and $moyenne->mgen<=20) {
+                              $appreciation='Très-Bien';
+                            }else{
+                            }
+                          }else{
+
+                            if ($moyenne->mgen==0) {
+                              $appreciation='';
+                            }elseif ($moyenne->mgen>0 and $moyenne->mgen<5) {
+                              $appreciation='Insuffisant';
+                            }elseif ($moyenne->mgen>=5 and $moyenne->mgen<6) {
+                              $appreciation='Passable';
+                            }elseif ($moyenne->mgen>=6 and $moyenne->mgen<8) {
+                              $appreciation='Assez-Bien';
+                            }elseif ($moyenne->mgen>=8 and $moyenne->mgen<10) {
+                              $appreciation='Bien';
+                            }elseif ($moyenne->mgen==10) {
+                              $appreciation='Très-Bien';
+                            }else{
+                            }
+
+                          }
+
+                          $tota=($moyenne->mgen*$moyenne->coefm);
+                          $tot1+=$tota;
+                          $tot1c+=$tota;
+
+                          $coefint+=$moyenne->coefm;
+                          $coefintc+=$moyenne->coefm;
+
+
+                          ?>
+
+                          <td style="text-align: center;"><?=number_format($moyenne->mgen,2,',',' ');?></td>
+
+                          <td style="text-align: center;"><?=number_format($tota,2,',',' ');?></td>
+                          <td style="text-align: left; padding-left: 10px;"><?=$appreciation;?></td><?php
+                        }?>
+                      </tr><?php
+
+                    }
                       //fin 1er semestre
+                    
                   }
 
                   if (!empty($prodmatiere)) {
@@ -475,7 +560,7 @@ if (isset($_GET['mensuel'])) {
 
                       <label style="margin-left: 15px; font-size:14px;">La plus Forte: <?=number_format($_SESSION['moyennegenbulgrande'],2,',',' ');?></label></th><?php
 
-                        $prodrg=$DB->querys('SELECT  rang, count(rang) as countr from rangel where matricule=:matr', array('matr'=>$eleve->matricule));
+                        $prodrg=$DB->querys("SELECT  rang, count(rang) as countr from rangel where matricule='{$eleve->matricule}' and pseudo='{$_SESSION['pseudo']}' ");
 
                         if ($etab['nom']=='Complexe Scolaire la Plume') {
 
@@ -566,7 +651,8 @@ if (isset($_GET['mensuel'])) {
     }
   }
 
-  $DB->delete('DELETE FROM rangel'); // Pour supprimer imediatement la liste des admis
+  $DB->delete("DELETE FROM rangel where pseudo='{$_SESSION['pseudo']}' "); // Pour supprimer imediatement la liste des admis
+  // Pour supprimer imediatement la liste des admis
 }
 
 

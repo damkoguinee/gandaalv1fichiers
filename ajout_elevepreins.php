@@ -363,7 +363,7 @@ if (isset($_SESSION['pseudo'])) {
 								        </li>
 									</ol><?php
 
-								  	if ($products['niveau']>=4) {
+								  	if ($panier->users($_SESSION['matricule'])['niveau']>1) {
 
 										if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
 

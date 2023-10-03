@@ -2,7 +2,7 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>damkosport</title>
+    <title>gandaal</title>
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta content="Page par défaut" name="description">

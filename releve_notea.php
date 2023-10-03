@@ -4,15 +4,25 @@ require_once "lib/html2pdf.php";
 ob_start(); ?>
 
 <?php require '_header.php';
-
 $prodmat=$DB->querys('SELECT  codef from inscription  where nomgr=:nom and annee=:promo ', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
 $prodmatiere=$DB->query('SELECT nommat, codem, coef, cat from  matiere where codef=:nom order by(cat)', array('nom'=>$prodmat['codef']));
 
 $nbremat=sizeof($prodmatiere);
+$bdd='relevebulannuel'; 
+$DB->insert("CREATE TABLE IF NOT EXISTS `".$bdd."`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `matricule` varchar(50) NOT NULL,
+  `codem` varchar(50) DEFAULT NULL,
+  `coefm` float DEFAULT NULL,
+  `moyenne` float DEFAULT NULL,
+  `trimestre` int(11) NOT NULL,
+  `pseudo` varchar(50) NOT NULL,
+  `promo` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2121 DEFAULT CHARSET=utf8");
 
 if ($_SESSION['niveauclasse']!='primaire') {
-
   if ($nbremat<=10) {
     $height='12px';
     $padding='5px';
@@ -42,12 +52,12 @@ if ($_SESSION['niveauclasse']!='primaire') {
 
 <style type="text/css">
 
-body{
-  margin: 0px;
-  width: 100%;
-  height:100%;
-  padding:0px;
-}
+  body{
+    margin: 0px;
+    width: 100%;
+    height:100%;
+    padding:0px;
+  }
   .entete{
     width: 100%;
 
@@ -113,6 +123,13 @@ body{
     list-style: none;
     font-size: 16px;
   }
+
+  .checkbox{
+    width:25px;
+    height:15px;
+    border:1px solid black;
+    margin-left:5px;
+  }
 </style><?php
 
 $prodmat=$DB->query('SELECT  inscription.matricule as matricule from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
@@ -156,13 +173,13 @@ foreach ($prodmat as $eleve) {
       $moyeng=0;
     }
 
-    $DB->insert('INSERT INTO rangel(matricule, moyenne, rang) values( ?, ?, ?)', array($eleve->matricule, $moyeng, 1));
+    $DB->insert('INSERT INTO rangel(matricule, moyenne, rang, pseudo) values( ?, ?, ?, ?)', array($eleve->matricule, $moyeng, 1, $_SESSION['pseudo']));
 
-    $produ=$DB->query('SELECT  moyenne, matricule from rangel order by(moyenne)desc');
+    $produ=$DB->query("SELECT  moyenne, matricule from rangel where pseudo='{$_SESSION['pseudo']}' order by(moyenne)desc");
 
     foreach ($produ as $key => $value) {
 
-      $DB->insert('UPDATE rangel SET rang = ? where matricule=?', array($key+1, $value->matricule));
+      $DB->insert('UPDATE rangel SET rang = ? where matricule=? and pseudo=?', array($key+1, $value->matricule, $_SESSION['pseudo']));
     
     }
 }
@@ -198,7 +215,7 @@ if (isset($_GET['annuel'])) {
 
     if (!empty($prodeval['id'])) {?>
 
-      <page backtop="5mm" backleft="8mm" backright="8mm" backbottom="5mm">
+      <page backtop="5mm" backleft="5mm" backright="5mm" backbottom="5mm">
 
         <div class="body"><?php
 
@@ -241,17 +258,17 @@ if (isset($_GET['annuel'])) {
 
 
                   $cat = array(
-                  1   => 'sciences exactes',
-                  2   => 'sciences litteraires',
-                  3   => 'c/svt',
-                  4   => 'facultatives',
-                  5   => 'catégorie essentielle',
-                  6   => 'catégorie francais',
-                  7   => 'catégorie math/calcul',
-                  8   => 'catégorie leçon d éveil',
-                  9   => 'autres'
-                  
-                );
+                    1   => 'sciences exactes',
+                    2   => 'sciences litteraires',
+                    3   => 'c/svt',
+                    4   => 'facultatives',
+                    5   => 'catégorie essentielle',
+                    6   => 'catégorie francais',
+                    7   => 'catégorie math/calcul',
+                    8   => 'catégorie leçon d éveil',
+                    9   => 'autres'
+                    
+                  );
 
                   $tot1=0;
                   $tot2=0;
@@ -291,7 +308,7 @@ if (isset($_GET['annuel'])) {
                         }?>
                           
                         </td>
-                    </tr><?php
+                      </tr><?php
                     }
 
                     
@@ -337,58 +354,60 @@ if (isset($_GET['annuel'])) {
                         // Annuel
 
                         $annuel=$DB->query('SELECT (sum(compo*devoir.coefcom)/sum(devoir.coefcom)) as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));
-                      }?>
+                      }
 
-                      <tr>
-                        <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
-                        <td style="text-align: center;"><?=$matiere->coef;?></td><?php
+                      if ($matiere->coef>0) {?>
 
-                        $coefmat+=$matiere->coef;
-                        $coefmatc+=$matiere->coef;
-                              
-                        foreach ($prod1 as $moyenne) {
-                          $tot1+=($moyenne->mgen*$moyenne->coefm);
-                          $tot1c+=($moyenne->mgen*$moyenne->coefm);
+                        <tr>
+                          <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
+                          <td style="text-align: center;"><?=$matiere->coef;?></td><?php
 
-                          $coefint+=$moyenne->coefm;
+                          $coefmat+=$matiere->coef;
+                          $coefmatc+=$matiere->coef;
+                                
+                          foreach ($prod1 as $moyenne) {
+                            $tot1+=($moyenne->mgen*$moyenne->coefm);
+                            $tot1c+=($moyenne->mgen*$moyenne->coefm);
 
-                          $coefint1+=$moyenne->coefm;
-                          $coefintc+=$moyenne->coefm;
-                          $coefintc1+=$moyenne->coefm;?>
+                            $coefint+=$moyenne->coefm;
 
-                          <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
-                        }
-                        //fin 1er semestre
-                              
-                        foreach ($prod2 as $moyenne) {
+                            $coefint1+=$moyenne->coefm;
+                            $coefintc+=$moyenne->coefm;
+                            $coefintc1+=$moyenne->coefm;?>
 
-                          $tot2+=($moyenne->mgen*$moyenne->coefm);
-                          $coefcomp+=$moyenne->coefm;
-                          $coefint2+=$moyenne->coefm;
-                          $tot2c+=($moyenne->mgen*$moyenne->coefm);
-                          $coefcompc+=$moyenne->coefm;
+                            <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
+                          }
+                          //fin 1er semestre
+                                
+                          foreach ($prod2 as $moyenne) {
 
-                          $coefintc2+=$moyenne->coefm;?>
+                            $tot2+=($moyenne->mgen*$moyenne->coefm);
+                            $coefcomp+=$moyenne->coefm;
+                            $coefint2+=$moyenne->coefm;
+                            $tot2c+=($moyenne->mgen*$moyenne->coefm);
+                            $coefcompc+=$moyenne->coefm;
 
-                          <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
-                        }
+                            $coefintc2+=$moyenne->coefm;?>
 
-                        //fin 2eme semestre
+                            <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
+                          }
 
-                        foreach ($prod3 as $moyenne) {
+                          //fin 2eme semestre
 
-                          $tot3+=($moyenne->mgen*$moyenne->coefm);
-                          $coefcomp+=$moyenne->coefm;
-                          $coefint3+=$moyenne->coefm;
-                          $tot3c+=($moyenne->mgen*$moyenne->coefm);
-                          $coefcompc+=$moyenne->coefm;
+                          foreach ($prod3 as $moyenne) {
 
-                          $coefintc3+=$moyenne->coefm;?>
+                            $tot3+=($moyenne->mgen*$moyenne->coefm);
+                            $coefcomp+=$moyenne->coefm;
+                            $coefint3+=$moyenne->coefm;
+                            $tot3c+=($moyenne->mgen*$moyenne->coefm);
+                            $coefcompc+=$moyenne->coefm;
 
-                          <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
-                        }
+                            $coefintc3+=$moyenne->coefm;?>
 
-                      //Annuel
+                            <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
+                          }
+
+                        //Annuel
 
                         foreach ($annuel as $moyenne) {
                           if ($_SESSION['niveauclasse']!='primaire') {
@@ -438,6 +457,8 @@ if (isset($_GET['annuel'])) {
                               
                           </tr><?php
                         }
+                      }
+
                     }
                     if (!empty($prodmatiere)) {
 
@@ -499,6 +520,19 @@ if (isset($_GET['annuel'])) {
                           
                         </tr><?php
                       }else{
+                        if (empty($coefintc1)) {
+                          $coefintc1=1;
+                        }
+
+                        if (empty($coefintc2)) {
+                          $coefintc2=1;
+                        }
+                        if (empty($coefintc3)) {
+                          $coefintc3=1;
+                        }
+                        if (empty($coefgenc)) {
+                          $coefgenc=1;
+                        }
 
                         if ($coefintc1==0) {
                           $moyencat1=$tot1c;
@@ -541,7 +575,27 @@ if (isset($_GET['annuel'])) {
 
                       }
                     }
-                  }?>
+                  }
+                  
+                  if (empty($tot1)) {
+                    $tot1=0;
+                    $abst1=1;
+                  }else{
+                    $abst1=0;
+                  }
+                  if (empty($tot2)) {
+                    $tot2=0;
+                    $abst2=1;
+                  }else{
+                    $abst2=0;
+                  }
+                  if (empty($tot3)) {
+                    $tot3=0;
+                    $abst3=1;
+                  }else{
+                    $abst3=0;
+                  }
+                  $nbreabst=3-$abst1-$abst2-$abst3; ?>
 
                   <tr>
                       <th>Total</th>
@@ -554,7 +608,7 @@ if (isset($_GET['annuel'])) {
 
                       <th style="padding-right: 10px; text-align: right;"><?=number_format($tot3,2,',',' ');?></th>
 
-                      <th style="padding-right: 10px; text-align: right;"><?=number_format($tota,2,',',' ');?></th>
+                      <th style="padding-right: 10px; text-align: right;"><?=number_format(($tot1+$tot2+$tot3)/$nbreabst,2,',',' ');?></th>
 
                       <th style="padding-right: 10px; text-align: right; border-bottom: 0px;"></th>
                       
@@ -562,6 +616,24 @@ if (isset($_GET['annuel'])) {
 
                   <tr>
                       <th colspan="2">Moyenne</th><?php
+                      if (empty($coefint1)) {
+                        $coefint1=1;
+                        $abs1=1;
+                      }else{
+                        $abs1=0;
+                      }
+                      if (empty($coefint2)) {
+                        $coefint2=1;
+                        $abs2=1;
+                      }else{
+                        $abs2=0;
+                      }
+                      if (empty($coefint3)) {
+                        $coefint3=1;
+                        $abs3=1;
+                      }else{
+                        $abs3=0;
+                      }
 
                       if (!empty($coefint1)) {?>
                           
@@ -595,16 +667,19 @@ if (isset($_GET['annuel'])) {
 
                       if (!empty($coefgen)) {
 
-                        $moyeng=$tota/$coefgen;?>
+                        $moyeng=$tota/$coefgen;
+                        
+                        $nbret=3-$abs1-$abs2-$abs3;
+                        $totmoyeng=(($tot1/$coefint1)+($tot2/$coefint2)+($tot3/$coefint3))/$nbret;?>
 
-                        <th style=" padding-right: 3px; text-align: center;"><?=number_format($tota/$coefgen,2,',',' ');?></th><?php
+                        <th style=" padding-right: 3px; text-align: center;"><?=number_format(($totmoyeng),2,',',' ');?></th><?php
 
                       }else{
                         $moyeng=0;?>
                           <th></th><?php
                       }
 
-                      $prodrg=$DB->querys('SELECT  rang, count(rang) as countr from rangel where matricule=:matr', array('matr'=>$eleve->matricule));
+                      $prodrg=$DB->querys("SELECT  rang, count(rang) as countr from rangel where matricule='{$eleve->matricule}' and pseudo='{$_SESSION['pseudo']}' ");
 
                       if ($etab['nom']=='Complexe Scolaire la Plume') {
 
@@ -625,38 +700,38 @@ if (isset($_GET['annuel'])) {
                   </tr><?php
 
 
-                if ($_SESSION['niveauclasse']!='primaire') {
+                  if ($_SESSION['niveauclasse']!='primaire') {
 
-                  if ($moyeng>=0 and $moyeng<=5) {
-                    $appreciation='Faible';
-                  }elseif ($moyeng>5 and $moyeng<10) {
-                    $appreciation='Insuffisant';
-                  }elseif ($moyeng>=10 and $moyeng<11) {
-                    $appreciation='Passable';
-                  }elseif ($moyeng>=11 and $moyeng<14) {
-                    $appreciation='Assez-bien';
-                  }elseif ($moyeng>=14 and $moyeng<16) {
-                    $appreciation='Bien';
-                  }elseif ($moyeng>=16 and $moyeng<=20) {
-                    $appreciation='Très-Bien';
+                    if ($moyeng>=0 and $moyeng<=5) {
+                      $appreciation='Faible';
+                    }elseif ($moyeng>5 and $moyeng<10) {
+                      $appreciation='Insuffisant';
+                    }elseif ($moyeng>=10 and $moyeng<11) {
+                      $appreciation='Passable';
+                    }elseif ($moyeng>=11 and $moyeng<14) {
+                      $appreciation='Assez-bien';
+                    }elseif ($moyeng>=14 and $moyeng<16) {
+                      $appreciation='Bien';
+                    }elseif ($moyeng>=16 and $moyeng<=20) {
+                      $appreciation='Très-Bien';
+                    }else{
+                    }
                   }else{
-                  }
-                }else{
 
-                  if ($moyeng>=0 and $moyeng<5) {
-                    $appreciation='Insuffisant';
-                  }elseif ($moyeng>=5 and $moyeng<6) {
-                    $appreciation='Passable';
-                  }elseif ($moyeng>=6 and $moyeng<8) {
-                    $appreciation='Assez-Bien';
-                  }elseif ($moyeng>=8 and $moyeng<10) {
-                    $appreciation='Bien';
-                  }elseif ($moyeng==10) {
-                    $appreciation='Très-Bien';
-                  }else{
-                  }
+                    if ($moyeng>=0 and $moyeng<5) {
+                      $appreciation='Insuffisant';
+                    }elseif ($moyeng>=5 and $moyeng<6) {
+                      $appreciation='Passable';
+                    }elseif ($moyeng>=6 and $moyeng<8) {
+                      $appreciation='Assez-Bien';
+                    }elseif ($moyeng>=8 and $moyeng<10) {
+                      $appreciation='Bien';
+                    }elseif ($moyeng==10) {
+                      $appreciation='Très-Bien';
+                    }else{
+                    }
 
-                }
+                  }
 
                   $prodabs=$DB->querys('SELECT count(nbreheure) as nbreh from absence where promo=:promo and matricule=:matr and absence.id not in(SELECT id_absence FROM justabsence)', array('promo'=>$_SESSION['promo'], 'matr'=>$eleve->matricule));
 
@@ -679,7 +754,19 @@ if (isset($_GET['annuel'])) {
                         
                     <th colspan="2">Absence(s): <?=$nbreh;?></th>
                     <th colspan="2">Retard(s):  <?=$nbrer;?></th>
-                  </tr>
+                  </tr><?php 
+                  if ($etab['nom']=='Complexe Scolaire la Plume') {?>
+
+                    <tr>
+                      <th colspan="7" style="text-align:center;">Décision du conseil des maitres:</th>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align:left; border-right:0px solid white; font-size:12px;">Admis(e) en classe supérieure <div class="checkbox"></div></th>
+                      <th colspan="2" style="text-align:center; border-right:0px solid white; font-size:12px;">Redouble sa classe <div class="checkbox"></div></th>
+                      <th colspan="3" style="text-align:center; font-size:12px;">Sessionnaire à la rentrée <div class="checkbox"></div></th>
+                    </tr><?php 
+                  }?>
+
                 </tbody>
               </table>
             </div><?php
@@ -702,13 +789,17 @@ if (isset($_GET['annuel'])) {
                 <tbody><?php
 
                   $prodgr=$DB->querys('SELECT codef from inscription where matricule=:mat and annee=:promo', array('mat'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));
-
-
+                 
                   $cat = array(
                     1   => 'sciences exactes',
                     2   => 'sciences litteraires',
                     3   => 'c/svt',
-                    4   => 'facultatives'
+                    4   => 'facultatives',
+                    5   => 'catégorie essentielle',
+                    6   => 'catégorie francais',
+                    7   => 'catégorie math/calcul',
+                    8   => 'catégorie leçon d éveil',
+                    9   => 'autres'
                     
                   );
 
@@ -731,8 +822,6 @@ if (isset($_GET['annuel'])) {
                         <td colspan="6" style="text-align: center; color: #717375; "><?=ucwords($value);?></td>
                       </tr><?php
                     }
-
-                    
                     $tot1c=0;
                     $tot2c=0;
                     $tot3c=0;
@@ -743,80 +832,97 @@ if (isset($_GET['annuel'])) {
                     $coefgenc=0;
                     foreach ($prodmatiere as $matiere) {
 
-                      $prod1=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and trimes=:sem and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>1, 'promo'=>$_SESSION['promo']));
+                      $prod1=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm, matiere.codem as codem from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and trimes=:sem and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>1, 'promo'=>$_SESSION['promo']));
+                      // foreach ($prod1 as $moyenne) {
+                      //   $DB->insert("INSERT INTO relevebulannuel(matricule,moyenne, codem, trimestre, pseudo, promo)VALUES(?,?,?,?,?,?)",array($eleve->matricule,$moyenne->mgen, $moyenne->codem,1,$_SESSION['pseudo'],$_SESSION['promo']));
+                      // }
 
-                    //2ème semestre
+                      //2ème semestre
 
-                    $prod2=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and trimes=:sem and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>2, 'promo'=>$_SESSION['promo']));
+                      $prod2=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm, matiere.codem as codem from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and trimes=:sem and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>2, 'promo'=>$_SESSION['promo']));
+                      
 
-                    //3ème semestre
+                      //3ème semestre
 
-                    //$prod3=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and trimes=:sem and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>3, 'promo'=>$_SESSION['promo']));
+                      //$prod3=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and trimes=:sem and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'sem'=>3, 'promo'=>$_SESSION['promo']));
 
-                    // Annuel
+                      // Annuel
 
-                    $annuel=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));?>
+                      //$annuel=$DB->query('SELECT ((sum(note*devoir.coef)/sum(devoir.coef))+2*(sum(compo*devoir.coefcom)/sum(devoir.coefcom)))/3 as mgen, nommat, matiere.coef as coefm from note inner join devoir on note.codev=devoir.id inner join eleve on note.matricule=eleve.matricule inner join matiere on matiere.codem=note.codem where matiere.codem=:mat and note.matricule=:matr and devoir.promo=:promo order by (eleve.matricule)', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));
 
-                      <tr>
-                        <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
-                        <td style="text-align: center;"><?=$matiere->coef;?></td><?php
+                      foreach ($prod1 as $moyenne) {
+                        $DB->insert("INSERT INTO relevebulannuel(matricule,moyenne,codem,coefm,trimestre, pseudo, promo)VALUES(?,?,?,?,?,?,?)",array($eleve->matricule,$moyenne->mgen, $moyenne->codem,$moyenne->coefm,1,$_SESSION['pseudo'],$_SESSION['promo']));
 
-                        $coefmat+=$matiere->coef;
-                        $coefmatc+=$matiere->coef;
-                              
-                        foreach ($prod1 as $moyenne) {
-                          $tot1+=($moyenne->mgen*$moyenne->coefm);
-                          $tot1c+=($moyenne->mgen*$moyenne->coefm);
+                      }
 
-                          $coefint+=$moyenne->coefm;
-                          $coefintc+=$moyenne->coefm;?>
+                      foreach ($prod2 as $moyenne) {
+                        $DB->insert("INSERT INTO relevebulannuel(matricule,moyenne,codem,coefm,trimestre, pseudo, promo)VALUES(?,?,?,?,?,?,?)",array($eleve->matricule,$moyenne->mgen, $moyenne->codem,$moyenne->coefm,2,$_SESSION['pseudo'],$_SESSION['promo']));
 
-                          <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
-                        }
-                        //fin 1er semestre
-                              
-                        foreach ($prod2 as $moyenne) {
+                      }
 
-                          $tot2+=($moyenne->mgen*$moyenne->coefm);
-                          $coefcomp+=$moyenne->coefm;
-                          $tot2c+=($moyenne->mgen*$moyenne->coefm);
-                          $coefcompc+=$moyenne->coefm;?>
+                      $annuel=$DB->query('SELECT (sum(moyenne))/2 as mgen, coefm from relevebulannuel where codem=:mat and matricule=:matr and promo=:promo', array('mat'=>$matiere->codem, 'matr'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));
 
-                          <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
-                        }
+                      
+                      
+                      if ($matiere->coef>0) {?>
 
-                      //Annuel
+                        <tr>
+                          <td style="text-align: left;"><?=ucfirst($matiere->nommat);?></td>
+                          <td style="text-align: center;"><?=$matiere->coef;?></td><?php
 
-                        foreach ($annuel as $moyenne) {
-                          if ($moyenne->mgen==0) {
-                            $appreciation='';
-                          }elseif ($moyenne->mgen>0 and $moyenne->mgen<=5) {
-                            $appreciation='Faible';
-                          }elseif ($moyenne->mgen>5 and $moyenne->mgen<10) {
-                            $appreciation='Insuffisant';
-                          }elseif ($moyenne->mgen>=10 and $moyenne->mgen<11) {
-                            $appreciation='Acceptable';
-                          }elseif ($moyenne->mgen>=11 and $moyenne->mgen<14) {
-                            $appreciation='Assez-Bien';
-                          }elseif ($moyenne->mgen>=14 and $moyenne->mgen<16) {
-                            $appreciation='Bien';
-                          }elseif ($moyenne->mgen>=16 and $moyenne->mgen<17) {
-                            $appreciation='Très Bien';
-                          }else{
-                            $appreciation='Excellent';
+                          $coefmat+=$matiere->coef;
+                          $coefmatc+=$matiere->coef;
+                                
+                          foreach ($prod1 as $moyenne) {
+                            $tot1+=($moyenne->mgen*$moyenne->coefm);
+                            $tot1c+=($moyenne->mgen*$moyenne->coefm);
+
+                            $coefint+=$moyenne->coefm;
+                            $coefintc+=$moyenne->coefm;?>
+
+                            <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
                           }
+                          //fin 1er semestre
+                                
+                          foreach ($prod2 as $moyenne) {
 
-                          $tota+=($moyenne->mgen*$moyenne->coefm);
-                          $coefgen+=$moyenne->coefm;
-                          $totac+=($moyenne->mgen*$moyenne->coefm);
-                          $coefgenc+=$moyenne->coefm;?>
+                            $tot2+=($moyenne->mgen*$moyenne->coefm);
+                            $coefcomp+=$moyenne->coefm;
+                            $tot2c+=($moyenne->mgen*$moyenne->coefm);
+                            $coefcompc+=$moyenne->coefm;?>
+                            <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td><?php
+                          }                          
 
-                          <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td>
+                          foreach ($annuel as $moyenne) {
+                            if ($moyenne->mgen==0) {
+                              $appreciation='';
+                            }elseif ($moyenne->mgen>0 and $moyenne->mgen<=5) {
+                              $appreciation='Faible';
+                            }elseif ($moyenne->mgen>5 and $moyenne->mgen<10) {
+                              $appreciation='Insuffisant';
+                            }elseif ($moyenne->mgen>=10 and $moyenne->mgen<11) {
+                              $appreciation='Acceptable';
+                            }elseif ($moyenne->mgen>=11 and $moyenne->mgen<14) {
+                              $appreciation='Assez-Bien';
+                            }elseif ($moyenne->mgen>=14 and $moyenne->mgen<16) {
+                              $appreciation='Bien';
+                            }elseif ($moyenne->mgen>=16 and $moyenne->mgen<17) {
+                              $appreciation='Très Bien';
+                            }else{
+                              $appreciation='Excellent';
+                            }
 
-                          <td style="text-align: left; padding-left: 3px;"><?=$appreciation;?></td>
-                              
-                          </tr><?php
-                        }
+                            $tota+=($moyenne->mgen*$moyenne->coefm);
+                            $coefgen+=$moyenne->coefm;
+                            $totac+=($moyenne->mgen*$moyenne->coefm);
+                            $coefgenc+=$moyenne->coefm;?>
+
+                            <td style="padding-right: 10px; text-align: right;"><?=number_format($moyenne->mgen,2,',',' ');?></td>
+
+                            <td style="text-align: left; padding-left: 3px;"><?=$appreciation;?></td><?php
+                          }?>
+                        </tr><?php
+                      }
                     }
                     if (!empty($prodmatiere)) {
 
@@ -840,24 +946,41 @@ if (isset($_GET['annuel'])) {
                         $appreciation='Très Bien';
                       }else{
                         $appreciation='Excellent';
-                      }?>
+                      }
+                      if (!empty($coefmatc)) {?>
 
-                      <tr>
-                        <td style="border: 1px; text-align: center; color: grey;">Total</td>
+                        <tr>
+                          <td style="border: 1px; text-align: center; color: grey;">Total</td>
 
-                        <td style="border: 1px; text-align: center; color: grey;"><?=$coefmatc;?></td>
+                          <td style="border: 1px; text-align: center; color: grey;"><?=$coefmatc;?></td>
 
-                        <td style="padding-right: 10px; text-align: right;border: 1px; color: grey;">Moy <?=number_format(($tot1c/$coefmatc),2,',',' ');?></td>
+                          <td style="padding-right: 10px; text-align: right;border: 1px; color: grey;">Moy <?=number_format(($tot1c/$coefmatc),2,',',' ');?></td>
 
-                        <td style="padding-right: 10px; text-align: right;border: 1px; color: grey;">Moy <?=number_format(($tot2c/$coefmatc),2,',',' ');?></td>
+                          <td style="padding-right: 10px; text-align: right;border: 1px; color: grey;">Moy <?=number_format(($tot2c/$coefmatc),2,',',' ');?></td>
 
-                        <td style="padding-right: 10px; text-align: right;border: 1px; color: grey;">Moy <?=number_format(($moyenc),2,',',' ');?></td>
+                          <td style="padding-right: 10px; text-align: right;border: 1px; color: grey;">Moy <?=number_format(($moyenc),2,',',' ');?></td>
 
-                        <td style="border: 1px; text-align: center; color: grey;" ><?=$appreciation;?></td>
-                        
-                      </tr><?php
+                          <td style="border: 1px; text-align: center; color: grey;" ><?=$appreciation;?></td>
+                          
+                        </tr><?php
+                      }
                     }
-                  }?>
+                  }
+                  
+                  if (empty($tot1)) {
+                    $tot1=0;
+                    $abst1=1;
+                  }else{
+                    $abst1=0;
+                  }
+                  if (empty($tot2)) {
+                    $tot2=0;
+                    $abst2=1;
+                  }else{
+                    $abst2=0;
+                  }
+                  
+                  $nbreabst=2-$abst1-$abst2;?>
 
                   <tr>
                     <th>Total</th>
@@ -868,7 +991,7 @@ if (isset($_GET['annuel'])) {
 
                     <th style="padding-right: 10px; text-align: right;"><?=number_format($tot2,2,',',' ');?></th>
 
-                    <th style="padding-right: 10px; text-align: right;"><?=number_format($tota,2,',',' ');?></th>
+                    <th style="padding-right: 10px; text-align: right;"><?=number_format(($tot1+$tot2)/$nbreabst,2,',',' ');?></th>
 
                     <th style="padding-right: 10px; text-align: right; border-bottom: 0px;"></th>
                       
@@ -898,19 +1021,31 @@ if (isset($_GET['annuel'])) {
                     }
 
                     if (!empty($coefgen)) {
+                      if (empty($coefint)) {
+                        $coefint=1;
+                        $abs1=1;
+                      }else{
+                        $abs1=0;
+                      }
+                      if (empty($coefcomp)) {
+                        $coefcomp=1;
+                        $abs2=1;
+                      }else{
+                        $abs2=0;
+                      }
+                      
+                      $nbret=2-$abs1-$abs2;
 
-                      $moyeng=$tota/$coefgen;?>
+                      $moyeng=$tota/$coefgen;
+                      $totmoyeng=($tot1/$coefint)+($tot2/$coefcomp);?>
 
-                      <th style=" padding-right: 3px; text-align: center;"><?=number_format($tota/$coefgen,2,',',' ');?></th><?php
+                      <th style=" padding-right: 3px; text-align: center;"><?=number_format($totmoyeng/$nbret,2,',',' ');?></th><?php
 
                     }else{
                       $moyeng=0?>
                         <th></th><?php
                     }
-
-
-
-                    $prodrg=$DB->querys('SELECT  rang, count(rang) as countr from rangel where matricule=:matr', array('matr'=>$eleve->matricule));
+                    $prodrg=$DB->querys("SELECT  rang, count(rang) as countr from rangel where matricule='{$eleve->matricule}' and pseudo='{$_SESSION['pseudo']}' ");
 
                     if ($etab['nom']=='Complexe Scolaire la Plume') {
 
@@ -928,42 +1063,39 @@ if (isset($_GET['annuel'])) {
                       }
 
                     }?>
-                </tr><?php
+                  </tr><?php
+                  if ($_SESSION['niveauclasse']!='primaire') {
 
-
-
-                if ($_SESSION['niveauclasse']!='primaire') {
-
-                  if ($moyeng>=0 and $moyeng<=5) {
-                    $appreciation='Faible';
-                  }elseif ($moyeng>5 and $moyeng<10) {
-                    $appreciation='Insuffisant';
-                  }elseif ($moyeng>=10 and $moyeng<11) {
-                    $appreciation='Passable';
-                  }elseif ($moyeng>=11 and $moyeng<14) {
-                    $appreciation='Assez-bien';
-                  }elseif ($moyeng>=14 and $moyeng<16) {
-                    $appreciation='Bien';
-                  }elseif ($moyeng>=16 and $moyeng<=20) {
-                    $appreciation='Très-Bien';
+                    if ($moyeng>=0 and $moyeng<=5) {
+                      $appreciation='Faible';
+                    }elseif ($moyeng>5 and $moyeng<10) {
+                      $appreciation='Insuffisant';
+                    }elseif ($moyeng>=10 and $moyeng<11) {
+                      $appreciation='Passable';
+                    }elseif ($moyeng>=11 and $moyeng<14) {
+                      $appreciation='Assez-bien';
+                    }elseif ($moyeng>=14 and $moyeng<16) {
+                      $appreciation='Bien';
+                    }elseif ($moyeng>=16 and $moyeng<=20) {
+                      $appreciation='Très-Bien';
+                    }else{
+                    }
                   }else{
-                  }
-                }else{
 
-                  if ($moyeng>=0 and $moyeng<5) {
-                    $appreciation='Insuffisant';
-                  }elseif ($moyeng>=5 and $moyeng<6) {
-                    $appreciation='Passable';
-                  }elseif ($moyeng>=6 and $moyeng<8) {
-                    $appreciation='Assez-Bien';
-                  }elseif ($moyeng>=8 and $moyeng<10) {
-                    $appreciation='Bien';
-                  }elseif ($moyeng==10) {
-                    $appreciation='Très-Bien';
-                  }else{
-                  }
+                    if ($moyeng>=0 and $moyeng<5) {
+                      $appreciation='Insuffisant';
+                    }elseif ($moyeng>=5 and $moyeng<6) {
+                      $appreciation='Passable';
+                    }elseif ($moyeng>=6 and $moyeng<8) {
+                      $appreciation='Assez-Bien';
+                    }elseif ($moyeng>=8 and $moyeng<10) {
+                      $appreciation='Bien';
+                    }elseif ($moyeng==10) {
+                      $appreciation='Très-Bien';
+                    }else{
+                    }
 
-                }
+                  }
 
                   $prodabs=$DB->querys('SELECT count(nbreheure) as nbreh from absence where promo=:promo and matricule=:matr and absence.id not in(SELECT id_absence FROM justabsence)', array('promo'=>$_SESSION['promo'], 'matr'=>$eleve->matricule));
 
@@ -998,7 +1130,8 @@ if (isset($_GET['annuel'])) {
     }
   }
 
-  $DB->delete('DELETE FROM rangel'); // Pour supprimer imediatement la liste des admis
+  $DB->delete("DELETE FROM rangel where pseudo='{$_SESSION['pseudo']}' "); // Pour supprimer imediatement la liste des admis
+  $DB->delete("DELETE FROM relevebulannuel where pseudo='{$_SESSION['pseudo']}' "); // Pour supprimer imediatement la liste des admis
 }
 
 $content = ob_get_clean();

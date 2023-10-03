@@ -5,7 +5,7 @@ if (isset($_SESSION['pseudo'])) {
   $pseudo=$_SESSION['pseudo'];
   
 
-  if ($products['niveau']>=3) {?>
+  if ($panier->users($_SESSION['matricule'])['niveau']>=1) {?>
 
     <div class="container-fluid">
 

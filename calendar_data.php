@@ -7,10 +7,16 @@ header('Content-Type: application/json');
     $codensp = $_GET['enseignant'];
     if (isset($_GET['groupe'])  and !empty($_GET['groupe'])) {
         $prodevents=$DB->query("SELECT *FROM events where promo = '{$promo}' and nomgrp = '{$groupe}' ");
+        $appelj="enseig";
     }else{
         $prodevents=$DB->query("SELECT *FROM events where promo = '{$promo}' and codensp = '{$codensp}' ");
+        $appelj="enseig";
     }
     foreach ($prodevents as $event) {
+        $debut=(new DateTime($event->debut))->format('H:i');
+        $valdebut=(new DateTime($event->debut))->format('H');
+        $valfin=(new DateTime($event->fin))->format('H');
+        $deltaval=$valfin-$valdebut;
         $duree=0;
         $events[] = [
             'id'			=> $event->id,
@@ -20,8 +26,12 @@ header('Content-Type: application/json');
             'description'	=> $event->nomgrp,
             'duree'	        =>$duree,
             'enseignant'	=>$event->codensp,
-            'montantf'	    =>0,
-            'etat'	        =>0,
+            'appelj'	    =>$appelj,
+            'nheure'	    =>$deltaval,
+            'hdebut'	    =>$debut,
+            'classe'	    =>$event->nomgrp,
+            'matiere'	    =>$event->codemp,
+            'semestre'	    =>$semcourant,
             // 'backgroundColor'   =>"#ffc107",
             // 'textColor'         =>"#5a88ad",
             // 'borderColor'       =>"#839C49"

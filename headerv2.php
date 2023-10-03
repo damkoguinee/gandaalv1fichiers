@@ -26,82 +26,82 @@ require '_header.php'
       <body onload="return focus();"><?php
     }  
 
-    if (empty($_SESSION['prodtype'])) {
+    // if (empty($_SESSION['prodtype'])) {
       
-      $prodtype=$DB->querys('SELECT id, type from repartition  where promo=:promo',array('promo'=>$_SESSION['promo']));
-      if (is_array($prodtype)) {
-        $_SESSION['prodtype']=$prodtype['type'];
+    //   $prodtype=$DB->querys('SELECT id, type from repartition  where promo=:promo',array('promo'=>$_SESSION['promo']));
+    //   if (is_array($prodtype)) {
+    //     $_SESSION['prodtype']=$prodtype['type'];
 
-        $typerepart=ucfirst($prodtype['type']);
-      }else{
-        $_SESSION['prodtype']="semestre";
+    //     $typerepart=ucfirst($prodtype['type']);
+    //   }else{
+    //     $_SESSION['prodtype']="semestre";
 
-        $typerepart=ucfirst("semestre");
+    //     $typerepart=ucfirst("semestre");
 
-      }
-    }
+    //   }
+    // }
 
-    if (isset($_POST['groupe'])){
+    // if (isset($_POST['groupe'])){
 
-      $prodclass=$DB->querys('SELECT codef from groupe where nomgr=:nom and promo=:promo', array('nom'=>$_POST['groupe'], 'promo'=>$_SESSION['promo']));
+    //   $prodclass=$DB->querys('SELECT codef from groupe where nomgr=:nom and promo=:promo', array('nom'=>$_POST['groupe'], 'promo'=>$_SESSION['promo']));
 
-      $prodform=$DB->querys('SELECT niveau from formation where codef=:code', array('code'=>$prodclass['codef']));
+    //   $prodform=$DB->querys('SELECT niveau from formation where codef=:code', array('code'=>$prodclass['codef']));
 
-      $prodtype=$DB->querys('SELECT type from cursus inner join repartition on repartition.codecursus=cursus.codecursus where nom=:code', array('code'=>$prodform['niveau']));
+    //   $prodtype=$DB->querys('SELECT type from cursus inner join repartition on repartition.codecursus=cursus.codecursus where nom=:code', array('code'=>$prodform['niveau']));
 
-      $prodtype=$prodtype['type'];
+    //   $prodtype=$prodtype['type'];
 
-      $_SESSION['prodtype']=$prodtype;
+    //   $_SESSION['prodtype']=$prodtype;
 
-      $prodtype=$_SESSION['prodtype'];
+    //   $prodtype=$_SESSION['prodtype'];
 
-      $typerepart=ucfirst($_SESSION['prodtype']);
+    //   $typerepart=ucfirst($_SESSION['prodtype']);
 
-    }else{
+    // }else{
 
-      if (!isset($_GET['note'])){
+    //   if (!isset($_GET['note'])){
 
-        $prodtype=$_SESSION['prodtype'];
+    //     $prodtype=$_SESSION['prodtype'];
 
-        $typerepart=ucfirst($_SESSION['prodtype']);
-      }
-    }
+    //     $typerepart=ucfirst($_SESSION['prodtype']);
+    //   }
+    // }
 
-    if (isset($_GET['disci'])){
+    // if (isset($_GET['disci'])){
 
-      $prodform=$DB->querys('SELECT niveau from inscription where matricule=:mat and annee=:promo', array('mat'=>$_GET['disci'], 'promo'=>$_SESSION['promo']));
+    //   $prodform=$DB->querys('SELECT niveau from inscription where matricule=:mat and annee=:promo', array('mat'=>$_GET['disci'], 'promo'=>$_SESSION['promo']));
 
-      $prodtype=$DB->querys('SELECT type from cursus inner join repartition on repartition.codecursus=cursus.codecursus where nom=:code', array('code'=>$prodform['niveau']));
+    //   $prodtype=$DB->querys('SELECT type from cursus inner join repartition on repartition.codecursus=cursus.codecursus where nom=:code', array('code'=>$prodform['niveau']));
 
-      $prodtype=$prodtype['type'];
+    //   $prodtype=$prodtype['type'];
 
-      $_SESSION['prodtype']=$prodtype;
+    //   $_SESSION['prodtype']=$prodtype;
 
-      $prodtype=$_SESSION['prodtype'];
+    //   $prodtype=$_SESSION['prodtype'];
 
-      $typerepart=ucfirst($_SESSION['prodtype']);
+    //   $typerepart=ucfirst($_SESSION['prodtype']);
 
-    }
+    // }
 
-    if ($_SESSION['prodtype']=='trimestre') {
+    // if ($_SESSION['prodtype']=='trimestre') {
 
-      if (date('m')=='11' or date('m')=='12' or date('m')=='01' or date('m')=='02' or date('m')=='03') {
-        $semcourant='1';
-      }elseif (date('m')=='04' or date('m')=='05') {
-        $semcourant='2';
-      }else{
-        $semcourant='3';
+    //   if (date('m')=='11' or date('m')=='12' or date('m')=='01' or date('m')=='02' or date('m')=='03') {
+    //     $semcourant='1';
+    //   }elseif (date('m')=='04' or date('m')=='05') {
+    //     $semcourant='2';
+    //   }else{
+    //     $semcourant='3';
 
-      }
-    }else{
+    //   }
+    // }else{
 
-      if (date('m')=='11' or date('m')=='12' or date('m')=='01' or date('m')=='02' or date('m')=='03') {
-        $semcourant='1';
-      }else{
-        $semcourant='2';
+    //   if (date('m')=='11' or date('m')=='12' or date('m')=='01' or date('m')=='02' or date('m')=='03') {
+    //     $semcourant='1';
+    //   }else{
+    //     $semcourant='2';
 
-      }
-    }
+    //   }
+    // }
 
     $products = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo= :PSEUDO',array('PSEUDO'=>$_SESSION['pseudo']));
 
@@ -162,7 +162,7 @@ require '_header.php'
 
                 if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {                 
 
-                  if ($products['niveau']>10) {?>
+                  if ($panier->users($_SESSION['matricule'])['niveau']>10) {?>
                     <li class="nav-item"><a class="nav-link active btn btn-danger text-light m-1 " href="csv.php?save">Sauvegarde</a></li><?php
                   }
                 }?> 

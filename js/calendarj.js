@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     
-                    initialView: 'timeGridWeek',
+                    initialView: 'timeGridDay',
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                        
                     },
                     // minTime: '08:00:00',
                     // maxTime: '18:00:00',
@@ -71,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         // var modalInstance = M.Modal.init(eventModal);
                         // modalInstance.open();
                         //console.log(info.event.extendedProps.enseignant);
-                        window.location.href = 'event.php?id=' + info.event.id + '&codens=' + info.event.extendedProps.enseignant;
+                        window.location.href = 'ajout_absencej.php?id=' + info.event.id + '&codens=' + info.event.extendedProps.enseignant + '&appelj=' + info.event.extendedProps.appelj + '&nheure=' + info.event.extendedProps.nheure + '&hdebut=' + info.event.extendedProps.hdebut + '&matn=' + info.event.extendedProps.matiere + '&semestre=' + info.event.extendedProps.semestre + '&classe=' + info.event.extendedProps.classe;
+                        // <a class="lienemp" href="planingjv0.php?id=<?=$event->id;?>&codens=<?=$event->codensp;?>&appelj=<?=$appelj;?>&nheure=<?=$deltaval;?>&hdebut=<?=$debut;?>&matn=<?=$event->codem;?>&semestre=<?=$semcourant;?>&classe=<?=$event->nomgrp;?>"></a>
                     }
 
                 });
@@ -104,10 +105,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // function faireQuelqueChoseAvecGroupe(groupe) {    
     //     // Ajoutez ici le code pour effectuer une action avec 'groupe'
     // }
-    
-        xmlhttp.open('get', 'https://groupescolairebikaz.com/gandaalbikaz/calendar_data.php?groupe=' + groupe + '&enseignant=' + enseignant, true)
-
         //xmlhttp.open('get', 'http://localhost/gandaal/calendar_data.php?groupe=' + groupe + '&enseignant=' + enseignant, true)
+
+        xmlhttp.open('get', 'https://groupescolairebikaz.com/gandaalbikaz/calendar_data.php?groupe=' + groupe + '&enseignant=' + enseignant, true)
         xmlhttp.send(null)
     
 

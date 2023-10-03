@@ -1,4 +1,6 @@
-<?php require '_header.php';?>
+<?php require '_header.php';
+require_once "phpqrcode/qrlib.php";
+require_once "phpqrcode/qrconfig.php";?>
 
 <!DOCTYPE html>
 <html>
@@ -79,9 +81,14 @@
 
     <div class="rep"><?php 
 
-      foreach ($prodcarte as $fiche) {?>
-
-      
+      foreach ($prodcarte as $fiche) {
+        $mat=$fiche->mat;
+        $codeContent=$mat;
+        $fileName=$mat.".png";
+        $cheminQrcode='qrcode/'.$fileName;
+        if (!file_exists($cheminQrcode)) {
+            QRcode::png($codeContent, $cheminQrcode);
+        }?>      
         <div class="container">
 
           <div class="carte"><?php
@@ -108,7 +115,7 @@
 
               </div>
 
-              <div>
+              <div style="display: flex;" >
 
                 <div style="margin-left: 0px;"><?php
 
@@ -122,7 +129,13 @@
                     <img style="margin-top: 1px;  border-radius: 10px; box-shadow: 3px 0px 20px rgba(1, 255, 255, 0.9);" src="img/defaut.jpg" width="70" height="70"><?php
 
                   }?>
+               
                 </div>
+
+                <div style="margin-left: 5px;">
+                  <img src="<?=$cheminQrcode;?>" class="card-img-top" alt="photo-enseignant">
+                </div> 
+
               </div>
             </div>
 

@@ -375,7 +375,7 @@ if (isset($_SESSION['pseudo'])) {
 
 				                    	<th colspan="2"><?php 
 
-											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?><a class="btn btn-warning" href="enseignement.php?ajout_ens" style="color: white;">Ajouter un cours</a><?php }?>
+											if (($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") AND $panier->users($_SESSION['matricule'])['niveau']>1) {?><a class="btn btn-warning" href="enseignement.php?ajout_ens" style="color: white;">Ajouter un cours</a><?php }?>
 										</th>
 				                  </tr>
 
@@ -410,14 +410,14 @@ if (isset($_SESSION['pseudo'])) {
 
 				                        <td><?php 
 
-											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" ) {	?>
+											if (($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") AND $panier->users($_SESSION['matricule'])['niveau']>1 ) {	?>
 				                        		<a class="btn btn-warning" href="enseignement.php?modif_ens=<?=$formation->codens;?>&codem=<?=$formation->codem;?>&nomgr=<?=$formation->nomgr;?>" >Modifier</a><?php 
 				                        	}?>
 				                        </td>
 
 				                        <td><?php 
 
-											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
+											if (($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") AND $panier->users($_SESSION['matricule'])['niveau']>1) {?>
 
 				                        		<a class="btn btn-success" href="enseignement.php?dupliq_f&nomgr=<?=$formation->nomgr;?>&codef=<?=$formation->codef;?>&codem=<?=$formation->codem;?>&codens=<?=$formation->codens;?>" onclick="return alerteV();">Reporter</a><?php
 				                        	}?>
@@ -425,11 +425,10 @@ if (isset($_SESSION['pseudo'])) {
 
 				                        <td><?php
 
-											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
+											if (($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") AND $panier->users($_SESSION['matricule'])['niveau']>1) {?>
 				                        		<a class="btn btn-danger" href="enseignement.php?del_ens=<?=$formation->id;?>&matricule=<?=$formation->codens;?>" onclick="return alerteS();">Annuler</a><?php
 				                        	}?>
 				                        </td>
-
 									</tr><?php
 								}
 							}?>

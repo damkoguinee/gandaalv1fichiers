@@ -84,48 +84,45 @@ if (isset($_SESSION['pseudo'])) {
                         }
                     }?>
 
-                    <table class="payement" style="width: 100%;">
-                        <thead>
+                    <table class="table table-bordered table-hover table-striped table-responsive align-middle">
+                        <thead class="sticky-top bg-secondary text-center">
                             
                             <tr>
-                                <form method="POST" action="horaireenvoye.php" id="suitec" name="termc">
-                                    <th colspan="4" class="info" style="text-align: center">
-                                        
-                                        <select style="width: 250px; height: 30px; font-size: 19px;" name="mois" required="" onchange="this.form.submit()"><?php
-
-                                            if (isset($_POST['mois'])) {?>
+                                <th colspan="8">
+                                    <div class="d-flex justify-content-between">
+                                        <form method="POST">
                                                 
-                                                <option value="<?=$_SESSION['moisp'];?>" ><?=$panier->moisbul();?></option><?php
+                                            <select class="form-select" name="mois" required="" onchange="this.form.submit()"><?php
 
-                                            }else{?>
+                                                if (isset($_POST['mois'])) {?>
+                                                    
+                                                    <option value="<?=$_SESSION['moisp'];?>" ><?=$panier->moisbul();?></option><?php
 
-                                                <option>Selectionnez le mois</option><?php
-                                            }
+                                                }else{?>
 
-                                            foreach ($month as $key => $mois) {?>
+                                                    <option>Selectionnez le mois</option><?php
+                                                }
 
-                                                <option value="<?=$key;?>"><?=$mois;?></option><?php
+                                                foreach ($month as $key => $mois) {?>
 
-                                            }?>
-                                        </select>
-                                    </th>
-                                </form>
+                                                    <option value="<?=$key;?>"><?=$mois;?></option><?php
+
+                                                }?>
+                                            </select>
+                                        </form>
+                                        
+                                        <?=$_SESSION['legende'];?>
+
+                                        <form method="POST">
+                                            <input class="form-control" type="hidden" name="mois" value="<?=$_SESSION['moisp'];?>">
+
+                                            <input class="form-control" type = "search" name = "termec" placeholder="rechercher !!!!"  onchange="this.form.submit()">
+
+                                            <input class="form-control"   type = "hidden" name = "effnav" value = "search">
+                                        </form>
+                                    </div>
+                                </th>
                             </tr>
-                            <tr>
-                                <th colspan="4" style="font-size: 16px;"><?=$_SESSION['legende'];?></th>
-                                <th colspan="4" class="info" style="text-align: center">
-
-                                    <form method="POST" action="horaireenvoye.php" id="suitec" name="termc">
-                                        <input type="hidden" name="mois" value="<?=$_SESSION['moisp'];?>">
-
-                                        <input id="reccode" style="width: 250px;" type = "search" name = "termec" placeholder="rechercher !!!!" onKeyUp="suite(this,'s', 4)" onchange="document.getElementById('suitec').submit()">
-
-                                        <input   type = "hidden" name = "effnav" value = "search">
-
-                                    </th>
-                                    
-                                </tr>
-                            </form>
 
                             <tr>
                                 <th></th>
@@ -177,19 +174,19 @@ if (isset($_SESSION['pseudo'])) {
                                 <tbody>
 
                                     <tr>
-                                        <td style="text-align: center;"><?=$key+1;?></td>
+                                        <td class="text-center"><?=$key+1;?></td>
 
-                                        <td style="text-align: center;"><?=$value->numens;?></td>
+                                        <td class="text-center"><?=$value->numens;?></td>
 
                                         <td><?=ucwords($value->prenomen.' '.$value->nomen);?></td>
 
-                                        <td style="text-align: center;"><?=$value->heuret;?></td>
+                                        <td class="text-center"><?=$value->heuret;?></td>
 
-                                        <td style="text-align: center;"><?=$value->heured;?></td>
+                                        <td class="text-center"><?=$value->heured;?></td>
 
-                                        <td style="text-align: center;"><?=(new dateTime($value->datet))->format('d/m/Y');?></td>
+                                        <td class="text-center"><?=(new dateTime($value->datet))->format('d/m/Y');?></td>
 
-                                        <td style="text-align: center;"><?=ucwords($value->nommat);?></td>
+                                        <td class="text-center"><?=ucwords($value->nommat);?></td>
 
                                         <td><a class="btn btn-danger" onclick="return alerteS();" href="horaireenvoye.php?deletec=<?=$value->numens;?>&datet=<?=$value->datet;?>&heuret=<?=$value->heured;?>">Annuler</a></td>                                     
                                         
@@ -199,7 +196,7 @@ if (isset($_SESSION['pseudo'])) {
                             <tfoot>
                                 <tr>
                                     <th colspan="3">Total</th>
-                                    <th style="text-align: center;"><?=number_format($toth,2,',',' ');?></th>
+                                    <th class="text-center"><?=number_format($toth,2,',',' ');?></th>
                                 </tr>
                             </tfoot><?php
                         }?>

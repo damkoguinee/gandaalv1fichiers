@@ -39,4 +39,8 @@ $DB->delete('DELETE FROM rangel'); // Pour supprimer imediatement la liste des a
 $mpetite=$prodmin['mpetite'];
 $mgrande=$prodmax['mgrande'];
 
-$moyenneecart=$moyengenerale/$nbrele;
+if (empty($nbrele)) {
+    $moyenneecart=$moyengenerale/1;
+}else{
+    $moyenneecart=$moyengenerale/$nbrele;
+}

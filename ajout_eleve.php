@@ -10,7 +10,7 @@ if (isset($_SESSION['pseudo'])) {
 		require 'fiche_eleve.php';
 	}else{
     
-	    if ($products['niveau']<=1) {?>
+	    if ($panier->users($_SESSION['matricule'])['niveau']<2) {?>
 	        <div class="alert alert-danger">Des autorisations sont requises pour consulter cette page</div><?php
 	    }else{?>
 	    	<div class="container-fluid">
@@ -548,7 +548,7 @@ if (isset($_SESSION['pseudo'])) {
 												</li>
 											</ol><?php
 
-											if ($products['niveau']>=4) {
+											if ($panier->users($_SESSION['matricule'])['niveau']>1) {
 
 												if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
 
@@ -870,7 +870,7 @@ if (isset($_SESSION['pseudo'])) {
 												</li>
 											</ol><?php
 
-											if ($products['niveau']>=4) {
+											if ($panier->users($_SESSION['matricule'])['niveau']>1) {
 
 												if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
 

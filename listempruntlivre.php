@@ -1,8 +1,11 @@
-<?php require 'header.php';?>
+<?php require 'headerv2.php';?>
 
-<div style="display: flex;">
+<div class="container-fluid">
 
-  <div><?php require 'headerbiblio.php';?></div><?php
+      <div class="row">
+        <?php require 'headerbiblio.php';?>
+        
+        <div class="col-sm-12 col-md-10"><?php
 
   if (isset($_GET['del'])) {
 
@@ -86,7 +89,7 @@
 
         if (!empty($products)) {?>
 
-          <table class="payement" style="width: 100%; margin-top: 30px;">
+          <table class="table table-bordered table-striped table-hover">
 
           <thead>
 

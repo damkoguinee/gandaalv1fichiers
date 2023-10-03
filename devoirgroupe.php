@@ -1,104 +1,105 @@
 <?php
-require 'header.php';?>
+require 'headerv2.php';?>
 
-</div>
+<div class="container-fluid">
+	<div class="row"><?php 
 
-<div style="display:flex;"><?php 
+		if (!isset($_GET['devoir'])) {
 
-	if (!isset($_GET['devoir'])) {
+			require 'navnote.php';
+		}?><?php
 
-   		require 'navnote.php';
-   	}?><?php
+		if (isset($_GET['ajout_dev']) or isset($_POST['ajoutedev'])) {
+			if (isset($_GET['ajout_dev'])) {
+				$classe=$_GET['classe'];
+				$codef=$_GET['codef'];
+				$_SESSION['classedev']=$classe;
+				$_SESSION['codefdev']=$codef;
+				$_SESSION['niveaudev']=$_GET['niveau'];
+			}
 
-	if (isset($_GET['ajout_dev']) or isset($_POST['ajoutedev'])) {
-		if (isset($_GET['ajout_dev'])) {
-			$classe=$_GET['classe'];
-			$codef=$_GET['codef'];
-			$_SESSION['classedev']=$classe;
-			$_SESSION['codefdev']=$codef;
-			$_SESSION['niveaudev']=$_GET['niveau'];
-		}
-
-		$prodtype=$DB->querys('SELECT type from cursus inner join repartition on repartition.codecursus=cursus.codecursus where nom=:code', array('code'=>$_SESSION['niveaudev']));
+			$prodtype=$DB->querys('SELECT type from cursus inner join repartition on repartition.codecursus=cursus.codecursus where nom=:code', array('code'=>$_SESSION['niveaudev']));
 		
 		
 
-		$prodmat=$DB->query("SELECT *from matiere where codef='{$_SESSION['codefdev']}'");?>
+			$prodmat=$DB->query("SELECT *from matiere where codef='{$_SESSION['codefdev']}'");?>
 		
-		<div>
-			<form id="formulaire" method="POST" action="devoirgroupe.php">
+			<div class="col-sm-12 col-md-10">
+			<form class="form" method="POST" action="devoirgroupe.php">
 
-			    <fieldset><legend>Ajouter une évaluation/intérro pour la <?=$_SESSION['classedev'];?> <a style="color: orange; font-size: 25px;" href="ajout_devoir.php?devoir"> Choisissez une Nouvelle Classe</a></legend>
-			    	<ol>
-			    		<li>
-			    			<input type="hidden" name="classe" value="<?=$_SESSION['classedev'];?>"/>
-			    			<input type="hidden" name="codef" value="<?=$_SESSION['codefdev'];?>"/>
-							<label>Type devoir</label>
-							<select type="number" name="type" required="">
-						    	<option></option>
+			    <fieldset><legend>Ajouter une évaluation/intérro pour la <?=$_SESSION['classedev'];?> <a class="btn btn-warning" href="ajout_devoir.php?devoir"> Choisissez une Nouvelle Classe</a></legend>
+			    	
+					<div class="mb-1 d-flex ">
+						<div>
+							<input class="form-control" type="hidden" name="classe" value="<?=$_SESSION['classedev'];?>"/>
+							<input class="form-control" type="hidden" name="codef" value="<?=$_SESSION['codefdev'];?>"/>
+							<label class="form-label">Type devoir</label>
+							<select class="form-select" type="number" name="type" required="">
+								<option></option>
 								<option value="note de cours">Note de cours</option>
 								<option value="composition">Composition</option>
 							</select>
-						</li>
+						</div>
 
-						<li>
-							<label>Trimestre</label>
-							<select  name="trim" required="" required="">
+
+						<div class="mx-2">
+							<label class="form-label">Trimestre</label>
+							<select class="form-select"  name="trim" required="" required="">
 								<option></option><?php 
 								if ($prodtype['type']=='semestre') {?>
 
-			                        <option value="1">1er Semestre</option>
-			                        <option value="2">2ème Semestre</option><?php
+									<option value="1">1er Semestre</option>
+									<option value="2">2ème Semestre</option><?php
 
-			                    }else{?>
-			                        <option value="1">1er Trimestre</option>
-			                        <option value="2">2ème Trimestre</option>
-			                        <option value="3">3ème Trimestre</option><?php
+								}else{?>
+									<option value="1">1er Trimestre</option>
+									<option value="2">2ème Trimestre</option>
+									<option value="3">3ème Trimestre</option><?php
 
-			                    
-			                    }?>
+								
+								}?>
 							</select>
-						</li>
+						</div>
+					</div>
 
-						<li>
+					<div class="mb-1">
 
-							<label>Matières</label>
-							<select type="text" name="nomm[]" multiple required="" class="form-control">
-						    	<option></option><?php
-							    foreach ($prodmat as $codef) {?>
+						<label class="form-label">Matières</label>
+						<select class="form-select" type="text" name="nomm[]" multiple required="" class="form-control">
+							<option></option><?php
+							foreach ($prodmat as $codef) {?>
 
-			                        <option value="<?=$codef->codem;?>"><?=$codef->nommat;?></option><?php
-			                        
-							    }?>
-							</select>
+								<option value="<?=$codef->codem;?>"><?=$codef->nommat;?></option><?php
+								
+							}?>
+						</select>
 
-							<a href="matiere.php?ajout_m">Ajouter une matière</a>
-						</li>
+						<a href="matiere.php?ajout_m">Ajouter une matière</a>
+					</div>
 
-						<li>
+					<div class="mb-1">
 
-							<label>Mois</label>
-							<select type="text" name="datedev[]" multiple required="" class="form-control">
-						    	<option></option>
-						    	<option value="10">Octobre</option>
-						    	<option value="11">Novembre</option>
-						    	<option value="12">Decembre</option>
-						    	<option value="01">Janvier</option>
-						    	<option value="02">Février</option>
-						    	<option value="03">Mars</option>
-						    	<option value="04">Avril</option>
-						    	<option value="05">Mai</option>
-						    	<option value="06">Juin</option>
-						    	<option value="07">Juillet</option>
-							</select>
+						<label class="form-label">Mois</label>
+						<select class="form-select" type="text" name="datedev[]" multiple required="" class="form-control">
+							<option></option>
+							<option value="10">Octobre</option>
+							<option value="11">Novembre</option>
+							<option value="12">Decembre</option>
+							<option value="01">Janvier</option>
+							<option value="02">Février</option>
+							<option value="03">Mars</option>
+							<option value="04">Avril</option>
+							<option value="05">Mai</option>
+							<option value="06">Juin</option>
+							<option value="07">Juillet</option>
+						</select>
 
-							<a href="matiere.php?ajout_m">Ajouter une matière</a>
-						</li>
-					</ol>
+						<a href="matiere.php?ajout_m">Ajouter une matière</a>
+					</div>
 
 				</fieldset>
 
-				<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutedev" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+				<button class="btn btn-primary my-2" type="submit" name="ajoutedev" onclick="return alerteV();" >Ajouter</button>
 			</form>
 		</div><?php
 	}?>

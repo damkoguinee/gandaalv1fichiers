@@ -430,10 +430,8 @@ class panier{
 	  	return $moisbul;
 	}
 
-	public function listeClasse(){
-		
-		$prodgroup=$this->DB->query('SELECT groupe.nomgr as nomgr, codef from groupe where promo=:promo order by(nomgr)', array('promo'=>$_SESSION['promo']));
-
+	public function listeClasse(){		
+		$prodgroup=$this->DB->query('SELECT * from groupe where promo=:promo order by(nomgr)', array('promo'=>$_SESSION['promo']));
 		return $prodgroup;
 	}
 

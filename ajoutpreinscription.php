@@ -477,7 +477,7 @@ if (isset($_SESSION['pseudo'])) {
 								</fieldset>
 								<fieldset><?php
 
-								  	if ($products['niveau']>=4) {
+								  	if ($panier->users($_SESSION['matricule'])['niveau']>1) {
 
 										if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
 

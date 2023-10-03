@@ -33,7 +33,7 @@
                     <label for=""><a class="bg-success" href="deconnexion.php"><img src="css/img/deconn.jpg" width="40" alt="damko"  ></a></label>
                 </div>
 
-                <div class="row align-items-center py-5" style="margin: auto; margin-top: 1rem; width:80%; background-image: url('img/fond.jpg');">
+                <div class="row align-items-center py-5" style="margin: auto; margin-top: 1rem; width:80%; background-image: url('css/img/fond.jpg');">
                     <div class=" fs-4 fw-bold text-center m-0 p-0"><?=ucwords($_SESSION['etab']);?></div>
 
                     <div class="row">

@@ -1,4 +1,4 @@
-<?php require 'header.php';
+<?php require 'headerv2.php';
 
 if (isset($_SESSION['pseudo'])) {
     
@@ -8,14 +8,11 @@ if (isset($_SESSION['pseudo'])) {
 
     }else{?>
 
-        <div style="width:99%;">
-            <div><?php
+        <div class="container-fluid"><?php
 
-                require 'formappreciation.php'; ?>
+            require 'formappreciation.php'; ?>
 
-            <div>
-
-            <div><?php
+            <div class="row"><?php
 
                 if (isset($_POST['validap'])) {
                     $codef=$_POST['codefmat'];
@@ -63,14 +60,16 @@ if (isset($_SESSION['pseudo'])) {
                     $prodmatiere=$DB->query("SELECT *from matiere where codef='{$_SESSION['codefmat']}'");?>
 
 
-                    <table class="payement">
+                    <table class="table table-bordered table-striped table-hover align-middle">
 
-                        <thead>
+                        <thead class="sticky-top text-center bg-light">
                             <tr>
-                                <th colspan="6" class="info" style="text-align: center">Appréciations des élèves de la <?=$_SESSION['groupe'];?>.  Période: <?=$_SESSION['periodeap'];?>
-                                <a style="margin-left: 10px;"href="printdocapp.php?voir_eleveap=<?=$_SESSION['eleveap'];?>&codef=<?=$_SESSION['codefmat'];?>&periode=<?=$_SESSION['periodesaisie'];?>&periodeap=<?=$_SESSION['periodeap'];?>&promo=<?=$_SESSION['promo'];?>&indi" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
+                                <th colspan="6">
+                                    Appréciations des élèves de la <?=$_SESSION['groupe'];?>.  Période: <?=$_SESSION['periodeap'];?>
+                                    <a class="btn btn-info" href="printdocapp.php?voir_eleveap=<?=$_SESSION['eleveap'];?>&codef=<?=$_SESSION['codefmat'];?>&periode=<?=$_SESSION['periodesaisie'];?>&periodeap=<?=$_SESSION['periodeap'];?>&promo=<?=$_SESSION['promo'];?>&indi" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
 
-                                <a style="margin-left: 10px;"href="printdocapp.php?voir_eleveap=<?=$_SESSION['eleveap'];?>&codef=<?=$_SESSION['codefmat'];?>&periode=<?=$_SESSION['periodesaisie'];?>&periodeap=<?=$_SESSION['periodeap'];?>&promo=<?=$_SESSION['promo'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a></th>
+                                    <a class="btn btn-info" href="printdocapp.php?voir_eleveap=<?=$_SESSION['eleveap'];?>&codef=<?=$_SESSION['codefmat'];?>&periode=<?=$_SESSION['periodesaisie'];?>&periodeap=<?=$_SESSION['periodeap'];?>&promo=<?=$_SESSION['promo'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
+                                </th>
                             </tr>
 
                             <tr>
@@ -91,15 +90,15 @@ if (isset($_SESSION['pseudo'])) {
 
                             foreach ($prodmatiere as $key=> $formation) {?>
 
-                                <form method="POST" action="appreciation.php"> 
+                                <form class="form " method="POST" action="appreciation.php"> 
 
                                     <tr>
-                                        <td style="text-align: center;"><?=$key+1;?></td>                                   
+                                        <td class="text-center"><?=$key+1;?></td>                                   
 
                                         <td><?=ucfirst(strtolower($formation->nommat));?>
-                                            <input type="hidden" name="codefmat" value="<?=$_SESSION['codefmat'];?>">
-                                            <input type="hidden" name="codem" value="<?=$formation->codem;?>">
-                                            <input type="hidden" name="eleveap" value="<?=$_SESSION['eleveap'];?>">
+                                            <input class="form-control" type="hidden" name="codefmat" value="<?=$_SESSION['codefmat'];?>">
+                                            <input class="form-control" type="hidden" name="codem" value="<?=$formation->codem;?>">
+                                            <input class="form-control" type="hidden" name="eleveap" value="<?=$_SESSION['eleveap'];?>">
                                         </td>
 
                                         <td style="text-align:center;"><?=$formation->coef;?></td>
@@ -109,7 +108,7 @@ if (isset($_SESSION['pseudo'])) {
                                                 <tbody>
                                                     <tr>
                                                         <td style="border: 0px;">
-                                                            <select name="app" required="" style="width: 90%;">
+                                                            <select class="form-select" name="app" required="">
                                                                 <option></option>
                                                                 <option value="Très-bien">Très-bien</option>
                                                                 <option value="Bien">Bien</option>
@@ -135,9 +134,9 @@ if (isset($_SESSION['pseudo'])) {
                                             
                                         </td>
 
-                                        <td><textarea style="width:95%; height: 30px;" type="text" name="com" maxlength="200"></textarea></td>
+                                        <td><textarea class="form-control" type="text" name="com" maxlength="200"></textarea></td>
 
-                                        <td><input type="submit" value="Valider" name="validap" style="width: 100%; font-size: 16px;  cursor: pointer">
+                                        <td><button class="btn btn-primary" type="submit" name="validap">Valider</button>
                                         </td>
 
                                     </tr>
@@ -149,12 +148,12 @@ if (isset($_SESSION['pseudo'])) {
                         </tbody>
 
                         <tfoot>
-                            <form method="POST" action="appreciation.php">
-                                <tr>
+                            <form class="form bg-success" method="POST" action="appreciation.php">
+                                <tr class="bg-success">
                                     <th colspan="3">Appréciation Générale</th>
                                     <th style="text-align:center;">
-                                        <input type="hidden" name="codefmat" value="<?=$_SESSION['codefmat'];?>"><input type="hidden" name="eleveap" value="<?=$_SESSION['eleveap'];?>">
-                                        <select name="app" required="" style="width: 90%;">
+                                        <input class="form-control" type="hidden" name="codefmat" value="<?=$_SESSION['codefmat'];?>"><input class="form-control" type="hidden" name="eleveap" value="<?=$_SESSION['eleveap'];?>">
+                                        <select class="form-select" name="app" required="">
                                             <option></option>
                                             <option value="Très-bien">Très-bien</option>
                                             <option value="Bien">Bien</option>
@@ -163,8 +162,8 @@ if (isset($_SESSION['pseudo'])) {
                                         
                                         </select>
                                     </th>
-                                    <th><textarea style="width:95%; height: 30px;" type="text" name="com" maxlength="200"></textarea></th>
-                                    <th><input type="submit" value="Valider" name="validapg" style="width: 100%; font-size: 16px;  cursor: pointer"></th>
+                                    <th><textarea class="form-control" type="text" name="com" maxlength="200"></textarea></th>
+                                    <th><button class="btn btn-primary" type="submit" name="validapg">Valider</button></th>
                                 </tr>
                             </form>
                         </tfoot>

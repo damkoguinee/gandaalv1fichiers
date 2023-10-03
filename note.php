@@ -350,7 +350,7 @@ if (isset($_SESSION['pseudo'])) {?>
 						}?>
 
 				
-						<table class="table table-hover table-bordered table-striped table-responsive text-center">
+						<table class="table table-hover table-bordered table-striped table-responsive text-center align-middle">
 							<thead>
 								<tr>
 									<th>N</th>
@@ -448,15 +448,15 @@ if (isset($_SESSION['pseudo'])) {?>
 
 										if (!empty($prodmoyenne['matricule'])) {?>
 
-											<td style="text-align: center;" height="26"><?=$matricule->matricule;?></td>
+											<td class="text-center" height="26"><?=$matricule->matricule;?></td>
 
-											<td style="text-align: left;" height="26"><?=ucfirst($prodmoyenne['prenomel']).' '.strtoupper($prodmoyenne['nomel']);?></td>
+											<td class="text-start" height="26"><?=ucfirst($prodmoyenne['prenomel']).' '.strtoupper($prodmoyenne['nomel']);?></td>
 
 											<td height="26"><?=number_format($generale,2,',',' ');?></td><?php
 										}else{?>
-											<td style="text-align: center;" height="26"><?=$matricule->matricule;?></td>
+											<td class="text-center" height="26"><?=$matricule->matricule;?></td>
 
-											<td style="text-align: left;" height="26"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></td>
+											<td class="text-start" height="26"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></td>
 
 											<td height="26" style="color: white;">null</td><?php
 										}
@@ -509,7 +509,7 @@ if (isset($_SESSION['pseudo'])) {?>
 
 										if (!empty($coeff)) {?>
 											
-											<th height="31" style="text-align: right;"><?=number_format($moyengen/$coeff,2,',',' ');?></th><?php
+											<th height="31" class="text-end"><?=number_format($moyengen/$coeff,2,',',' ');?></th><?php
 										}else{?>
 											
 											<th height="31"></th><?php
@@ -528,7 +528,7 @@ if (isset($_SESSION['pseudo'])) {?>
 
 												if (!empty($coeff)) {?>
 
-													<th height="30" style="text-align: right;"><?='  '.number_format($moyenn/$coeff,2,',',' ');?></th><?php
+													<th height="30" class="text-end"><?='  '.number_format($moyenn/$coeff,2,',',' ');?></th><?php
 												}
 									
 												
@@ -536,7 +536,7 @@ if (isset($_SESSION['pseudo'])) {?>
 
 												if (!empty($coeff)) {?>
 
-													<th height="30" style="text-align: right;"><?='  '.number_format($moyenc/$coeff,2,',',' ');?></th><?php
+													<th height="30" class="text-end"><?='  '.number_format($moyenc/$coeff,2,',',' ');?></th><?php
 												}
 											}
 										}?>

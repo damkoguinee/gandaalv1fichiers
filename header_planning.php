@@ -161,7 +161,7 @@ require '_header.php'
 
                 if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {                 
 
-                  if ($products['niveau']>10) {?>
+                  if ($panier->users($_SESSION['matricule'])['niveau']>10) {?>
                     <li class="nav-item"><a class="nav-link active btn btn-danger text-light m-1 " href="csv.php?save">Sauvegarde</a></li><?php
                   }
                 }?> 

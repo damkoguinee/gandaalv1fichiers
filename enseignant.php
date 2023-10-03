@@ -652,14 +652,12 @@ if (isset($_SESSION['pseudo'])) {
 
 								    	<fieldset><legend></legend>
 								    		<div class="mb-1">
-
 												<input class="form-control" type="hidden" name="mat" value="<?=$prodm['matricule'];?>"/>	
 											    <label class="form-label">Pseudo</label>
 											    <input class="form-control" type="text" name="pseudo"  value="<?=$prodm['pseudo'];?>"/>
 																		  	
 												<label class="form-label">Mot de passe</label>
 												<input class="form-control" type="text" name="mdp"/>  
-
 										  	</div>
 
 										  	<button type="submit" name="modifenmdp" class="btn btn-primary">Modifier</button>
@@ -756,7 +754,7 @@ if (isset($_SESSION['pseudo'])) {
 								
 							}elseif(!empty($_SESSION['niveauf'])) {
 
-								$prodm=$DB->query("SELECT enseignant.matricule as matricule, nomen, prenomen, phone from enseignant inner join enseignantencours on enseignant.matricule=matriculens left join contact on enseignant.matricule=contact.matricule  inner join niveau on enseignant.matricule=niveau.matricule where nom='{$_SESSION['niveauf']}' and promo='{$_SESSION['promo']}'  order by(prenomen)");
+								$prodm=$DB->query("SELECT *from enseignant inner join enseignantencours on enseignant.matricule=matriculens left join contact on enseignant.matricule=contact.matricule  inner join niveau on enseignant.matricule=niveau.matricule where nom='{$_SESSION['niveauf']}' and promo='{$_SESSION['promo']}'  order by(prenomen)");
 
 							}else{
 								$prodm=$DB->query("SELECT  *from enseignant inner join enseignantencours on enseignant.matricule=matriculens left join contact on enseignant.matricule=contact.matricule where promo='{$_SESSION['promo']}' order by(prenomen)");

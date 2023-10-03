@@ -1,5 +1,5 @@
 
-<div class="col" style="display: flex; margin-top: -20px;"><?php
+<div class="d-flex" ><?php
 
     if (isset($_POST['groupe'])){
 
@@ -93,121 +93,121 @@
         $prodeleve=$DB->query('SELECT eleve.matricule as matricule, nomel, prenomel from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
     }?>           
 
-    <form id="formulaire" action="appreciation.php" method="POST" style="height: 30px;">
-        <ol style="margin-left: -50px; margin-top: -10px;">
-            <li><select type="text" name="groupe" required="" onchange="this.form.submit()"><?php
+    <form class="form m-2 bg-light" action="appreciation.php" method="POST" >
+        
+        <select class="form-select" type="text" name="groupe" required="" onchange="this.form.submit()"><?php
 
-                if (isset($_POST['groupe']) or isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleveap'])) {?>
+            if (isset($_POST['groupe']) or isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleveap'])) {?>
 
-                    <option value="<?=$_SESSION['groupe'];?>"><?=$_SESSION['groupe'];?></option><?php
+                <option value="<?=$_SESSION['groupe'];?>"><?=$_SESSION['groupe'];?></option><?php
 
-                }else{?>
+            }else{?>
 
-                    <option>Choisissez la Classe</option><?php
-                }
+                <option>Choisissez la Classe</option><?php
+            }
 
-                foreach ($prodgroup as $form) {?>
+            foreach ($prodgroup as $form) {?>
 
-                    <option><?=$form->nomgr;?></option><?php
+                <option><?=$form->nomgr;?></option><?php
 
-                }?></select>
-            </li>
-        </ol>
+            }?>
+        </select>           
+        
     </form><?php
 
     if (isset($_POST['groupe']) or isset($_POST['mois']) or isset($_POST['semestre'])) {
 
         if (isset($_POST['mois']) or isset($_POST['groupe'])) {?>
 
-            <form id="formulaire" action="appreciation.php" method="POST" style="margin-left: -20px; height: 30px;">
-                <ol style="margin-left: -50px; margin-top: -10px;">
-                    <li><select type="text" name="mois" required="" onchange="this.form.submit()"><?php
+            <form class="form m-2 bg-light" action="appreciation.php" method="POST">
+                
+                <select class="form-select" type="text" name="mois" required="" onchange="this.form.submit()"><?php
 
-                        if (isset($_POST['mois'])) {?>
+                    if (isset($_POST['mois'])) {?>
 
-                            <option value="<?=$_SESSION['mois'];?>"><?=$panier->moisbul();?></option><?php
+                        <option value="<?=$_SESSION['mois'];?>"><?=$panier->moisbul();?></option><?php
 
+                    }else{?>
+
+                        <option>Choisissez le mois</option><?php
+                    }
+
+                    foreach ($month as $key => $mois) {
+
+                        if ($key<10) {?>
+
+                            <option value="<?="0".$key;?>"><?=$mois;?></option><?php
+                                
                         }else{?>
 
-                            <option>Choisissez le mois</option><?php
+                            <option value="<?=$key;?>"><?=$mois;?></option><?php
                         }
 
-                        foreach ($month as $key => $mois) {
+                    }?>
 
-                            if ($key<10) {?>
-
-                                <option value="<?="0".$key;?>"><?=$mois;?></option><?php
-                                 
-                            }else{?>
-
-                                <option value="<?=$key;?>"><?=$mois;?></option><?php
-                            }
-
-                        }?>
-
-                        </select></li>
-                </ol>
+                </select>
+                
             </form><?php 
         }
 
         if (isset($_POST['semestre']) or isset($_POST['groupe'])) {?>
 
 
-            <form id="formulaire" action="appreciation.php" method="POST" style="margin-left: -20px; height: 30px;">
-                <ol style="margin-left: -50px; margin-top: -10px;">
-                    <li><select type="text" name="semestre" required="" onchange="this.form.submit()"><?php
+            <form class="form m-2 bg-light" action="appreciation.php" method="POST">
+                
+                <select class="form-select" type="text" name="semestre" required="" onchange="this.form.submit()"><?php
 
-                        if (isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleve'])) {?>
+                    if (isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleve'])) {?>
 
-                            <option value="<?=$_SESSION['semestre'];?>"><?=$_SESSION['semestre'].' '.$typerepart;?></option><?php
+                        <option value="<?=$_SESSION['semestre'];?>"><?=$_SESSION['semestre'].' '.$typerepart;?></option><?php
 
-                        }else{?>
+                    }else{?>
 
-                            <option>Choisissez le</option><?php
-                        }
+                        <option>Choisissez le</option><?php
+                    }
 
-                        if ($prodtype=='semestre') {?>
+                    if ($prodtype=='semestre') {?>
 
-                            <option value="1">1er Semestre</option>
-                            <option value="2">2ème Semestre</option><?php
+                        <option value="1">1er Semestre</option>
+                        <option value="2">2ème Semestre</option><?php
 
-                        }else{?>
-                            <option value="1">1er Trimestre</option>
-                            <option value="2">2ème Trimestre</option>
-                            <option value="3">3ème Trimestre</option><?php
-                        
-                        }?>
-                        <option value="annuel">Annuel</option>
-                    </select></li>
-                </ol>
+                    }else{?>
+                        <option value="1">1er Trimestre</option>
+                        <option value="2">2ème Trimestre</option>
+                        <option value="3">3ème Trimestre</option><?php
+                    
+                    }?>
+                    <option value="annuel">Annuel</option>
+                </select>
+                
             </form><?php
         } 
     }
 
     if (isset($_POST['mois']) or isset($_POST['semestre']) or isset($_POST['eleveap'])) {?>
 
-        <form id="formulaire" action="appreciation.php" method="POST" style="margin-left: -20px; height: 30px;">
-            <ol style="margin-left: -50px; margin-top: -10px;">
-                <li>
-                    <select type="text" name="eleveap" required="" onchange="this.form.submit()"><?php
+        <form class="form m-2 bg-light" action="appreciation.php" method="POST">
+            
+                
+            <select class="form-select" type="text" name="eleveap" required="" onchange="this.form.submit()"><?php
 
-                        if (isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleveap'])) {?>
+                if (isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleveap'])) {?>
 
-                            <option value="<?=$_SESSION['eleveap'];?>"><?=$panier->nomEleve($_SESSION['eleveap']);?></option><?php
+                    <option value="<?=$_SESSION['eleveap'];?>"><?=$panier->nomEleve($_SESSION['eleveap']);?></option><?php
 
-                        }else{?>
+                }else{?>
 
-                            <option>Choisissez l' élève</option><?php
-                        }
+                    <option>Choisissez l' élève</option><?php
+                }
 
-                        foreach ($prodeleve as $value) {?>
+                foreach ($prodeleve as $value) {?>
 
-                            <option value="<?=$value->matricule;?>"><?=$panier->nomEleve($value->matricule);?></option><?php
-                            
-                        } ?>
-                    </select>
-                </li>
-            </ol>
+                    <option value="<?=$value->matricule;?>"><?=$panier->nomEleve($value->matricule);?></option><?php
+                    
+                } ?>
+            </select>
+                
+            
         </form><?php 
     }?>
     

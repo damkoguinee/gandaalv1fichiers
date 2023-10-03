@@ -10,27 +10,26 @@ require 'headerv2.php';?>
 
 			if (isset($_GET['ajout_dev'])) {?>
 
-				<form id="formulaire" method="POST" action="ajout_devoir.php">
+				<form class="form" method="POST" action="ajout_devoir.php">
 
 			    	<fieldset><legend>Ajouter une évaluation/intérro</legend>
-				    	<ol>
-							<li>
-								<label>Nom</label>
-								<input type="text" name="nomdev" required="" maxlength="30" />
-							</li>
+							<div class="mb-1">
+								<label class="form-label">Nom</label>
+								<input class="form-control" type="text" name="nomdev" required="" maxlength="30" />
+							</div>
 
-							<li>
-								<label>Type devoir</label>
-								<select type="number" name="type" required="">
+							<div class="mb-1">
+								<label class="form-label">Type devoir</label>
+								<select class="form-select" type="number" name="type" required="">
 							    	<option></option>
 									<option value="note de cours">Note de cours</option>
 									<option value="composition">Composition</option>
 								</select>
-							</li>
+							</div>
 
-							<li>
-								<label>Coefficient</label>
-								<select type="number" name="coef" required=""><?php
+							<div class="mb-1">
+								<label class="form-label">Coefficient</label>
+								<select class="form-select" type="number" name="coef" required=""><?php
 									$i=1;
 									while ($i<= 10) {?>
 										<option value="<?=$i;?>"><?=$i;?></option><?php
@@ -39,27 +38,27 @@ require 'headerv2.php';?>
 									
 								</select>
 
-								<input type="hidden" name="nomm" value="<?=$_SESSION['matn'];?>"  />
+								<input class="form-control" type="hidden" name="nomm" value="<?=$_SESSION['matn'];?>"  />
 
-								<input type="hidden" name="nomgr" value="<?=$_SESSION['groupe'];?>"/>
+								<input class="form-control" type="hidden" name="nomgr" value="<?=$_SESSION['groupe'];?>"/>
 
-								<input type="hidden" name="codens" value="<?=$_SESSION['ens'];?>"/>
+								<input class="form-control" type="hidden" name="codens" value="<?=$_SESSION['ens'];?>"/>
 
-								<input type="hidden" name="promo" value="<?=$_SESSION['promo'];?>"/>
+								<input class="form-control" type="hidden" name="promo" value="<?=$_SESSION['promo'];?>"/>
 
-								<input type="hidden" name="trim" value="<?=$_SESSION['semestre'];?>"/>
-							</li>
+								<input class="form-control" type="hidden" name="trim" value="<?=$_SESSION['semestre'];?>"/>
+							</div>
 
-							<li>
+							<div class="mb-1">
 
-								<label>date</label>
-							    <input type="date" name="datedev" required=""/>
-							</li>
-						</ol>
+								<label class="form-label">date</label>
+							    <input class="form-control" type="date" name="datedev" required=""/>
+							</div>
+						
 
 					</fieldset>
 
-					<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajoutedev" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+					<button class="btn btn-primary" type="submit"  name="ajoutedev" onclick="return alerteV();">Ajouter</button>
 				</form><?php
 			}
 
@@ -132,47 +131,47 @@ require 'headerv2.php';?>
 
 		    	$_SESSION['typemodifdev']=$prodev['type'];?>
 
-		    	<form id="formulaire" method="POST" action="ajout_devoir.php?devoir">
+		    	<form class="form" method="POST" action="ajout_devoir.php?devoir">
 
 			    	<fieldset><legend>Modifier un dévoir</legend>
-				    	<ol>
-							<li>
-								<label>Nom du Dévoir</label>
-								<input type="text" name="nomdev" value="<?=$prodev['nomdev'];?>" required="" maxlength="30" /><input type="hidden" name="id" value="<?=$prodev['id'];?>"/>
-							</li>
+						<div class="mb-1">
+							<label class="form-label">Nom du Dévoir</label>
+							<input class="form-control" type="text" name="nomdev" value="<?=$prodev['nomdev'];?>" required="" maxlength="30" />
+							<input class="form-control" type="hidden" name="id" value="<?=$prodev['id'];?>"/>
+						</div>
 
-							<li>
-								<label>Type Dévoir</label>
-								<select type="number" name="type" required="">
-							    	<option value="<?=$prodev['type'];?>"><?=ucwords($prodev['type']);?></option>
-									<option value="note de cours">Note de cours</option>
-									<option value="composition">Composition</option>
-								</select>
-							</li>
+						<div class="mb-1">
+							<label class="form-label">Type Dévoir</label>
+							<select class="form-select" type="number" name="type" required="">
+								<option value="<?=$prodev['type'];?>"><?=ucwords($prodev['type']);?></option>
+								<option value="note de cours">Note de cours</option>
+								<option value="composition">Composition</option>
+							</select>
+						</div>
 
-							<li>
-								<label>Coefficient</label>
-								<select type="number" name="coef" required="">
-									<option value="<?=$coef;?>"><?=$coef;?></option><?php
-									$i=1;
-									while ($i<= 1) {?>
-										<option value="<?=$i;?>"><?=$i;?></option><?php
-										$i++;
-									}?>
-									
-								</select>
-							</li>
+						<div class="mb-1">
+							<label class="form-label">Coefficient</label>
+							<select class="form-select" type="number" name="coef" required="">
+								<option value="<?=$coef;?>"><?=$coef;?></option><?php
+								$i=1;
+								while ($i<= 1) {?>
+									<option value="<?=$i;?>"><?=$i;?></option><?php
+									$i++;
+								}?>
+								
+							</select>
+						</div>
 
-							<li>
+						<div class="mb-1">
 
-								<label>Date du Dévoir</label>
-							    <input type="date" name="datedev" value="<?=$prodev['datedev'];?>" required=""/>
-							</li>
-						</ol>
+							<label class="form-label">Date du Dévoir</label>
+							<input class="form-control" type="date" name="datedev" value="<?=$prodev['datedev'];?>" required=""/>
+						</div>
+						
 
 					</fieldset>
 
-					<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="modifdev" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset>
+					<input class="btn btn-primary" type="submit" name="modifdev" onclick="return alerteV();" />Valider</button>
 				</form><?php
 			}
 
@@ -247,7 +246,7 @@ require 'headerv2.php';?>
 					    	 	
 					        	<div class="col text-center p-2">
 
-					        		<a href="ajout_devoir.php?classe=<?=$niveau;?>&codef=<?=$matiere->codef;?>&niveau=<?=$matiere->niveau;?>"><input type="button" value="<?=ucwords($niveau);?>" style="width: 300px; height: 60px; font-size: 16px; font-family: cursive; font-weight: bold; cursor: pointer"></a>
+					        		<a class="btn btn-info pt-3 align-middle" style="width: 300px; height: 60px; font-size: 16px; font-family: cursive; font-weight: bold;" href="ajout_devoir.php?classe=<?=$niveau;?>&codef=<?=$matiere->codef;?>&niveau=<?=$matiere->niveau;?>"><?=ucwords($niveau);?></a>
 
 					        	</div><?php
 					        }?>
@@ -273,12 +272,17 @@ require 'headerv2.php';?>
 				} ?>
 
 		    
-				<table class="payement">
-					<thead>
+				<table class="table table-bordered table-hover table-striped table-responsive align-middle">
+                    <thead class="sticky-top bg-secondary text-center">
 
 						<tr>
-							<th colspan="8" class="info" style="text-align: center">Liste des dévoirs de la <?=$_GET['classe'];?> <a style="color: orange; font-size: 25px;" href="ajout_devoir.php?devoir"> Choisissez une Nouvelle Classe</a></th>
-							<th colspan="2"><a style="color: white;" href="devoirgroupe.php?note&ajout_dev&classe=<?=$_GET['classe'];?>&codef=<?=$_GET['codef'];?>&niveau=<?=$_GET['niveau'];?>" class="btn btn-info">Ajouter un dévoir</a></th>
+							<th colspan="8">
+								<div class="d-flex justify-content-between">
+									Liste des dévoirs de la <?=$_GET['classe'];?> 
+									<a class="btn btn-warning" href="ajout_devoir.php?devoir"> Choisissez une Nouvelle Classe</a>
+									<a class="btn btn-info" href="devoirgroupe.php?note&ajout_dev&classe=<?=$_GET['classe'];?>&codef=<?=$_GET['codef'];?>&niveau=<?=$_GET['niveau'];?>" class="btn btn-info">Ajouter un dévoir</a>
+								</div>
+							</th>
 						</tr>
 						<tr>
 							<th><?=$typerepart;?></th>
@@ -306,7 +310,7 @@ require 'headerv2.php';?>
 							<tr>
 								<td><?=$formation->trimes.' '.$typerepart;?></td>
 
-								<td style="text-align:center;"><a href="formation.php?voir_elg=<?=$formation->nomgroupe;?>"><?=$formation->nomgroupe;?></a></td>
+								<td class="text-center"><a href="formation.php?voir_elg=<?=$formation->nomgroupe;?>"><?=$formation->nomgroupe;?></a></td>
 
 								<td><?=ucwords($formation->nommat);?></td>
 
@@ -316,24 +320,24 @@ require 'headerv2.php';?>
 
 								if ($formation->type=='composition') {?>
 
-									<td style="text-align: center;"><?=$formation->coefcom;?></td><?php
+									<td class="text-center"><?=$formation->coefcom;?></td><?php
 
 								}else{?>
 
-									<td style="text-align: center;"><?=$formation->coef;?></td><?php
+									<td class="text-center"><?=$formation->coef;?></td><?php
 								}?>
 
-								<td style="text-align:left;"><?=$datedev;?></td><?php 
+								<td class="text-start"><?=$datedev;?></td><?php 
 
 								if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
 
 							  	
-								  	<td><a href="note.php?note"><input type="button" value="Saisir les Notes" style="font-size: 16px; background-color: green; color: white; cursor: pointer"></a></td>
+								  	<td><a class="btn btn-success" href="note.php?note">Saisir les Notes</a></td>
 
-								  	<td><a href="ajout_devoir.php?modif_dev=<?=$formation->id;?>&codev=<?=$formation->id;?>"><input type="button" value="modifier" style="font-size: 16px; background-color: orange; color: white; cursor: pointer"></a></td>
+								  	<td><a class="btn btn-warning" href="ajout_devoir.php?modif_dev=<?=$formation->id;?>&codev=<?=$formation->id;?>">Modifier</a></td>
 
 
-								  	<td><a href="ajout_devoir.php?del_dev=<?=$formation->id;?>" onclick="return alerteS();"><input type="button" value="Supprimer" style="font-size: 16px; background-color: red; color: white; cursor: pointer"></a></td><?php
+								  	<td><a class="btn btn-danger" href="ajout_devoir.php?del_dev=<?=$formation->id;?>" onclick="return alerteS();">Supprimer</a></td><?php
 								}else{?>
 									<td></td>
 									<td></td>

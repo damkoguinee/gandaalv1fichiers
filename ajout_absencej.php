@@ -1,9 +1,14 @@
 <?php
-//require 'header.php';
+require 'headerv2.php';
 
 if ($panier->cloture()!='cloturer') {
 
 	if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']) or isset($_GET['appelj'])) {
+		if (isset($_GET['classe'])) {
+			$_SESSION['groupe']=$_GET['classe'];
+		}else{
+			$_SESSION['groupe']=$_SESSION['groupe'];
+		}
 
 		if (!isset($_POST['matr'])) {
 
@@ -151,8 +156,8 @@ if ($panier->cloture()!='cloturer') {
 			
 		}else{?>
 
-			<table class="payement" style=" margin-left: 10px; width: 100%;">
-	    		<thead>
+			<table class="table table-bordered table-striped table-hover align-middle my-2" >
+	    		<thead class="sticky-top text-center bg-light">
 					<tr>
 						<th>Matricule</th>
 						<th height="30">Nom et Prénom</th>
@@ -168,20 +173,20 @@ if ($panier->cloture()!='cloturer') {
 					foreach ($prodeleve as $formation) {?>						
 
 						<tr>
-							<td><?=$formation->matricule;?></td>
+							<td class="text-center"><?=$formation->matricule;?></td>
 
 
-							<td><?=ucwords(strtolower($formation->prenomel)).' '.strtoupper($formation->nomel);?><input type="hidden" name="matr" value="<?=$formation->matricule;?>"/></td>
+							<td><?=ucwords(strtolower($formation->prenomel)).' '.strtoupper($formation->nomel);?><input class="form-control" type="hidden" name="matr" value="<?=$formation->matricule;?>"/></td>
 
-							<form method="POST" action="planingj.php?appelj">
+							<form method="POST" action="?appelj">
 
 								<td>
 									<div style="display: flex;">
 										<div style="margin-left: 50px;">
 
-											<input type="hidden" name="matr" value="<?=$formation->matricule;?>"/>
+											<input class="form-control" type="hidden" name="matr" value="<?=$formation->matricule;?>"/>
 
-											<input style="width: 20px;" type="checkbox" name="appel" value="abs" onchange="this.form.submit()" />
+											<input  type="checkbox" name="appel" value="abs" onchange="this.form.submit()" />
 										</div>
 
 										<div>
@@ -218,14 +223,14 @@ if ($panier->cloture()!='cloturer') {
 								</td>
 							</form>
 
-							<form method="POST" action="planingj.php?appelj">
+							<form method="POST" action="?appelj">
 
 								<td>
 									<div style="display: flex;">
 										<div>
-											<input type="hidden" name="matr" value="<?=$formation->matricule;?>"/>
+											<input class="form-control" type="hidden" name="matr" value="<?=$formation->matricule;?>"/>
 
-											<input type="number" name="retard" placeholder="min" onchange="this.form.submit()" style="width: 60px; height: 22px; border-radius: 2px; font-size: 14px; text-align: left;"/>
+											<input class="form-control" type="number" name="retard" placeholder="min" onchange="this.form.submit()"/>
 										</div>
 
 										<div>
@@ -259,15 +264,15 @@ if ($panier->cloture()!='cloturer') {
 							</form>
 
 
-							<form method="POST" action="planingj.php?appelj">
+							<form method="POST" action="?appelj">
 
 								<td>
 									<div style="display: flex;">
 
 										<div>
-											<input type="hidden" name="matr" value="<?=$formation->matricule;?>"/>
+											<input class="form-control" type="hidden" name="matr" value="<?=$formation->matricule;?>"/>
 
-											<select type="text" name="exclus" onchange="this.form.submit();"  style="width: 100%; height: 26px; border-radius: 2px; font-size: 14px; text-align: left;">
+											<select class="form-select" type="text" name="exclus" onchange="this.form.submit();" >
 
 												<option></option>
 

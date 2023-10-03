@@ -1,28 +1,7 @@
 
-<div style="width: 10%;">
-
-    <fieldset style="margin-top: 30px;"><legend></legend>
-        <div class="choixg">                
-
-            <div class="optiong">
-                <a href="absence.php?abs&note">
-                <div class="descript_optiong">Appel</div></a>
-            </div>
-
-            <div class="optiong">
-                <a href="listeabsence.php?listeabs&note">
-                <div class="descript_optiong">Absences</div></a>
-            </div>
-
-            <div class="optiong">
-                <a href="listeretard.php?listeret&note">
-                <div class="descript_optiong">Retards</div></a>
-            </div>
-
-            <div class="optiong">
-                <a href="listexclusion.php?listeex&note">
-                <div class="descript_optiong">Exclusions</div></a>
-            </div>
-        </div>
-    </fieldset>
+<div class="col-sm-12 col-md-2" style="background-color: #253553;">
+    <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="absence.php?abs&note">Appel</a></div></div>
+    <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="listeabsence.php?listeabs&note">Absences</a></div></div>
+    <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="listeretard.php?listeret&note">Retards</a></div></div>
+    <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="listexclusion.php?listeex&note">Exclus</a></div></div>
 </div>

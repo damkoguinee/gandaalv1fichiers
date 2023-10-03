@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require 'headerv2.php';
 
 if (isset($_SESSION['pseudo'])) {
 
@@ -9,28 +9,29 @@ if (isset($_SESSION['pseudo'])) {
 
     }else{?>
 
-        <div style="display: flex;">
+    <div class="container-fluid">
 
-            <div><?php require 'headerbiblio.php';?></div>
+        <div class="row">
+            <?php require 'headerbiblio.php';?>
+  
+            <div class="col-sm-12 col-md-10"><?php
 
-            <div><?php
+                if (isset($_POST['payer'])) {
+                    $_SESSION['motif']="Commande Fournisseur";
+                    $type="FOURNISSEUR";
+                    require 'insertcmd.php';
+                }
 
-            if (isset($_POST['payer'])) {
-                $_SESSION['motif']="Commande Fournisseur";
-                $type="FOURNISSEUR";
-                require 'insertcmd.php';
-            }
+                if (isset($_GET['delcmd'])) {
 
-            if (isset($_GET['delcmd'])) {
-
-              $DB->delete('DELETE FROM achat WHERE id = ?', array($_GET['delcmd']));
-            }
+                $DB->delete('DELETE FROM achat WHERE id = ?', array($_GET['delcmd']));
+                }
 
             
                 
-            if (isset($_POST['etat']) AND $_POST['etat']=="livre" ) {
-            
-            }else{?>
+                if (isset($_POST['etat']) AND $_POST['etat']=="livre" ) {
+                
+                }else{?>
 
                     <div class="expoc" style="width: 100%;"><fieldset><legend>Rechercher un Livre</legend><?php
 
