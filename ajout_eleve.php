@@ -213,7 +213,7 @@ if (isset($_SESSION['pseudo'])) {
 
 										$DB->insert('UPDATE elevepreinscription SET etat=? WHERE matricule = ?', array('traite', $initiale.$matricule));
 
-										$_SESSION['matricule']=($matricule);
+										$_SESSION['matricule_eleve']=($matricule);
 										$_SESSION['etat']="reussi";
 										$etat=$_SESSION['etat'];?>
 
