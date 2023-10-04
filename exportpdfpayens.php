@@ -182,11 +182,12 @@ body{
                 $_SESSION['prodsocial']=$prodsocial['montant'];
 
                 $prodsalaire=$DB->querys('SELECT salaire, thoraire from salaireens where numpers=:mat and promo=:promo', array('mat'=>$numeen, 'promo'=>$_SESSION['promo']));
-                
+
+                $thoraire_pers=$prodsalaire['thoraire'];                
                 if ($prodsalaire['salaire']==0) {
                     
-                    $_SESSION['salaire']=$prodsalaire['thoraire'];
-                    $_SESSION['salaireact']='not';
+                  $_SESSION['salaire']=$prodsalaire['thoraire'];
+                  $_SESSION['salaireact']='not';
 
                 }else{
 
@@ -232,7 +233,7 @@ body{
                     $salairep=$_SESSION['salaire']*$prodh['heuret']+$salairesautres+$prime-$accompte-$_SESSION['prodsocial'];
 
                 }else{
-                    $salaireb=$_SESSION['salaire']+($prodh['heuret']*$rapport->infoEtablissement()['thoraire'])+$salairesautres;
+                    $salaireb=$_SESSION['salaire']+($prodh['heuret']*$thoraire_pers)+$salairesautres;
 
                     $salairep=$salaireb+$prime-$accompte-$_SESSION['prodsocial'];
                 }

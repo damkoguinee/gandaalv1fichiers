@@ -33,6 +33,7 @@ foreach($query as $key => $value) {
     $_SESSION['prodsocial']=$prodsocial['montant'];
 
     $prodsalaire=$DB->querys('SELECT salaire, thoraire from salaireens where numpers=:mat and promo=:promo', array('mat'=>$numeen, 'promo'=>$_SESSION['promo']));
+    $thoraire_pers=$prodsalaire['thoraire'];
     
     if ($prodsalaire['salaire']==0) {
         
@@ -83,7 +84,7 @@ foreach($query as $key => $value) {
         $salairep=$_SESSION['salaire']*$prodh['heuret']+$salairesautres+$prime-$accompte-$_SESSION['prodsocial'];
 
     }else{
-        $salaireb=$_SESSION['salaire']+($prodh['heuret']*$rapport->thoraire)+$salairesautres;
+        $salaireb=$_SESSION['salaire']+($prodh['heuret']*$thoraire_pers)+$salairesautres;
 
         $salairep=$salaireb+$prime-$accompte-$_SESSION['prodsocial'];
     }
