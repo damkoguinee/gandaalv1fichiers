@@ -267,7 +267,7 @@
 
                     $prodsalaire=$DB->querys('SELECT salaire, thoraire from salaireens where numpers=:mat and promo=:promo', array('mat'=>$numeen, 'promo'=>$_SESSION['promo']));
 
-
+                    $thoraire_pers=$prodsalaire['thoraire'];
                     if ($prodsalaire['salaire']==0) {
                         
                         $_SESSION['salaire']=$prodsalaire['thoraire'];
@@ -295,11 +295,8 @@
                         $salairesautres=0;
                     }else{
                         $prodautres=$DB->querys('SELECT salaire as montantp from salairepers where numpers=:mat and promo=:promo', array('mat'=>$numeen, 'promo'=>$_SESSION['promo']));
-
                         $salairesautres=$prodautres['montantp'];
-
                     }
-
 
                     $prodh=$DB->querys('SELECT sum(heuret) as heuret from horairet where numens=:mat and date_format(datet,\'%m\')=:datet and annees=:promo', array('mat'=>$numeen, 'datet'=>$cmois, 'promo'=>$_SESSION['promo']));
 
@@ -317,8 +314,9 @@
                         $salairep=$_SESSION['salaire']*$prodh['heuret']+$salairesautres+$prime-$accompte-$_SESSION['prodsocial'];
 
                     }else{
-                        $salaireb=$_SESSION['salaire']+($prodh['heuret']*$rapport->infoEtablissement()['thoraire'])+$salairesautres;
+                        //$salaireb=$_SESSION['salaire']+($prodh['heuret']*$rapport->infoEtablissement()['thoraire'])+$salairesautres;
 
+                        $salaireb=$_SESSION['salaire']+($prodh['heuret']*$thoraire_pers)+$salairesautres;
                         $salairep=$salaireb+$prime-$accompte-$_SESSION['prodsocial'];
                     }
 
