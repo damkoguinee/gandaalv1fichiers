@@ -668,7 +668,7 @@
 
                                             $DB->insert('INSERT INTO banque (id_banque, montant, devise, taux, libelles, numero, matriculeb, promob,  date_versement) VALUES(?, ?, ?, ?, ?, ?, ?, ?, now())', array($compte, $mp, $devise, $taux, 'paiement frais de scolarite', 'depfs'.$famille, $numel, $promo));?>
 
-                                            <div class="alert laert-success">Payement effectué avec succèe!!</div><?php
+                                            <div class="alert alert-success">Payement effectué avec succèe!!</div><?php
 
                                         }elseif(($prodrep['montant']+$prodscol['montant']*($prodrem['remise']/100))<$prodscol['montant']){
 

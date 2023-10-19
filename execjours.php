@@ -11,6 +11,6 @@ foreach ($prod as $key => $value) {
 $mois=866;
 $mois1=8;
 $jours=7;
-$DB->delete("DELETE FROM events WHERE moisEvent='{$mois}' or moisEvent='{$mois1}' or joursEvent='{$jours}' ");
+//$DB->delete("DELETE FROM events WHERE moisEvent='{$mois}' or moisEvent='{$mois1}' or joursEvent='{$jours}' ");
 
 

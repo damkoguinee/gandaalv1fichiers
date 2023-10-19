@@ -683,8 +683,7 @@ class panier{
 	}
 
 	public function infoEleve($param){
-
-		$prodensnom=$this->DB->querys("SELECT nomel, prenomel, codef, nomgr from eleve inner join inscription on inscription.matricule=eleve.matricule where eleve.matricule='{$param}'");
+		$prodensnom=$this->DB->querys("SELECT nomel, prenomel, codef, nomgr from eleve inner join inscription on inscription.matricule=eleve.matricule where eleve.matricule='{$param}' and annee = '{$_SESSION['promo']}' ");
 	
 		return array(ucwords($prodensnom['prenomel']), strtoupper($prodensnom['nomel']), $this->infoFormation($prodensnom['codef'])[0], $prodensnom['nomgr']);
 	}

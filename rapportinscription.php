@@ -124,7 +124,7 @@ if (isset($_SESSION['pseudo'])) {
 
 						if (isset($_GET['remiseins'])) {
 
-							$prodremise = $DB->query('SELECT payement.matricule as matricule, montant, payement.remise as remise, nomgr, nomel, prenomel FROM payement inner join inscription on inscription.matricule=payement.matricule inner join eleve on eleve.matricule=inscription.matricule WHERE payement.remise!= :mat and promo=:promo ORDER BY(prenomel) DESC', array('mat'=> 0, 'promo'=>$promo));
+							$prodremise = $DB->query('SELECT payement.matricule as matricule, montant, payement.remise as remise, nomgr, nomel, prenomel FROM payement inner join inscription on inscription.matricule=payement.matricule inner join eleve on eleve.matricule=inscription.matricule WHERE payement.remise!= :mat and promo=:promo and annee=:annee ORDER BY(prenomel) DESC', array('mat'=> 0, 'promo'=>$promo, 'annee'=>$promo));
 
 							if (!empty($prodremise)) {?>
 

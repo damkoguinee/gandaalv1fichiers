@@ -117,10 +117,10 @@ if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']
     }?>
 
     <table class="table table-bordered table-striped table-hover align-middle my-2" >
-        <thead class="sticky-top text-center bg-light">
+        <thead class="sticky-top text-center">
             <tr>
-                <form action="?appelj" class="form" method="POST">
-                    <th>
+                <form action="?appelj" class="form bg-secondary" method="POST">
+                    <th class="bg-secondary" colspan="5">
                         <select name="journee" id="" class="form-select" onchange="this.form.submit()"><?php 
                             if (empty($_SESSION['journee'])) {?>
                                 <option value="">Selectionnez une période</option><?php
@@ -133,9 +133,9 @@ if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']
                     </th>
                 </form>
             </tr>
-            <tr>
-                <th>Matricule</th>
-                <th height="30">Nom et Prénom</th>
+            <tr >
+                <th class="bg-secondary">Matricule</th>
+                <th class="bg-secondary">Nom et Prénom</th>
                 <th style="background-color: green;">Appel</th>
                 <th style="background-color: orange;">Retard</th>
                 <th style="background-color: red;">Exclusions</th>

@@ -127,8 +127,8 @@ if (isset($_SESSION['pseudo'])) {
 
 											<div class="mb-1">
 
-												<label class="form-label">Date de Naissance</label>
-												<input class="form-control" type="date" name="datenaiss"> 
+												<label class="form-label">Date de Naissance*</label>
+												<input class="form-control" type="date" name="datenaiss" required> 
 											</div>
 
 											<div class="mb-1">
@@ -249,8 +249,8 @@ if (isset($_SESSION['pseudo'])) {
 												</div>
 
 												<div class="mb-1">
-													<label class="form-label">Date d'Embauche</label>
-													<input class="form-control" type="date" name="embauche"> 
+													<label class="form-label">Date d'Embauche*</label>
+													<input class="form-control" type="date" name="embauche" required> 
 												</div>
 
 												<div class="mb-1">
@@ -499,8 +499,8 @@ if (isset($_SESSION['pseudo'])) {
 
 											<div class="mb-1">
 
-												<label class="form-label">Date de Naissance</label>
-												<input class="form-control" type="date" name="datenaiss" value="<?=$prodm['datenaiss'];?>"/> 
+												<label class="form-label">Date de Naissance *</label>
+												<input class="form-control" type="date" name="datenaiss" value="<?=$prodm['datenaiss'];?>" required/> 
 											</div>
 
 											<div class="mb-1">
@@ -595,8 +595,8 @@ if (isset($_SESSION['pseudo'])) {
 
 												<div class="mb-1">
 
-													<label class="form-label">Date d'Embauche</label>
-													<input class="form-control" type="date" name="embauche" value="<?=$prodm['embauche'];?>"/> 
+													<label class="form-label">Date d'Embauche*</label>
+													<input class="form-control" type="date" name="embauche" value="<?=$prodm['embauche'];?>" required/> 
 												</div>
 
 												<div class="mb-1">

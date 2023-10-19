@@ -276,7 +276,7 @@ if (isset($_SESSION['pseudo'])) {
               <tr>
                 <th>N°</th>
                 <th>Date</th>
-                <th>Commenataires</th>
+                <th>Commentaires</th>
                 <th>Désignation</th>
                 <th>Montant GNF</th>
                 <th>Montant $</th>
@@ -292,11 +292,11 @@ if (isset($_SESSION['pseudo'])) {
 
               if (isset($_POST['j1'])) {            
 
-                $products= $DB->query("SELECT * FROM transferfond WHERE  lieuvente='{$_SESSION['lieuvente']}' and DATE_FORMAT(dateop, \"%Y%m%d\")>= '{$_SESSION['date1']}' and DATE_FORMAT(dateop, \"%Y%m%d\")<= '{$_SESSION['date2']}' order by(dateop) LIMIT 50");
+                $products= $DB->query("SELECT * FROM transferfond WHERE  DATE_FORMAT(dateop, \"%Y%m%d\")>= '{$_SESSION['date1']}' and DATE_FORMAT(dateop, \"%Y%m%d\")<= '{$_SESSION['date2']}' order by(dateop) LIMIT 50");
 
               }elseif (isset($_POST['clientliv'])) {
                 $banque=$_POST['clientliv'];
-                $products= $DB->query("SELECT *FROM transferfond WHERE lieuvente='{$_SESSION['lieuvente']}' and caissedep='{$banque}' order by(dateop) LIMIT 50");
+                $products= $DB->query("SELECT *FROM transferfond WHERE caissedep='{$banque}' order by(dateop) LIMIT 50");
 
               }else{
                 $annee=date('Y');
@@ -329,10 +329,10 @@ if (isset($_SESSION['pseudo'])) {
                   <td><?=$panier->formatDate($product->dateop); ?></td>
                   <td><?=$product->coment;?></td>
                   <td>Transfert des fonds <?=$caisseret;?> --> <?=$caissedep;?></td><?php
-
+                    
                   if ($product->devise=='gnf') {
 
-                      $montantgnf+=$product->montant;?>
+                      $montantgnf+=$product->montant; ?>
 
                       <td class="text-end"><?= number_format($product->montant,0,',',' '); ?></td>
                       <td></td>
@@ -369,6 +369,13 @@ if (isset($_SESSION['pseudo'])) {
               }?>
 
             </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="4">Totaux</th>
+                <th><?= number_format( $montantgnf,0,',',' '); ?></th>
+
+              </tr>
+            </tfoot>
 
           </table> <?php
         }?>
