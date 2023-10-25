@@ -104,28 +104,29 @@ require '_header.php'
           <div class="menu"><a href="index.php?form" class="logo">ACCUEIL</a></div>
 
           <div class="nav"><?php 
-            if ($products['type']!='enseignant'){?>
+            if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
               <a class="logo" href="formation.php?form&note">Gestion</a> 
               <a class="logo" href="ajout_eleve.php?ajoute&note">Scolarite</a><?php
             }
 
-            if ($products['type']=='admin' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='informaticien' or $products['type']=='Directeur Général' or $products['type']=='proviseur' or $products['type']=='DE/Censeur' or $products['type']=='surveillant Général' or $products['type']=="Conseille a l'éducation" or $products['type']=='coordonateur bloc B' or $products['type']=='Directeur du primaire' or $products['type']=='coordinatrice maternelle' or $products['type']=='secrétaire' or $products['type']=='enseignant' or $products['type']=='bibliothecaire') {?>
+            if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
 
 
                 <a class="logo" href="note.php?note&note">Pédagogie</a><?php
-              }
+            }
 
-            if ($products['type']=='admin' or $products['type']=='fondation' or $products['type']=='fondateur' or $products['type']=='Administrateur Général' or $products['type']=='Directeur Général' or $products['type']=='comptable' or $products['type']=='informaticien' or $products['type']=='secrétaire') {?>
+            
+            if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
 
-                <a class="logo" href="comptabilite.php?note">Comptabilite</a><?php 
-              }
+              <a class="logo" href="comptabilite.php?note">Comptabilite</a><?php 
+            }
 
-            if ($products['type']!='enseignant'){?>
+            if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true") {?>
               
               <a class="logo" href="rapport.php?rapport">Statistiques</a><?php
               
 
-              if ($products['niveau']>4) {?>
+              if ( $panier->searchRole("ROLE_DEV")=="true" ) {?>
 
 
                 <a class="logo" href="csv.php?save">Sauvegarde</a><?php
