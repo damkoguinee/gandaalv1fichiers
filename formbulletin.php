@@ -86,7 +86,7 @@
 
             if (isset($_POST['semestre']) or isset($_POST['mois']) or isset($_POST['eleve'])) {?>
 
-                <option value="<?=$_SESSION['semestre'];?>"><?=$_SESSION['semestre'].' '.$typerepart;?></option><?php
+                <option value="<?=$_SESSION['semestre'];?>"><?=$_SESSION['semestre'].' '.$_SESSION['prodtype'];?></option><?php
 
             }else{?>
 

@@ -182,12 +182,9 @@ if (isset($_POST['mois'])) {
               $terme = trim($terme); //pour supprimer les espaces dans la requête de l'internaute
               $terme = strip_tags($terme); //pour supprimer les balises html dans la requête
               $terme = strtolower($terme);
-
-              $prodm=$DB->query('SELECT  *from personnel inner join salairepers on salairepers.numpers=personnel.numpers where salairepers.promo LIKE ? and personnel.numpers not in(SELECT matricule FROM payepersonnel WHERE promo LIKE? and mois LIKE?) and personnel.numpers not in(SELECT matricule FROM liaisonenseigpers WHERE promo LIKE?) and (personnel.numpers LIKE? or nom LIKE ? or prenom LIKE ?) order by(prenom)',array($_SESSION['promo'], $_SESSION['promo'], $_SESSION['mois'], $_SESSION['promo'], "%".$terme."%", "%".$terme."%", "%".$terme."%"));
-              
+              $prodm=$DB->query('SELECT  *from personnel inner join personnelencours on matriculens = numpers inner join salairepers on salairepers.numpers=personnel.numpers where salairepers.promo LIKE ? and personnel.numpers not in(SELECT matricule FROM payepersonnel WHERE promo LIKE? and mois LIKE?) and personnel.numpers not in(SELECT matricule FROM liaisonenseigpers WHERE promo LIKE?) and (personnel.numpers LIKE? or nom LIKE ? or prenom LIKE ?) order by(prenom)',array($_SESSION['promo'], $_SESSION['promo'], $_SESSION['mois'], $_SESSION['promo'], "%".$terme."%", "%".$terme."%", "%".$terme."%"));              
             }else{
-
-                $prodm=$DB->query("SELECT  *from personnel inner join salairepers on salairepers.numpers=personnel.numpers where salairepers.promo='{$_SESSION['promo']}' and personnel.numpers not in(SELECT matricule FROM payepersonnel WHERE promo='{$_SESSION['promo']}' and mois='{$_SESSION['mois']}') and personnel.numpers not in(SELECT matricule FROM liaisonenseigpers WHERE promo='{$_SESSION['promo']}') order by(prenom)");
+                $prodm=$DB->query("SELECT  *from personnel inner join personnelencours on matriculens = numpers inner join salairepers on salairepers.numpers=personnel.numpers where salairepers.promo='{$_SESSION['promo']}' and personnel.numpers not in(SELECT matricule FROM payepersonnel WHERE promo='{$_SESSION['promo']}' and mois='{$_SESSION['mois']}') and personnel.numpers not in(SELECT matricule FROM liaisonenseigpers WHERE promo='{$_SESSION['promo']}') order by(prenom)");
             }
 
             if (isset($_POST['mois'])) {

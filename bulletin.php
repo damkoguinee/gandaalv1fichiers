@@ -193,9 +193,9 @@ if (isset($_SESSION['pseudo'])) {
 
                         if ($_POST['semestre']==1) {
 
-                            $periode=$_POST['semestre'].'er '.$typerepart;
+                            $periode=$_POST['semestre'].'er '.$_SESSION['prodtype'];
                         }else{
-                            $periode=$_POST['semestre'].'ème '.$typerepart;
+                            $periode=$_POST['semestre'].'ème '.$_SESSION['prodtype'];
                         }
 
                         $prodabs=$DB->querys('SELECT count(nbreheure) as nbreh from absence where promo=:promo and semestre=:annee and nomgr=:nom and absence.id not in(SELECT id_absence FROM justabsence)', array('promo'=>$_SESSION['promo'], 'annee' => $_POST['semestre'], 'nom'=>$_SESSION['groupe']));
@@ -206,9 +206,9 @@ if (isset($_SESSION['pseudo'])) {
                     }elseif (isset($_GET['semestre'])) {
                         if ($_GET['semestre']==1) {
 
-                            $periode=$_GET['semestre'].'er '.$typerepart;
+                            $periode=$_GET['semestre'].'er '.$_SESSION['prodtype'];
                         }else{
-                            $periode=$_GET['semestre'].'ème '.$typerepart;
+                            $periode=$_GET['semestre'].'ème '.$_SESSION['prodtype'];
                         }
 
                         $prodabs=$DB->querys('SELECT count(nbreheure) as nbreh from absence where promo=:promo and semestre=:annee and nomgr=:nom and absence.id not in(SELECT id_absence FROM justabsence)', array('promo'=>$_SESSION['promo'], 'annee' => $_GET['semestre'], 'nom'=>$_SESSION['groupe']));
@@ -260,10 +260,10 @@ if (isset($_SESSION['pseudo'])) {
 
                             }elseif (isset($_POST['semestre'])) {?>
 
-                                <a href="bulletin.php?printnote&semestre=<?=$_POST['semestre'];?>&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                <a href="bulletin.php?printnote&semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                             }else{?>
 
-                                <a href="bulletin.php?printnote&annuel&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                <a href="bulletin.php?printnote&annuel&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                             }?>
                         </div>
 
@@ -275,10 +275,10 @@ if (isset($_SESSION['pseudo'])) {
 
                                 }elseif (isset($_POST['semestre'])) {?>
 
-                                    <a href="releve_notetmat.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                    <a href="releve_notetmat.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                                 }else{?>
 
-                                    <a href="releve_noteamat.php?annuel&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                    <a href="releve_noteamat.php?annuel&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                                 }
                             }else{
 
@@ -289,10 +289,10 @@ if (isset($_SESSION['pseudo'])) {
 
                                 }elseif (isset($_POST['semestre'])) {?>
 
-                                    <a href="releve_notet.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                    <a href="releve_notet.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                                 }else{?>
 
-                                    <a href="releve_notea.php?annuel&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                    <a href="releve_notea.php?annuel&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                                 }
 
                             }?>
@@ -305,10 +305,10 @@ if (isset($_SESSION['pseudo'])) {
 
                             }elseif (isset($_POST['semestre'])) {?>
 
-                                <a href="admis.php?listad&semestre=<?=$_POST['semestre'];?>&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                <a href="admis.php?listad&semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                             }else{?>
 
-                                <a href="admis.php?listad&annuel&trimestre=<?=$typerepart;?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
+                                <a href="admis.php?listad&annuel&trimestre=<?=$_SESSION['prodtype'];?>" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
                             }?>
                         </div>
 
@@ -388,10 +388,10 @@ if (isset($_SESSION['pseudo'])) {
 
                                                 }elseif (isset($_POST['semestre'])) {?>
 
-                                                    <a href="releve_notet.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$typerepart;?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
+                                                    <a href="releve_notet.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
                                                 }else{?>
 
-                                                    <a href="releve_notea.php?annuel&trimestre=<?=$typerepart;?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;" ><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
+                                                    <a href="releve_notea.php?annuel&trimestre=<?=$_SESSION['prodtype'];?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;" ><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
                                                 }?>
                                             </td>
 

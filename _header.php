@@ -45,9 +45,9 @@
 	
 			if (!isset($_GET['note'])){
 	
-			$prodtype=$_SESSION['prodtype'];
+				$prodtype=$_SESSION['prodtype'];
 	
-			$typerepart=ucfirst($_SESSION['prodtype']);
+				$typerepart=ucfirst($_SESSION['prodtype']);
 			}
 		}
 	

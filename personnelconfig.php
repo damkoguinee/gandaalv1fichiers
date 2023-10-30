@@ -7,7 +7,8 @@ if (isset($_SESSION['pseudo'])) {
 
         <div class="alert alert-danger">Des autorisations sont requises pour consulter cette page</div><?php
 
-    }else{?>
+    }else{       
+        ?>
 
     	<div class="container-fluid">
 
@@ -21,9 +22,11 @@ if (isset($_SESSION['pseudo'])) {
 						$etat=$panier->h($_POST['etat']);
 						$cursus=$panier->h($_POST['cursus']);
 						if ($etat!='Confirmer') {
-							$DB->delete("DELETE  FROM enseignantencours where matriculens='{$matricule}' and promo='{$_SESSION['promo']}' ");
+							$DB->delete("DELETE  FROM personnelencours where matriculens='{$matricule}' and promo='{$_SESSION['promo']}' ");
 						}else{
-							$DB->insert("INSERT INTO enseignantencours(matriculens,cursus,promo)VALUES(?,?,?)",array($matricule,$cursus,$_SESSION['promo']));
+							$DB->insert("INSERT INTO personnelencours(matriculens,fonction,promo)VALUES(?,?,?)",array($matricule,$cursus,$_SESSION['promo']));
+					        $DB->insert('UPDATE login SET type = ? WHERE matricule=?', array($cursus, $matricule));
+                            
 						}?>
 						<div class="alert alert-success">Opération éffectuée avec succée!!!</div><?php
 
@@ -35,11 +38,11 @@ if (isset($_SESSION['pseudo'])) {
 						$terme = trim($terme); //pour supprimer les espaces dans la requête de l'internaute
 						$terme = strip_tags($terme); //pour supprimer les balises html dans la requête
 						$terme = strtolower($terme);
-						$prodm =$DB->query('SELECT *from enseignant left join contact on enseignant.matricule=contact.matricule  WHERE enseignant.matricule LIKE? or nomen LIKE ? or prenomen LIKE ? or phone LIKE ? order by(prenomen)',array("%".$terme."%", "%".$terme."%", "%".$terme."%", "%".$terme."%"));					
+						$prodm =$DB->query('SELECT *from personnel left join contact on numpers=contact.matricule  WHERE numpers LIKE? or nom LIKE ? or prenom LIKE ? or phone LIKE ? order by(prenom)',array("%".$terme."%", "%".$terme."%", "%".$terme."%", "%".$terme."%"));					
 						
 					}else{
 
-						$prodm=$DB->query('SELECT  *from enseignant left join contact on enseignant.matricule=contact.matricule order by(prenomen)');
+						$prodm=$DB->query('SELECT  *from personnel left join contact on numpers=contact.matricule order by(prenom)');
 					}?>
 					<div class="row" style="height:90vh;">
 
@@ -47,11 +50,11 @@ if (isset($_SESSION['pseudo'])) {
 						<thead class="sticky-top bg-light">
 							<form class="form" method="GET" id="suitec" name="termc">
 								<tr>
-									<th colspan="8" class="info" style="text-align: center">Liste des Enseignants
+									<th colspan="8" class="info" style="text-align: center">Liste des Personnels
 
-										<a style="margin-left: 10px;"href="printdoc.php?enseig&niveau=<?=$_SESSION['niveaufl'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
+										<!-- <a style="margin-left: 10px;"href="printdoc.php?enseig&niveau=<?=$_SESSION['niveaufl'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a>
 
-										<a style="margin-left: 10px;"href="csv.php?enseignant" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/excel.jpg"></a>
+										<a style="margin-left: 10px;"href="csv.php?enseignant" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/excel.jpg"></a> -->
 									</th>
 								</tr>
 
@@ -67,8 +70,8 @@ if (isset($_SESSION['pseudo'])) {
 									<th colspan="3"><?php 
 
 										if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
-											<a href="enseignant.php?ajout_en" class="btn btn-info">Ajouter un enseignant</a>
-											<a href="enseignantconfig.php?ajout_en" class="btn btn-info">Configuration</a><?php
+											<a href="personnellist.php?ajout_en" class="btn btn-info">Ajouter un personnel</a>
+											<a href="personnelconfig.php?ajout_en" class="btn btn-info">Configuration</a><?php
 										}?>
 									</th>
 									
@@ -80,7 +83,7 @@ if (isset($_SESSION['pseudo'])) {
 								<th>Matricule</th>
 								<th>Prénom & Nom</th>
 								<th>Téléphone</th>
-								<th>Niveau</th>
+								<th>Fonction</th>
 								<th colspan="2"></th>
 							</tr>
 
@@ -93,7 +96,7 @@ if (isset($_SESSION['pseudo'])) {
 								$keye=1;
 								foreach ($prodm as $key=> $formation) {
 
-									$value=$DB->querys("SELECT  *from enseignantencours where matriculens='{$formation->matricule}' and promo='{$_SESSION['promo']}'");
+									$value=$DB->querys("SELECT  *from personnelencours where matriculens='{$formation->matricule}' and promo='{$_SESSION['promo']}'");
 									if (empty($value['id'])){
 										$etat="Confirmer";
 										$bg="success";
@@ -106,18 +109,52 @@ if (isset($_SESSION['pseudo'])) {
 										<tr>
 											<td><?=$keye;?></td>
 											<td><?=$formation->matricule;?></td>
-											<td><?=ucwords(strtolower($formation->prenomen)).' '.strtoupper($formation->nomen);?></td>
+											<td><?=ucwords(strtolower($formation->prenom)).' '.strtoupper($formation->nom);?></td>
 											<td><?=$formation->phone;?></td>
 											<td>
 												<select class="form-select" name="cursus" required>
-													<option value="<?=$value['cursus'];?>"><?=$value['cursus'];?></option>
-													<option value="maternelle">Maternelle</option>
-													<option value="primaire">Primaire</option>
-													<option value="secondaire">Secondaire</option>
+													<option value="<?=$value['fonction'];?>"><?=$value['fonction'];?></option>
+													<option value="fondation">Fondation</option>
+													<option value="fondateur">Fondateur</option>
+													<option value="Administrateur Général">Administrateur Général</option>
+													<option value="rh">Ressources humaines</option>
+													<option value="Directeur Général">Directeur Général</option>
+													<option value="secrétaire">Secrétaire</option>
+													<option value="Directeur du primaire">Directeur du primaire</option>
+													<option value="coordonateur bloc B">coordonateur bloc B</option>									
+													<option value="coordinatrice maternelle">Coordinatrice Maternelle</option>
+													<option value="monitrice">Monitrice</option>
+													<option value="proviseur">Proviseur</option>
+													<option value="DE/Censeur">Directeur des etudes</option>
+													<option value="Conseille a l'éducation">Conseiller à l'éducation</option>
+
+													<option value="bibliothecaire">Bibliothécaire</option>
+													<option value="comptable">Comptable</option>
+													
+													<option value="surveillant Général">Surveillant Général</option>
+
+													<option value="électricien">Electricien</option>
+													<option value="technicien de surface">Technicien de Surface</option>
+
+													<option value="vigile">Vigile</option>
+
+													<option value="conseiller pédogogique">Conseiller Pédagogique</option>
+
+													<option value="informaticien">Informaticien</option>
+
+													<option value="cuisinier">Cuisinier</option>
+
+													<option value="aide maitresse">Aide Maitresse</option>
+
+													<option value="gardien">Gardien</option>
+
+													<option value="chauffeur">Chauffeur</option>
+
+													<option value="hygieniste">Hygièniste</option>
 												</select>
 												<input type="hidden" name="matricule" value="<?=$formation->matricule;?>"/>
 											</td>
-											<td><a class="btn btn-info" href="enseignant.php?ficheens=<?=$formation->matricule;?>">+infos</a></td>
+											<td><a class="btn btn-info" href="personnellist.php?fichepers=<?=$formation->matricule;?>">+infos</a></td>
 
 											<td><?php 
 												if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>

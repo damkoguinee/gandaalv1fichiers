@@ -810,7 +810,17 @@ if (isset($_SESSION['pseudo'])) {
 											# code...
 										}else{
 											$keye=1;
-											foreach ($prodm as $key=> $formation) {?>
+											$verif = [];
+											foreach ($prodm as $key=> $formation) {
+												$prodVerifPaie=$DB->querys("SELECT * from payenseignant where matricule = '{$formation->matriculens}'");
+												$prodVerifEvents=$DB->querys("SELECT * from events where codensp = '{$formation->matriculens}' and promo = '{$_SESSION['promo']}' ");
+												$prodVerifCours=$DB->querys("SELECT * from enseignement where codens = '{$formation->matriculens}' and promo = '{$_SESSION['promo']}' ");
+
+												$verif[$prodVerifPaie['matricule']]=$prodVerifPaie['matricule'];
+												$verif[$prodVerifEvents['codensp']]=$prodVerifEvents['codensp'];
+												$verif[$prodVerifCours['codens']]=$prodVerifCours['codens'];
+
+												?>
 
 												<tr>
 													<td style="text-align: center;"><?=$key+1;?></td>
@@ -846,7 +856,7 @@ if (isset($_SESSION['pseudo'])) {
 
 													<td><?php
 
-														if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true") {?>
+														if ((!array_key_exists($formation->matricule, $verif) and  ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true"))) {?>
 
 															<a class="btn btn-danger" href="enseignant.php?del_en=<?=$formation->matricule;?>" onclick="return alerteS();">Supprimer</a><?php
 														}?>

@@ -9,7 +9,15 @@ if (isset($_SESSION['pseudo'])) {
 
         <div class="alert alert-danger">Des autorisations sont requises pour consulter cette page</div><?php
 
-    }else{?>
+    }else{
+		$bdd='personnelencours'; 
+		$DB->insert("CREATE TABLE IF NOT EXISTS `".$bdd."`(
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`matriculens` VARCHAR(50) NULL,
+		`promo` VARCHAR(50) DEFAULT '2024',
+		`fonction` VARCHAR(150) DEFAULT 'secondaire',
+		PRIMARY KEY (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 ");?>
 
     	<div class="container-fluid">
 
@@ -846,15 +854,15 @@ if (isset($_SESSION['pseudo'])) {
 								$terme = strip_tags($terme); //pour supprimer les balises html dans la requête
 								$terme = strtolower($terme);
 
-								$prodm =$DB->query('SELECT personnel.numpers as matricule, personnel.nom as nom, prenom, phone from personnel left join contact on personnel.numpers=contact.matricule WHERE (personnel.nom LIKE ? or prenom LIKE ? or phone LIKE ?) ',array("%".$terme."%", "%".$terme."%", "%".$terme."%"));
+								$prodm =$DB->query('SELECT personnel.numpers as matricule, personnel.nom as nom, prenom, phone from personnel inner join personnelencours on numpers = matriculens left join contact on personnel.numpers=contact.matricule WHERE (personnel.nom LIKE ? or prenom LIKE ? or phone LIKE ?) ',array("%".$terme."%", "%".$terme."%", "%".$terme."%"));
 								
 							}elseif (!empty($_SESSION['niveauf'])) {
 
-								$prodm=$DB->query("SELECT personnel.numpers as matricule, personnel.nom as nom, prenom, phone from personnel left join contact on personnel.numpers=contact.matricule left join niveau on personnel.numpers=niveau.matricule where niveau.nom='{$_SESSION['niveauf']}' ");
+								$prodm=$DB->query("SELECT personnel.numpers as matricule, personnel.nom as nom, prenom, phone from personnel inner join personnelencours on numpers = matriculens left join contact on personnel.numpers=contact.matricule left join niveau on personnel.numpers=niveau.matricule where niveau.nom='{$_SESSION['niveauf']}' ");
 
 							}else{
 
-								$prodm=$DB->query("SELECT  personnel.numpers as matricule, personnel.nom as nom, prenom, phone from personnel left join contact on personnel.numpers=contact.matricule order by(prenom) ");
+								$prodm=$DB->query("SELECT  personnel.numpers as matricule, personnel.nom as nom, prenom, phone from personnel inner join personnelencours on numpers = matriculens left join contact on personnel.numpers=contact.matricule order by(prenom) ");
 							}?>
 							<div class="row" style="height: 90vh;">
 		
@@ -879,7 +887,9 @@ if (isset($_SESSION['pseudo'])) {
 
 											<th colspan="4"><?php 
 
-											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?><a href="personnellist.php?ajout_en" class="btn btn-info">Ajouter un personnel</a><?php }?></th>
+											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
+											<a href="personnellist.php?ajout_en" class="btn btn-info">Ajouter un personnel</a>
+											<a href="personnelconfig.php?ajout_en" class="btn btn-info">Configuration</a><?php }?></th>
 										
 										</tr>
 									</form>
@@ -900,8 +910,14 @@ if (isset($_SESSION['pseudo'])) {
 									if (empty($prodm)) {
 										# code...
 									}else{
+										$verif = [];
 										foreach ($prodm as $key=> $formation) {
-											$type=$panier->login($formation->matricule)[0];?>
+											$type=$panier->login($formation->matricule)[0];
+											
+											$prodVerifPaie=$DB->querys("SELECT * from payepersonnel where matricule = '{$formation->matricule}'");
+
+											$verif[$prodVerifPaie['matricule']]=$prodVerifPaie['matricule'];
+												?>
 
 											<tr>
 												<td style="text-align: center;"><?=$key+1;?></td>
@@ -938,7 +954,7 @@ if (isset($_SESSION['pseudo'])) {
 
 												<td><?php
 
-													if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
+													if (((!array_key_exists($formation->matricule, $verif)) and ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true"))) {?>
 
 														<a onclick="return alerteS();" class="btn btn-danger" href="?del_pers=<?=$formation->matricule;?>" onclick="return alerteS();">Supprimer</a><?php 
 													}?>

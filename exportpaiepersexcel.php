@@ -22,7 +22,7 @@ $totcot=0;
 $totn=0;
 $toth=0;
     
-$query=$DB->query("SELECT  *from personnel inner join salairepers on salairepers.numpers=personnel.numpers where salairepers.promo='{$_SESSION['promo']}' and personnel.numpers not in(SELECT matricule FROM payepersonnel WHERE promo='{$_SESSION['promo']}' and mois='{$_SESSION['mois']}') and personnel.numpers not in(SELECT matricule FROM liaisonenseigpers WHERE promo='{$_SESSION['promo']}') order by(prenom)");
+$query=$DB->query("SELECT  *from personnel inner join personnelencours on matriculens = numpers inner join salairepers on salairepers.numpers=personnel.numpers where salairepers.promo='{$_SESSION['promo']}' and personnel.numpers not in(SELECT matricule FROM payepersonnel WHERE promo='{$_SESSION['promo']}' and mois='{$_SESSION['mois']}') and personnel.numpers not in(SELECT matricule FROM liaisonenseigpers WHERE promo='{$_SESSION['promo']}') order by(prenom)");
 
 if ($_GET['mois']<10) {
                 

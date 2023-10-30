@@ -15,7 +15,7 @@ $execlData=implode("\t", array_values($fields)). "\n";
 
 $_SESSION['moisp']=$_GET['mois'];
     
-$query=$DB->query('SELECT enseignant.matricule as matricule, prenomen, nomen from enseignant inner join salaireens on salaireens.numpers=enseignant.matricule where salaireens.promo=:promop and enseignant.matricule not in(SELECT matricule FROM payenseignant WHERE anneescolaire=:annee and mois=:mois) and promo=:promo order by(prenomen)', array('promop'=>$_SESSION['promo'], 'annee'=>$_SESSION['promo'], 'mois'=>$_SESSION['moisp'], 'promo'=>$_SESSION['promo']));
+$query=$DB->query('SELECT enseignant.matricule as matricule, prenomen, nomen from enseignant inner join enseignantencours on enseignant.matricule=matriculens inner join salaireens on salaireens.numpers=enseignant.matricule where salaireens.promo=:promop and enseignant.matricule not in(SELECT matricule FROM payenseignant WHERE anneescolaire=:annee and mois=:mois) and promo=:promo order by(prenomen)', array('promop'=>$_SESSION['promo'], 'annee'=>$_SESSION['promo'], 'mois'=>$_SESSION['moisp'], 'promo'=>$_SESSION['promo']));
 
 if ($_GET['mois']<10) {
                 
