@@ -116,7 +116,7 @@ require 'headerv2.php';?>
 
                         <div class="col-sm-12 col-md-5">
                             <ol style="font-size: 15px;">
-                                <li class="fw-bold"><label class="label">Matricule</label><?=strtoupper($mat);?></li>
+                                <li class="fw-bold"><label class="label">Matricule</label> <?=strtoupper($mat);?></li>
 
                                 <li class="fw-bold"><label class="label">Nom</label> <?=strtoupper($fiche['nomel']);?></li>
 

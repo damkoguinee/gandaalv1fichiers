@@ -208,7 +208,7 @@ body{
 
   if (isset($_GET['perso'])) {
 
-    $prodm=$DB->query('SELECT personnel.numpers as matricule, personnel.nom as nom, prenom, sexe, type, phone, pseudo, mdp from personnel left join contact on numpers=contact.matricule left join login on login.matricule=numpers order by(prenom)');?>
+    $prodm=$DB->query('SELECT personnel.numpers as matricule, personnel.nom as nom, prenom, sexe, type, phone, pseudo, mdp from personnel inner join personnelencours on matriculens = numpers  left join contact on numpers=contact.matricule left join login on login.matricule=numpers order by(prenom)');?>
       
     <table class="tablistebul" style="width: 90%;">
       <thead>

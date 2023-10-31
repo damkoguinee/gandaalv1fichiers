@@ -50,7 +50,7 @@ if(isset($_POST["ajoutimg"])){
                     <div class="card  m-auto bg-primary bg-opacity-25" >
                     <img class="card-img-top m-auto" src="img/<?=$mat;?>.jpg" alt="Card image cap"><?php
 
-                        if ($products['niveau']>3) {?>
+                        if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
                             <a class="btn m-auto" href="fiche_elevegen.php?supimg=<?=$mat;?>&fiche_eleve=<?=$mat;?>&promo=<?=$_SESSION['promo'];?>"><img src="css/img/sup.jpg" width="20" height="20"></a><?php 
                         }?>
                     </div>
@@ -64,7 +64,7 @@ if(isset($_POST["ajoutimg"])){
 
                         if (!isset($_GET['bulele'])) {
                         
-                            if ($products['niveau']>3) {?>
+                            if ($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_PERSONNEL")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?>
 
                                 <div style="margin-left: 60px; margin-top: -5px;">
                                     <a href="fiche_elevegen.php?ajoutimg=<?=$mat;?>&fiche_eleve=<?=$mat;?>&promo=<?=$_SESSION['promo'];?>">

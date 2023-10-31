@@ -566,7 +566,7 @@ if (isset($_SESSION['pseudo'])) {?>
     }
 
     function focus(){
-        document.getElementById('pointeur').focus();
+        document.querySelector('#pointeur').focus();
     }
 
 </script>

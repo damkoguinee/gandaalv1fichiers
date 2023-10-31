@@ -59,6 +59,122 @@ if (isset($_SESSION['pseudo'])) {
 			          </form><?php
 			        }
 
+					if(isset($_POST['updatedep'])){
+
+						if ($_POST['montant']<0){?>
+
+			                <div class="alert alert-warning">Format incorrect</div><?php
+
+			            }elseif ($_POST['montant']>$panier->montantCompteT($_POST['compte'])) {?>
+
+			                <div class="alert alert-warning">Echec montant decaissé est > au montant disponible</div><?php
+
+			            }else{
+
+							if($_POST['coment']!="" and $_POST['montant']!=""){
+								
+								$numdec=addslashes(Htmlspecialchars($_POST['numdec']));
+								$montant=addslashes(Htmlspecialchars($_POST['montant']));
+								$caisse=addslashes(Htmlspecialchars($_POST['compte']));
+								$motif=addslashes(Htmlspecialchars($_POST['categorie']));
+								$com=addslashes(Htmlspecialchars($_POST['coment']));
+								$typep=addslashes(Htmlspecialchars($_POST['typep']));
+								$numcheque=addslashes(Htmlspecialchars($_POST['bordereau']));
+								$datedep=$_POST['datedep'];
+
+			            		if(isset($_POST["env"])){
+
+						            require "uploadep.php";
+						        }
+
+			            		
+
+									$DB->insert('UPDATE decaissement SET caisse = ?, montant = ?, motif = ?, coment = ?, typepaye = ?, numcheque = ?, datepaye = ?  WHERE numdec = ? ', array($caisse, $montant, $motif, $com, $typep, $numcheque, $datedep, $numdec));
+
+									$DB->insert('UPDATE banque SET id_banque = ?, montant = ?, date_versement = ?, typep = ?, numeropaie = ?  WHERE numero = ? ', array($caisse, -$montant, $datedep, $typep, $numcheque, "depdep".$numdec));
+				                ?>
+
+			                    <div class="alert alert-success">Dépense modifiée avec succèe!!</div><?php
+
+							}else{?>	
+
+								<div class="alert alert-warning">Remplissez les champs vides</div><?php
+							}
+						}
+					}
+
+					if (isset($_GET['update'])) {
+						$valuedep=$DB->querys("SELECT *from decaissement where numdec = '{$_GET['update']}' ");
+						// var_dump($valuedep);
+
+						$prodep=$DB->query('SELECT id, nom FROM categoriedep');?>
+
+						<form id="formulaire" method="POST" action="depense.php?dep" enctype="multipart/form-data">
+
+						    <fieldset><legend>Modifier</legend>
+						    	<ol>
+						    		<li><label>Catégorie de dépense*</label>
+			                            <select name="categorie" required="">
+			                                <option value="<?=$valuedep['motif'];?>"><?= $panier->nomCategorie($valuedep['motif']);?></option><?php
+			                                foreach ($prodep as $value) {?>
+
+			                                  <option value="<?=$value->id;?>"><?=ucfirst($value->nom);?></option><?php 
+			                                }?>
+			                            </select>
+
+			                            <a href="depense.php?categ">Ajouter une catégorie</a>
+			                        </li>
+
+						    		<li><label>Motif*</label>
+										<textarea type="text" name="coment" required="" maxlength="150"><?=$valuedep['coment'];?></textarea>
+									</li>
+
+									<li><label>Montant à décaisser*</label>
+										<input style="font-size: 25px;" type="text" name="montant" value="<?=$valuedep['montant'];?>" required="">
+										<input style="font-size: 25px;" type="hidden" name="numdec" value="<?=$_GET['update'];?>" required="">
+									</li>
+
+									<li><label>Type de payement*</label><select name="typep" required="" >
+		                            <option value="<?=$valuedep['typepaye'];?>"><?=$valuedep['typepaye'];?></option><?php 
+		                            foreach ($panier->modep as $value) {?>
+		                                <option value="<?=$value;?>"><?=$value;?></option><?php 
+		                            }?></select></li>
+
+		                            <li><label>N° Chèque/Bordereau</label>
+										<input style="font-size: 25px;" type="text" name="bordereau" value="<?=$valuedep['numcheque'];?>">
+									</li>
+
+		                            <li><label>Compte à prélever*</label>
+										<select  name="compte" required="">
+											<option value="<?=$valuedep['caisse'];?>"><?=$panier->nomBanquefecth($valuedep['caisse']);?></option><?php
+	                                    	$type='Banque';
+
+		                                    foreach($panier->nomBanque() as $product){?>
+
+		                                        <option value="<?=$product->id;?>"><?=strtoupper($product->nomb);?></option><?php
+		                                    }?>
+		                                </select>
+									</li>
+
+									<li><label>Date dépense*</label>
+										<input type="date" name="datedep" value="<?=$valuedep['datepaye'];?>" required>
+									</li>
+
+									<li><label>Justificatifs</label>
+					                	<input type="file" name="just[]"multiple id="photo" />
+					                	<input type="hidden" value="b" name="env"/>
+					              	</li>
+
+								</ol>
+							</fieldset><?php 
+
+							if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_COMPTABLE")=="true") {?>
+
+								<fieldset><input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="updatedep" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/></fieldset><?php 
+							}?>
+						</form><?php
+					}
+
 					if (isset($_GET['ajoutdep']) or isset($_GET['ajout_scol']) or isset($_POST['categins']) or isset($_GET["categ"])) {
 
 						$prodep=$DB->query('SELECT id, nom FROM categoriedep');?>
@@ -369,7 +485,7 @@ if (isset($_SESSION['pseudo'])) {
 												}?>
 											</td>
 
-					                        <td><a class="btn btn-warning" href="depense.php?dep" >Modifier</a></td>
+					                        <td><a class="btn btn-warning" href="depense.php?update=<?=$formation->numdec;?>" >Modifier</a></td>
 
 					                        <td><a  class="btn btn-danger" href="depense.php?deledep=<?=$formation->numdec;?>" onclick="return alerteS();">Supprimer</a></td>
 

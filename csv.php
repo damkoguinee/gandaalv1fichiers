@@ -120,7 +120,7 @@ if (isset($_GET['perso'])) {
 if (isset($_GET['persodirec'])) {
 	header("Content-disposition: attachment; filename=personnel de direction.csv");
 
-	$newReservations=$DB->query('SELECT numpers as matricule, nom, prenom, sexe, datenaiss as naissance, lieunaiss, phone, email, adresse, agencebanq, numbanq, embauche from personnel inner join contact on personnel.numpers=contact.matricule');?>
+	$newReservations=$DB->query('SELECT numpers as matricule, nom, prenom, sexe, datenaiss as naissance, lieunaiss, phone, email, adresse, agencebanq, numbanq, embauche from personnel inner join personnelencours on numpers=matriculens inner join contact on personnel.numpers=contact.matricule');?>
 	Ordre;"matricule";"Nom";"Prenom";"Sexe";"Ne(e)";"lieu de naissance";"Telephone";"email";"adresse";"date de debut";"numero banque";"agence banque";<?php
 
 	foreach($newReservations as $key => $row) {
@@ -133,7 +133,7 @@ if (isset($_GET['persodirec'])) {
 if (isset($_GET['enseignant'])) {
 	header("Content-disposition: attachment; filename=enseignant.csv");
 
-	$newReservations=$DB->query('SELECT enseignant.matricule as matricule, nomen, prenomen, sexe, datenaiss AS naissance, lieunaiss, phone, email, adresse, agencebanq, numbanq, embauche from enseignant inner join contact on enseignant.matricule=contact.matricule');?>
+	$newReservations=$DB->query('SELECT enseignant.matricule as matricule, nomen, prenomen, sexe, datenaiss AS naissance, lieunaiss, phone, email, adresse, agencebanq, numbanq, embauche from enseignant inner join enseignantencours on enseignant.matricule=matriculens LEFT join contact on enseignant.matricule=contact.matricule');?>
 	Ordre;"matricule";"Nom";"Prenom";"Sexe";"Ne(e)";"lieu de naissance";"Telephone";"email";"adresse";"date de debut";"numero banque";"agence banque";<?php
 
 	foreach($newReservations as $key => $row) {

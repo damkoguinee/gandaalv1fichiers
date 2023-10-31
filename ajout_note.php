@@ -191,7 +191,7 @@ if ($_SESSION['cloture']=='en-cours') {
 															<input class="form-control" id="pointeur" type="text" name="note" min="0" max="20"  onchange="document.getElementById('<?=$formation->id;?>').submit()"><?php 
 														}else{?>
 
-															<input class="form-control" type="text" name="note" min="0" max="10"  onchange="document.getElementById('<?=$formation->id;?>').submit()"><?php 
+															<input class="form-control" id="pointeur" type="text" name="note" min="0" max="10"  onchange="document.getElementById('<?=$formation->id;?>').submit()"><?php 
 
 														}?>
 													</div>
@@ -259,7 +259,7 @@ if ($_SESSION['cloture']=='en-cours') {
 																<input class="form-control" id="pointeur" type="text" name="note" min="0" max="20"  onchange="document.getElementById('<?=$formation->id;?>').submit()"><?php 
 															}else{?>
 
-																<input class="form-control" type="text" name="note" min="0" max="10"  onchange="document.getElementById('<?=$formation->id;?>').submit()"><?php 
+																<input class="form-control" id="pointeur" type="text" name="note" min="0" max="10"  onchange="document.getElementById('<?=$formation->id;?>').submit()"><?php 
 
 															}?>
 														</div>
@@ -312,4 +312,5 @@ if ($_SESSION['cloture']=='en-cours') {
 }else{?>
 
 	<div class="alert alert-warning" style="background-color: red;">Les inscriptions sont fermées contacter le chef d'établissement </div><?php
-}
+}?>
+
