@@ -4,9 +4,12 @@
 
     $etab=$DB->querys('SELECT *from etablissement');
 
-    if ($etab['nom']=='Complexe Scolaire la Plume') {
-      
-      $pers1=$DB->querys('SELECT *from personnel inner join login on numpers=matricule where type=:type', array('type'=>'Administrateur General'));
+    if ($etab['nom']=='Complexe Scolaire la Plume' or $etab['nom']=='COMPLEXE SCOLAIRE LES ANGELUS DE SAINTE ODILE') {
+      if ($etab['nom']=='Complexe Scolaire la Plume') {      
+        $pers1=$DB->querys('SELECT *from personnel inner join login on numpers=matricule where type=:type', array('type'=>'Administrateur General'));
+      }else{
+        $pers1=$DB->querys('SELECT *from personnel inner join login on numpers=matricule where type=:type', array('type'=>'Directeur Général'));
+      }
 
       if ($fiche['nomf']=='college') {
         $pers2=$DB->querys('SELECT *from personnel inner join login on numpers=matricule where type=:type', array('type'=>'DE/Censeur'));

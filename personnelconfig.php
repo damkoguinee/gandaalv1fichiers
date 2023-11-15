@@ -125,31 +125,20 @@ if (isset($_SESSION['pseudo'])) {
 													<option value="coordinatrice maternelle">Coordinatrice Maternelle</option>
 													<option value="monitrice">Monitrice</option>
 													<option value="proviseur">Proviseur</option>
-													<option value="DE/Censeur">Directeur des etudes</option>
+													<option value="DE/Censeur">Directeur des études</option>
 													<option value="Conseille a l'éducation">Conseiller à l'éducation</option>
-
 													<option value="bibliothecaire">Bibliothécaire</option>
-													<option value="comptable">Comptable</option>
-													
+													<option value="comptable">Comptable</option>													
 													<option value="surveillant Général">Surveillant Général</option>
-
 													<option value="électricien">Electricien</option>
 													<option value="technicien de surface">Technicien de Surface</option>
-
 													<option value="vigile">Vigile</option>
-
 													<option value="conseiller pédogogique">Conseiller Pédagogique</option>
-
 													<option value="informaticien">Informaticien</option>
-
 													<option value="cuisinier">Cuisinier</option>
-
 													<option value="aide maitresse">Aide Maitresse</option>
-
 													<option value="gardien">Gardien</option>
-
 													<option value="chauffeur">Chauffeur</option>
-
 													<option value="hygieniste">Hygièniste</option>
 												</select>
 												<input type="hidden" name="matricule" value="<?=$formation->matricule;?>"/>

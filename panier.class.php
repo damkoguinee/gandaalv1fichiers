@@ -430,6 +430,39 @@ class panier{
 	  	return $moisbul;
 	}
 
+	public function module($mois){
+
+		if ($mois==1) {
+	      $module='Module 3';
+	    }elseif ($mois==2) {
+	    	$module='Module 4';
+	  	}elseif ($mois==3) {
+	    	$module='Module 4';
+	  	}elseif ($mois==4) {
+	    	$module='Module 5';
+	  	}elseif ($mois==5) {
+	    	$module='Module 6';
+	  	}elseif ($mois==6) {
+	    	$module='Module 6';
+	  	}elseif ($mois==7) {
+	    	$module='Juillet';
+	  	}elseif ($mois==8) {
+	    	$module='Août';
+	  	}elseif ($mois==9) {
+	    	$module='Module 1';
+	  	}elseif ($mois==10) {
+	    	$module='Module 1';
+	  	}elseif ($mois==11) {
+	    	$module='Module 2';
+	  	}elseif ($mois==12) {
+	    	$module='Module 2';
+	  	}else{
+	  		$module='Janvier';
+	  	}
+
+	  	return array($module);
+	}
+
 	public function listeClasse(){		
 		$prodgroup=$this->DB->query('SELECT * from groupe where promo=:promo order by(nomgr)', array('promo'=>$_SESSION['promo']));
 		return $prodgroup;

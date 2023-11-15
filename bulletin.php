@@ -444,11 +444,11 @@ if (isset($_SESSION['pseudo'])) {
                         foreach ($prodevoir as $devoir) {?>
 
                             <div class="col">
-                                <table class="table table-bordered table-hover align-middle" style="width: 20px;">
+                                <table class="table table-bordered table-hover align-middle">
                                     <thead class="sticky-top text-center ">
                                             
                                         <tr>
-                                            <th height="80" ><?php if (strlen($devoir->nommat)>=1000) {
+                                            <th height="80" style="font-size: 14px;"><?php if (strlen($devoir->nommat)>=1000) {
                                                 echo ucwords($devoir->codem);
                                             }else{
                                                 echo ucwords($devoir->nommat);
