@@ -466,14 +466,14 @@ if (isset($_SESSION['pseudo'])) {
 							$DB->insert('UPDATE inscription SET nomgr= ? WHERE matricule = ? and annee= ?', array($_GET['modifclasse'], $_GET['elevecl'], $_SESSION['promo']));
 						}
 
-						$prodm=$DB->query('SELECT  nomel, prenomel, adresse, sexe, pere, mere, DATE_FORMAT(naissance, \'%d/%m/%Y\') AS naissance, inscription.matricule as matricule, nomgr, phone, codef from inscription inner join eleve on eleve.matricule=inscription.matricule inner join contact on contact.matricule=inscription.matricule where inscription.nomgr=:code and annee=:promo order by(prenomel) ', array('code'=>$_SESSION['voir_elg'], 'promo'=>$_SESSION['promo']));
+						$prodm=$DB->query('SELECT  Etatscol as etat, nomel, prenomel, adresse, sexe, pere, mere, DATE_FORMAT(naissance, \'%d/%m/%Y\') AS naissance, inscription.matricule as matricule, nomgr, phone, codef from inscription inner join eleve on eleve.matricule=inscription.matricule inner join contact on contact.matricule=inscription.matricule where inscription.nomgr=:code and annee=:promo order by(prenomel) ', array('code'=>$_SESSION['voir_elg'], 'promo'=>$_SESSION['promo']));
 
 						$prodf=$DB->querys('SELECT nomgr from groupe  where nomgr=:code', array('code'=>$_SESSION['voir_elg']));?>
 						
 						<table class="table table-bordered table-striped table-hover align-middle my-2">
 				    		<thead>
 				    			<tr>
-				    				<th colspan="5" class="info">Liste des <?=$_SESSION['typeel'].' en '.$prodf['nomgr'];?> <a class="btn btn-info" href="printdoc.php?voir_elg=<?=$prodf['nomgr'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a></th>
+				    				<th colspan="6" class="info">Liste des <?=$_SESSION['typeel'].' en '.$prodf['nomgr'];?> <a class="btn btn-info" href="printdoc.php?voir_elg=<?=$prodf['nomgr'];?>" target="_blank"><img  style="height: 20px; width: 20px;" src="css/img/pdf.jpg"></a></th>
 				    			</tr>
 
 								<tr>
@@ -482,6 +482,7 @@ if (isset($_SESSION['pseudo'])) {
 									<th>Prénom & Nom</th>
 									<th>Né(e)</th>
 									<th>Téléphone</th>
+									<th>Statut</th>
 									<th>Modif Classe</th>
 									<th></th>
 								</tr>
@@ -493,21 +494,29 @@ if (isset($_SESSION['pseudo'])) {
 									# code...
 								}else{
 
-									foreach ($prodm as $key=> $formation) {?>
+									foreach ($prodm as $key=> $formation) {
+										if ($formation->etat == 'inactif') {
+											$color = "danger";
+										}else{
+											$color = "";
+										}
+										?>
 
 										<form class="form" method="GET" action="formation.php"> 
 											<tr>
-												<td style="text-align: center;"><?=$key+1;?></td>									
+												<td class="text-<?=$color;?>" style="text-align: center;"><?=$key+1;?></td>									
 
-												<td><?=$formation->matricule;?><input type="hidden" name="elevecl" value="<?=$formation->matricule;?>"></td>
+												<td class="text-<?=$color;?>"><?=$formation->matricule;?><input type="hidden" name="elevecl" value="<?=$formation->matricule;?>"></td>
 
-												<td><?=ucfirst(strtolower($formation->prenomel)).' '.strtoupper($formation->nomel);?></td>
+												<td class="text-<?=$color;?>"><?=ucfirst(strtolower($formation->prenomel)).' '.strtoupper($formation->nomel);?></td>
 
-												<td><?=$formation->naissance;?></td>
+												<td class="text-<?=$color;?>"><?=$formation->naissance;?></td>
 
-												<td><?=$formation->phone;?></td>
+												<td class="text-<?=$color;?>"><?=$formation->phone;?></td>
 
-												<td><select class="form-select" name="modifclasse" onchange="this.form.submit()
+												<td class="text-<?=$color;?>"><?=$formation->etat;?></td>
+
+												<td class="text-<?=$color;?>"><select class="form-select" name="modifclasse" onchange="this.form.submit()
 												">
 
 												<option value="<?=$formation->nomgr;?>"><?=$formation->nomgr;?></option><?php

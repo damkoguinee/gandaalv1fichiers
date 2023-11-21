@@ -215,11 +215,11 @@ if (isset($_SESSION['pseudo'])) {
                                     </thead>
 
                                         <tbody><?php
-
+                                             $etat='actif';
 
                                             if (isset($_POST['groupe'])) {
 
-                                                $prodelevenote=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel, adresse, DATE_FORMAT(naissance, \'%Y\')AS naissance, phone, classe, formation.codef as codef, nomf, remise from inscription inner join eleve on eleve.matricule=inscription.matricule inner join contact on inscription.matricule=contact.matricule inner join formation on inscription.codef=formation.codef where  nomgr=:nom and annee=:promo order by (matricule)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                                                $prodelevenote=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel, adresse, DATE_FORMAT(naissance, \'%Y\')AS naissance, phone, classe, formation.codef as codef, nomf, remise from inscription inner join eleve on eleve.matricule=inscription.matricule inner join contact on inscription.matricule=contact.matricule inner join formation on inscription.codef=formation.codef where  nomgr=:nom and etatscol=:etat and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'etat'=>$etat, 'promo'=>$_SESSION['promo']));
 
                                             }elseif (isset($_GET['termec'])) {
 
@@ -233,7 +233,7 @@ if (isset($_SESSION['pseudo'])) {
                                               
                                             }else{
 
-                                                $prodelevenote=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel, adresse, DATE_FORMAT(naissance, \'%Y\')AS naissance, phone, classe, formation.codef as codef, nomf, remise from inscription inner join eleve on eleve.matricule=inscription.matricule inner join contact on inscription.matricule=contact.matricule inner join formation on inscription.codef=formation.codef where annee=:promo order by (matricule)', array('promo'=>$_SESSION['promo']));
+                                                $prodelevenote=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel, adresse, DATE_FORMAT(naissance, \'%Y\')AS naissance, phone, classe, formation.codef as codef, nomf, remise from inscription inner join eleve on eleve.matricule=inscription.matricule inner join contact on inscription.matricule=contact.matricule inner join formation on inscription.codef=formation.codef where annee=:promo and etatscol=:etat order by (prenomel)', array('promo'=>$_SESSION['promo'], 'etat'=>$etat));
 
                                             }
 
@@ -270,7 +270,7 @@ if (isset($_SESSION['pseudo'])) {
 
                                                             <td style="text-align: center;"><a href="comptabilite.php?eleve=<?=$eleve->matricule;?>"><?=$eleve->matricule;?></a></td>
 
-                                                            <td><?=ucfirst($eleve->prenomel).' '.strtoupper($eleve->nomel);?></td>
+                                                            <td class="text-start"><?=ucfirst($eleve->prenomel).' '.strtoupper($eleve->nomel);?></td>
 
                                                             <td style="text-align: center;"><?=ucwords($eleve->phone);?></td><?php
 
@@ -339,7 +339,7 @@ if (isset($_SESSION['pseudo'])) {
 
                                                                 <td style="text-align: center;"><a href="comptabilite.php?eleve=<?=$eleve->matricule;?>"><?=$eleve->matricule;?></a></td>
 
-                                                                <td><?=ucfirst($eleve->prenomel).' '.strtoupper($eleve->nomel);?></td>
+                                                                <td class="text-start"><?=ucfirst($eleve->prenomel).' '.strtoupper($eleve->nomel);?></td>
 
                                                                 <td style="text-align: center;"><?=ucwords($eleve->phone);?></td><?php
 

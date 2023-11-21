@@ -24,13 +24,11 @@
 			<div class="row align-items-center py-1" style="margin: auto; margin-top: 1rem; width:80%; background-image: url('img/fond.jpg');">
 
 				<div class="row my-1">
-		          <a style="text-decoration: none" href="table.php?surplace">
-		              <div class="card m-auto" style="width: 8rem;">
-		                <img src="css/img/gandaal.jpg" class="card-img-top m-auto" alt="..." style="width: 6rem; height: 6rem">
-		                <div class="card-bod m-auto text-center">
-		                </div>
-		              </div>
-		          </a>
+		          
+					<div class="card m-auto" style="width: 8rem;">
+						<img src="css/img/gandaal.jpg" class="card-img-top m-auto" alt="..." style="width: 6rem; height: 6rem">
+					</div>
+		          
 		        </div>
 
 				<div  style="background-color: #253553; color: white; display:flex; justify-content:space-around;align-items: center; ">

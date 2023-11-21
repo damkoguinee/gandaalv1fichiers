@@ -196,7 +196,7 @@ body{
                     }
     
 
-                    $prodac=$DB->querys('SELECT montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$numeen, 'datet'=>$_SESSION['mois'], 'promo'=>$_SESSION['promo']));
+                    $prodac=$DB->querys('SELECT sum(montant) as montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$numeen, 'datet'=>$_SESSION['mois'], 'promo'=>$_SESSION['promo']));
 
                     if (empty($prodac)) {
                         $accompte=0;

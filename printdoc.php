@@ -635,16 +635,16 @@ body{
 
   if (isset($_GET['voir_elg'])) {
 
-    $prodm=$DB->query('SELECT  nomel, prenomel, adresse, sexe, pere, mere, DATE_FORMAT(naissance, \'%d/%m/%Y\') AS naissance, inscription.matricule as matricule, nomgr, classe, nomf from inscription inner join eleve on eleve.matricule=inscription.matricule inner join formation on inscription.codef=formation.codef where inscription.nomgr=:code and annee=:promo order by(prenomel)', array('code'=>$_GET['voir_elg'], 'promo'=>$_SESSION['promo']));
+    $prodm=$DB->query('SELECT  Etatscol as etat, nomel, prenomel, adresse, sexe, pere, mere, DATE_FORMAT(naissance, \'%d/%m/%Y\') AS naissance, inscription.matricule as matricule, nomgr, classe, nomf from inscription inner join eleve on eleve.matricule=inscription.matricule inner join formation on inscription.codef=formation.codef where inscription.nomgr=:code and annee=:promo order by(prenomel)', array('code'=>$_GET['voir_elg'], 'promo'=>$_SESSION['promo']));
 
     $prodf=$DB->querys('SELECT nomgr from groupe  where nomgr=:code', array('code'=>$_GET['voir_elg']));?>
 
         
-    <table class="tablistel">
+    <table class="tablistel" style="margin: auto;">
 
       <thead>
 
-        <tr><th colspan="6" height="15"><?=$_SESSION['typeel'];?> de <?=$prodf['nomgr'];?> Année-Scolaire <?=($_SESSION['promo']-1).'-'. $_SESSION['promo'];?></th></tr>
+        <tr><th colspan="7" height="15"><?=$_SESSION['typeel'];?> de <?=$prodf['nomgr'];?> Année-Scolaire <?=($_SESSION['promo']-1).'-'. $_SESSION['promo'];?></th></tr>
 
         <tr>
           <th height="25"></th>
@@ -653,6 +653,7 @@ body{
           <th>Né(e)</th>
           <th>Sexe</th>
           <th>Filation</th>
+          <th>Statut</th>
         </tr>
 
       </thead>
@@ -664,21 +665,26 @@ body{
         }else{
 
 
-          foreach($prodm as $key=>$payeloc ){?>
+          foreach($prodm as $key=>$payeloc ){
+            if ($payeloc->etat == 'inactif') {
+              $color = "red";
+            }else{
+              $color = "";
+            }?>
 
             <tr>
 
-              <td height="15" style="text-align: center;"><?=$key+1;?></td>
+              <td height="15" style="text-align: center; color: <?=$color;?>"><?=$key+1;?></td>
 
-              <td style="text-align: center;"><?=$payeloc->matricule;?></td>
+              <td style="text-align: center; color: <?=$color;?> ;"><?=$payeloc->matricule;?></td>
 
-              <td><?=ucfirst($payeloc->prenomel).' '.strtoupper($payeloc->nomel);?></td>              
+              <td style="color: <?=$color;?>;"><?=ucfirst($payeloc->prenomel).' '.strtoupper($payeloc->nomel);?></td>              
 
-              <td style="text-align: center;"><?=$payeloc->naissance;?></td>
+              <td style="text-align: center; color: <?=$color;?>;"><?=$payeloc->naissance;?></td>
 
-              <td style="text-align: center;"><?=strtoupper($payeloc->sexe);?></td>
-
-              <td><?=ucwords($payeloc->pere).' et '.ucwords(strtolower($payeloc->mere));?></td>
+              <td style="text-align: center; color: <?=$color;?>;"><?=strtoupper($payeloc->sexe);?></td>              
+              <td style="color: <?=$color;?>;"><?=ucwords($payeloc->pere).' et '.ucwords(strtolower($payeloc->mere));?></td>
+              <td style="text-align: center; color: <?=$color;?>;"><?=ucfirst($payeloc->etat);?></td>
 
             </tr><?php
           }
