@@ -344,20 +344,10 @@ if (isset($_SESSION['pseudo'])) {
 								</ol>
 							</fieldset><?php
 
-							if ($_SESSION['niveaupers']>=4) {
-
-								if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
+							if ($_SESSION['niveaupers']>=4) {?>
 									<button class="btn btn-primary"  type="submit" name="ajoutel" onclick="return alerteV();">Valider</div><?php
 
-								}else{?>
-
-									<div class="alert alert-warning">Les inscriptions sont fermées contacter le chef d'établissement </div>
-
-									<div class="alert alert-warning">OU</div>
-
-									<div class="alert alert-warning">la licence est expirée contacter DAMKO </div><?php
-
-								}
+								
 							}?>
 
 							

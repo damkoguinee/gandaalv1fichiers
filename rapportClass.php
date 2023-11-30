@@ -139,9 +139,9 @@ class Rapport
 			$fraisins=$this->fraisins(5,"inscription")['montant'];
 		}else{
 			if ($prod['niveau']=='creche') {
-				$fraisins=$this->fraisins(1,"inscription")['montant'];
+				$fraisins=$this->fraisins(1,"reinscription")['montant'];
 			}elseif ($prod['niveau']=='maternelle') {
-				$fraisins=$this->fraisins(2,"inscription")['montant'];
+				$fraisins=$this->fraisins(2,"reinscription")['montant'];
 			}elseif ($prod['niveau']=='primaire') {
 				$fraisins=$this->fraisins(3,"reinscription")['montant'];
 			}elseif ($prod['niveau']=='college') {

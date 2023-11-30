@@ -548,22 +548,10 @@ if (isset($_SESSION['pseudo'])) {
 												</li>
 											</ol><?php
 
-											if ($panier->users($_SESSION['matricule'])['niveau']>1) {
+											if ($panier->users($_SESSION['matricule'])['niveau']>1) {?>
 
-												if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
-
-													<input type="reset" value="Annuler" name="annuldec" />
-													<input  type="submit" value="Valider" name="ajoutel" onclick="return alerteV();" /><?php
-
-												}else{?>
-
-													<div class="alert alert-warning">Les inscriptions sont fermées contacter le chef d'établissement </div>
-
-													<div class="alert alert-warning">OU</div>
-
-													<div class="alert alert-warning">la licence est expirée contacter DAMKO </div><?php
-
-												}
+												<input type="reset" value="Annuler" name="annuldec" />
+												<input  type="submit" value="Valider" name="ajoutel" onclick="return alerteV();" /><?php
 											}?>
 										</fieldset>
 
@@ -870,22 +858,10 @@ if (isset($_SESSION['pseudo'])) {
 												</li>
 											</ol><?php
 
-											if ($panier->users($_SESSION['matricule'])['niveau']>1) {
-
-												if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
+											if ($panier->users($_SESSION['matricule'])['niveau']>1) {?>
 
 													<input type="reset" value="Annuler" name="annuldec" />
 													<input  type="submit" value="Valider" name="ajoutel" onclick="return alerteV();" /><?php
-
-												}else{?>
-
-													<div class="alert alert-warning">Les inscriptions sont fermées contacter le chef d'établissement </div>
-
-													<div class="alert alert-warning">OU</div>
-
-													<div class="alert alert-warning">la licence est expirée contacter DAMKO </div><?php
-
-												}
 											}?>
 										</fieldset>
 

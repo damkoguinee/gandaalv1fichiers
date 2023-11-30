@@ -298,21 +298,11 @@ if (isset($_GET['enseignant'])) {
 
 				</fieldset><?php
 
-					if ($products['niveau']>3) {
-
-						if ($panier->licence()!="expiree" and $panier->cloture()!='cloturer') {?>
+					if ($products['niveau']>3) {?>
 
 							<input type="reset" value="Annuler" name="annuldec" style="cursor: pointer;" /><input type="submit" value="Valider" name="ajouteins" onclick="return alerteV();" style="margin-left: 30px; cursor: pointer;"/><?php
 
-						}else{?>
-
-							<div class="alert alert-warning">Les inscriptions sont fermées contacter le chef d'établissement </div>
-
-							<div class="alert alert-warning">OU</div>
-
-							<div class="alert alert-warning">la licence est expirée contacter DAMKO </div><?php
-
-						}
+						
 					}?>
 					
 				</fieldset>

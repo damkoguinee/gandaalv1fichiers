@@ -11,7 +11,9 @@
 
 	<body><?php
 		$product = $DB->querys('SELECT num_licence, nom_societe, DATE_FORMAT(date_souscription, \'%d/%m/%Y\') AS datesouscript, DATE_FORMAT(date_fin, \'%d/%m/%Y\') AS datefin, date_fin FROM licence');?>
-		<div class="container-fluid"><?php
+		<div class="container-fluid">
+			
+			<!-- <?php
 
 			if ($panier->licence()=="expiree") {?>
 				<div class="alert alert-warning" style="font-size: 20px; color: black;">Licence expirée contacter la société gestionnaire</div><?php	
@@ -20,7 +22,7 @@
 				if ($panier->licencea()<0 and $panier->licencea()>=-2) {?>
 					<div class="alert alert-warning" style="font-size: 20px; color: black;">Votre licence expire dans moins de <?=-$panier->licencea();?> mois</div><?php	
 				}
-			}?>
+			}?> -->
 			<div class="row align-items-center py-1" style="margin: auto; margin-top: 1rem; width:80%; background-image: url('img/fond.jpg');">
 
 				<div class="row my-1">
@@ -88,7 +90,7 @@
 		            <div class="col">Email:gestcomdev@gmail.com</div>
 		            <div class="col">Numéro licence: <?= $product['num_licence']; ?> </div>
 		            <div class="col">Date de souscription: <?= $product['datesouscript']; ?> </div>
-		            <div class="col" style="color: red;">Valable jusqu'au: <?= $product['datefin']; ?> à 23H59</div>
+		            <!-- <div class="col" style="color: red;">Valable jusqu'au: <?= $product['datefin']; ?> à 23H59</div> -->
 		            <div class="copyright"><img src="img/copyright.jpg" height="40"> </div>	
 		        </div>
 	    	</div>    	
