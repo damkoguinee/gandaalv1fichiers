@@ -176,7 +176,7 @@ if (isset($_GET['etatsalairens'])) {
 
                     foreach ($prodm as $key=>$formation) {
 
-                        $prodac=$DB->querys('SELECT montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$formation->matricule, 'datet'=>$_GET['mois'], 'promo'=>$_SESSION['promo']));
+                        $prodac=$DB->querys('SELECT sum(montant) as montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$formation->matricule, 'datet'=>$_GET['mois'], 'promo'=>$_SESSION['promo']));
 
                         if (empty($prodac)) {
                         $accompte=0;
@@ -268,7 +268,7 @@ if (isset($_GET['etatsalairepers'])) {
 
                             foreach ($prodm as $key=>$formation) {
 
-                                $prodac=$DB->querys('SELECT montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$formation->matricule, 'datet'=>$_GET['mois'], 'promo'=>$_SESSION['promo']));
+                                $prodac=$DB->querys('SELECT sum(montant) as montant from accompte where matricule=:mat and mois=:datet and anneescolaire=:promo', array('mat'=>$formation->matricule, 'datet'=>$_GET['mois'], 'promo'=>$_SESSION['promo']));
 
                                 if (empty($prodac)) {
                                 $accompte=0;

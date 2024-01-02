@@ -93,6 +93,8 @@ require '_header.php'
     //   }
     // }
 
+  
+
     $products = $DB->querys('SELECT type, matricule, niveau FROM login WHERE pseudo= :PSEUDO',array('PSEUDO'=>$_SESSION['pseudo']));
 
     if (isset($_SESSION['pseudo'])) {

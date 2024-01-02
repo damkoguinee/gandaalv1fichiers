@@ -38,6 +38,26 @@ $DB->insert("CREATE TABLE IF NOT EXISTS `".$bdd."`(
 PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ");
 
+$bdd='just_absence_journee'; 
+$DB->insert("CREATE TABLE IF NOT EXISTS `".$bdd."`(
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`id_absence` int(10) NOT NULL,
+`matricule` varchar(50) NOT NULL,
+`motif` varchar(150) NOT NULL,
+`datejust` datetime NOT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ");
+
+$bdd='just_retard_journee'; 
+$DB->insert("CREATE TABLE IF NOT EXISTS `".$bdd."`(
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`id_absence` int(10) NOT NULL,
+`matricule` varchar(50) NOT NULL,
+`motif` varchar(150) NOT NULL,
+`datejust` datetime NOT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ");
+
 
 if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']) or isset($_GET['appelj'])) {
     $dateabs = date('Y-m-d');
@@ -121,15 +141,22 @@ if (isset($_POST['nheure']) or isset($_POST['matr']) or isset($_GET['modif_dev']
             <tr>
                 <form action="?appelj" class="form bg-secondary" method="POST">
                     <th class="bg-secondary" colspan="5">
-                        <select name="journee" id="" class="form-select" onchange="this.form.submit()"><?php 
-                            if (empty($_SESSION['journee'])) {?>
-                                <option value="">Selectionnez une période</option><?php
-                            }else{?>
-                                <option value="">Présence du <?=$_SESSION['journee'];?></option><?php
-                            }?>
-                            <option value="matin">Prsence du matin</option>
-                            <option value="soir">Présence du soir</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-8">
+                                <select name="journee" id="" class="form-select" onchange="this.form.submit()"><?php 
+                                    if (empty($_SESSION['journee'])) {?>
+                                        <option value="">Selectionnez une période</option><?php
+                                    }else{?>
+                                        <option value="">Présence du <?=$_SESSION['journee'];?></option><?php
+                                    }?>
+                                    <option value="matin">Prsence du matin</option>
+                                    <option value="soir">Présence du soir</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <a href="liste_absence_journee.php" class="btn btn-warning">Voir la liste</a>
+                            </div>
+                        </div>
                     </th>
                 </form>
             </tr>

@@ -91,9 +91,14 @@ require 'headerv3.php';?>
                                     <option value="ROLE_RESPONSABLE">ROLE_RESPONSABLE</option>
                                     <option value="ROLE_PERSONNEL">ROLE_PERSONNEL</option>
                                     <option value="ROLE_COMPTABLE">ROLE_COMPTABLE</option>
+                                    <option value="ROLE_SCOLARITE">ROLE_SCOLARITE</option>
+                                    <option value="ROLE_PEDAGOGIE">ROLE_PEDAGOGIE</option>
                                     <option value="ROLE_ENSEIGNANT">ROLE_ENSEIGNANT</option>
                                     <option value="ROLE_ELEVE">ROLE_ELEVE</option>
                                     <option value="ROLE_PARENT">ROLE_PARENT</option>
+                                    <option value="ROLE_SUPPRESSION">ROLE_SUPPRESSION</option>
+                                    <option value="ROLE_MODIFICATION">ROLE_MODIFICATION</option>
+                                    <option value="ROLE_AJOUT">ROLE_AJOUT</option>
                                 </select>
 
                             </td>  

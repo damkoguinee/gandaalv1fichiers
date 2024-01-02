@@ -14,13 +14,13 @@
 			
 			$prodtype=$DB->querys('SELECT id, type from repartition  where promo=:promo',array('promo'=>$_SESSION['promo']));
 			if (is_array($prodtype)) {
-			$_SESSION['prodtype']=$prodtype['type'];
-	
-			$typerepart=ucfirst($prodtype['type']);
+				$_SESSION['prodtype']=$prodtype['type'];
+		
+				$typerepart=ucfirst($prodtype['type']);
 			}else{
-			$_SESSION['prodtype']="semestre";
-	
-			$typerepart=ucfirst("semestre");
+				$_SESSION['prodtype']="semestre";
+		
+				$typerepart=ucfirst("semestre");
 	
 			}
 		}

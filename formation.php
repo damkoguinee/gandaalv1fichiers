@@ -80,6 +80,7 @@ if (isset($_SESSION['pseudo'])) {
 									<input type="text" name="nomf" required="" placeholder="par exple: F Scientifique" class="form-control"/>
 
 								</div>
+
 								<button class="btn btn-primary" type="submit" name="ajoutef" onclick="return alerteV();">Ajouter</button>
 
 							</form><?php
@@ -126,9 +127,8 @@ if (isset($_SESSION['pseudo'])) {
 									<tr>
 										<th colspan="4" class="text-center">Liste des Formations</th>
 
-										<th colspan="3"><?php 
-
-											if ( $panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") {?><a class="btn btn-warning" href="formation.php?ajout_f" class="btn btn-warning">Ajouter une formation</a><?php }?>
+										<th colspan="3"><?php
+											if ( (($panier->searchRole("ROLE_DEV")=="true" OR $panier->searchRole("ROLE_ADMIN")=="true" OR $panier->searchRole("ROLE_RESPONSABLE")=="true") and $panier->searchRole("ROLE_AJOUT")=="true" )) {?><a class="btn btn-warning" href="formation.php?ajout_f" class="btn btn-warning">Ajouter une formation</a><?php }?>
 										</th>
 									</tr>
 															

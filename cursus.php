@@ -19,7 +19,7 @@ if (isset($_SESSION['pseudo'])) {
 
 							    <legend>Ajouter un cursus scolaire</legend>
 								<div class="row mb-1">	
-									<label class="form-label px-0">Nom du Cursus</label>
+						.			<label class="form-label px-0">Nom du Cursus</label>
 									<select class="form-select" type="text" name="cursus" required="">
 										<option></option>
 										<option value="creche">Crèche</option>
