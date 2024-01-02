@@ -3,7 +3,7 @@ require 'headerv2.php';
 
 if (isset($_SESSION['pseudo'])) {
     
-    if ($products['niveau']<4) {?>
+    if ($products['niveau']<1) {?>
 
         <div class="alertes">Des autorisations sont requises pour consulter cette page</div><?php
 
