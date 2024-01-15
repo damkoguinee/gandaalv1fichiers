@@ -254,7 +254,7 @@ class Rapport
 
 	public function nbreEnseignant(){
 
-		$prod=$this->DB->querys("SELECT count(id) as nbre FROM enseignant");
+		$prod=$this->DB->querys("SELECT count(enseignant.id) as nbre FROM enseignant inner join enseignantencours on enseignant.matricule=matriculens where promo='{$_SESSION['promo']}' ");
 
 		return $prod['nbre'];
 
