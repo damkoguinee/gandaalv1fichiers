@@ -218,7 +218,7 @@ class Rapport
 
 	public function nbrePersonnel(){
 
-		$prod=$this->DB->querys("SELECT count(id) as nbre FROM personnel ");
+		$prod=$this->DB->querys("SELECT count(personnel.id) as nbre FROM personnel inner join personnelencours on numpers=matriculens where promo='{$_SESSION['promo']}' ");;
 
 		return $prod['nbre'];
 
@@ -307,7 +307,7 @@ class Rapport
 
 	public function inscriptionTotal($promo){
 
-		$prod=$this->DB->querys("SELECT sum(montant) as montant FROM payement inner join inscription on payement.matricule=inscription.matricule where annee='{$promo}' and promo='{$promo}'");
+		$prod=$this->DB->querys("SELECT sum(montant) as montant FROM payement inner join inscription on payement.matricule=inscription.matricuensele where annee='{$promo}' and promo='{$promo}'");
 
 		return $prod['montant'];
 
