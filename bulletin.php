@@ -547,7 +547,6 @@ if (isset($_SESSION['pseudo'])) {
                                                 </tr><?php // Recupération du nbre des élèves ayant été evalués
                                                 if (!empty($note->id)) {
                                                     $prodmoymat=$DB->querys('SELECT count(matricule) as coef from effectifn where codev=:code and nomgr=:nom and promo=:promo', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
-
                                                     array_push($tabcoef1, $prodmoymat['coef']);
                                                 }
 
@@ -559,6 +558,7 @@ if (isset($_SESSION['pseudo'])) {
 
 
                                         if ($prodmoymat['coef']!=0) {
+                                            
                                             $totalMoyenneGenerale+=$moyenne/($prodmoymat['coef']);?>
                                             
                                             <tr>
@@ -616,13 +616,14 @@ if (isset($_SESSION['pseudo'])) {
                                                     if (!empty($coefm1)) {
 
                                                         $moyenmat=($totm1/$coefm1);
-                                                        $moyengenerale+=$moyenmat;?>
+                                                        $moyengenerale+=$moyenmat;
+                                                        ?>
                                                         
-                                                        <td height="45"><?=number_format($totm1/$coefm1,2,',',' ');?></td><?php
+                                                        <td height="45" class="text-end" ><?=number_format($totm1/$coefm1,2,',',' ');?></td><?php
 
                                                     }else{?>
 
-                                                        <td height="45" style="color:white;">neval</td><?php
+                                                        <td height="45" class="text-end" style="color:white;">neval</td><?php
 
                                                     }?>
                                                 </tr><?php

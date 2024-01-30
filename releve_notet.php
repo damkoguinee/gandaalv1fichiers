@@ -24,8 +24,8 @@ if ($_SESSION['niveauclasse']!='primaire') {
 }else{
 
   if ($nbremat<=13) {
-    $height='15px';
-    $padding='5px';
+    $height='10px';
+    $padding='2px';
   }else{
     $height='10px';
     $padding='0px';

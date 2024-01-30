@@ -41,10 +41,11 @@ foreach ($prodevoir as $devoir) {
             }
 
             if (!empty($compo) and !empty($cours)) {
-
                 if ($_SESSION['niveauclasse']=='primaire') {
 
                         $generale=($compo); //Moyenne eleve
+
+                        var_dump($generale);
                 }else{
 
                     $generale=($cours+2*$compo)/3; //Moyenne eleve
@@ -54,12 +55,10 @@ foreach ($prodevoir as $devoir) {
             }elseif (!empty($note->compo)) {
                 
                 $generale=$compo;
-            }
-            else{
+            }else{
                 $generale=($cours); //Moyenne eleve
 
             }
-
             if (isset($_POST['mois'])) {
                 if (!empty($note->compo)) {
                     $generale=($compo); //Moyenne eleve
@@ -81,8 +80,8 @@ foreach ($prodevoir as $devoir) {
 
     //$maxcoef1=max($tabcoef1);
     //var_dump($prodmoymat['coef']);
-
-
+    
+    
     if ($prodmoymat['coef']!=0) {
         $totalMoyenneGenerale+=$moyenne/($prodmoymat['coef']);
     }

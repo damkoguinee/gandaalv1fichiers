@@ -516,17 +516,20 @@ if (isset($_SESSION['pseudo'])) {
 
 												<td class="text-<?=$color;?>"><?=$formation->etat;?></td>
 
-												<td class="text-<?=$color;?>"><select class="form-select" name="modifclasse" onchange="this.form.submit()
-												">
+												<td class="text-<?=$color;?>"><?php 
+													if ($_SESSION['type']=="admin") {?>
+														<select class="form-select" name="modifclasse" onchange="this.form.submit()">
 
-												<option value="<?=$formation->nomgr;?>"><?=$formation->nomgr;?></option><?php
-													$codef=$formation->codef;
-													foreach ($panier->classeStat($codef, $_SESSION['promo']) as $value) {?>
+															<option value="<?=$formation->nomgr;?>"><?=$formation->nomgr;?></option><?php
+															$codef=$formation->codef;
+															foreach ($panier->classeStat($codef, $_SESSION['promo']) as $value) {?>
+																
+																<option value="<?=$value->nomgr;?>"><?=strtoupper($value->nomgr);?></option><?php
+															}?>
 														
-														<option value="<?=$value->nomgr;?>"><?=strtoupper($value->nomgr);?></option><?php
+														</select><?php 
 													}?>
-													
-												</select></td>
+												</td>
 
 												<td colspan="2">
 
