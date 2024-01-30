@@ -2,7 +2,7 @@
 
 $prodgr=$DB->querys('SELECT codef from  groupe where nomgr=:nom and promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
-$prodevoir=$DB->query('SELECT nommat, matiere.codem as codem, coef from  matiere inner join enseignement on enseignement.codem=matiere.codem where matiere.codef=:nom and nomgr=:nomgr and promo=:promo order by(cat)', array('nom'=>$prodgr['codef'], 'nomgr'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+$prodevoir=$DB->query('SELECT nommat, matiere.codem as codem, coef from  matiere inner join enseignement on enseignement.codem=matiere.codem where coef!=:coef and matiere.codef=:nom and nomgr=:nomgr and promo=:promo order by(cat)', array('coef' => 0, 'nom'=>$prodgr['codef'], 'nomgr'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 $nbreMat=sizeof($prodevoir);
 $totalMoyenneGenerale=0;
 foreach ($prodevoir as $devoir) {
