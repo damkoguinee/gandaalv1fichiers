@@ -198,9 +198,9 @@ if (isset($_GET['trimestre'])) {
           require 'entetebul.php';
 
           if ($_GET['semestre']==1) {
-            $trimestre=strtoupper($_GET['semestre']).'er '.strtoupper($_GET['trimestre']);
+            $trimestre=strtoupper($_GET['semestre']).'<sup>er</sup> '.strtoupper($_GET['trimestre']);
           }else{
-            $trimestre=strtoupper($_GET['semestre']).'ème '.strtoupper($_GET['trimestre']);
+            $trimestre=strtoupper($_GET['semestre']).'<sup>ème</sup> '.strtoupper($_GET['trimestre']);
           }
 
           $fiche=$DB->querys('SELECT eleve.matricule as mat, nomel, prenomel, pere, telpere, mere, telmere, date_format(naissance,\'%d/%m/%Y \') as naiss, phone, email , annee, nomf, classe, nomgr from eleve inner join contact on eleve.matricule=contact.matricule inner join inscription on eleve.matricule=inscription.matricule inner join formation on inscription.codef=formation.codef where eleve.matricule=:mat and annee=:promo', array('mat'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));?>

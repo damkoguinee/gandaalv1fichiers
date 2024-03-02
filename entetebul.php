@@ -39,6 +39,6 @@
   </table>
 </div>
 
-<div style="width: 90%; padding-top: 5px; padding-bottom: 0px; font-size: 15px; font-weight: bold; margin: auto; margin-top: -15px; background-color: white; color: grey; text-align: center;"><?=strtoupper($etab['nom']);?></div>
+<div style="width: 90%; padding-top: 5px; padding-bottom: 0px; font-size: 15px; font-weight: bold; margin-top: -15px; background-color: white; color: grey; text-align: center;"><?=strtoupper($etab['nom']);?></div>
 
-<div style="margin-left: 320px; color: #717375; font-size: 10px;"><?=$etab['devise'];?></div>
+<div style="margin-left: 350px; color: #717375; font-size: 10px;"><?=$etab['devise'];?></div>
