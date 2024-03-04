@@ -43,6 +43,8 @@
               $classe_syntaxe = "Terminale Sciences Expérimentales";
             }elseif ($fiche['nomgr'] == "TSM" ) {
               $classe_syntaxe = "Terminale Sciences Mathématiques";
+            }else{
+              $classe_syntaxe = strtoupper($fiche['nomgr']);
             }?>
 
             <label style="margin-left:49px; margin-top: 5px;">Classe:</label><label style="color: white; background-color: white; margin-top: 5px;">.................</label><label style="margin-top: 5px;"><?=$classe_syntaxe ;?></label><?php
@@ -90,6 +92,8 @@
               $classe_syntaxe = "Terminale Sciences Expérimentales";
             }elseif ($fiche['nomgr'] == "TSM" ) {
               $classe_syntaxe = "Terminale Sciences Mathématiques";
+            }else{
+              $classe_syntaxe = strtoupper($fiche['nomgr']);
             }?>
 
             <label style="margin-left:49px; margin-top: 5px;">Classe:</label><label style="color: white; background-color: white; margin-top: 5px;">.................</label><label style="margin-top: 5px;"><?=$classe_syntaxe ;?></label><?php
