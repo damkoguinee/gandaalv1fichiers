@@ -173,7 +173,7 @@
                                 </div>
 
                                 <div class="col-sm-4 col-md-4">
-                                    <form method="POST" action="payementemployer.php" id="suitec" name="termc">
+                                    <form method="POST" action="payementemployer.php?mois=<?=$_SESSION['moisp'];?>" id="suitec" name="termc">
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-8 col-md-8">
@@ -237,8 +237,7 @@
             }else{
                 $prodm=array();
             }
-
-            if (isset($_GET['mois'])) {
+            if (isset($_GET['mois']) or isset($_POST['termec'])) {
 
                 if ($_GET['mois']<10) {
                     

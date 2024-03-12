@@ -355,15 +355,15 @@ if (isset($_SESSION['pseudo'])) {
 
 				        if (isset($_POST['j1'])) {
 				        	
-				        	$prodm=$DB->query('SELECT id, motif, numdec, montant, coment, typepaye, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye from decaissement where promo=:promo and DATE_FORMAT(datepaye, \'%Y%m%d\') >= :date1 and DATE_FORMAT(datepaye, \'%Y%m%d\') <= :date2 order by(id)desc', array('promo'=>$promotion, 'date1' => $_SESSION['date1'], 'date2' => $_SESSION['date2']));
+				        	$prodm=$DB->query('SELECT id, motif, numdec, montant, coment, typepaye, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye from decaissement where promo=:promo and DATE_FORMAT(datepaye, \'%Y%m%d\') >= :date1 and DATE_FORMAT(datepaye, \'%Y%m%d\') <= :date2 order by(DATE_FORMAT(datepaye, \'%Y%m%d\'))desc', array('promo'=>$promotion, 'date1' => $_SESSION['date1'], 'date2' => $_SESSION['date2']));
 
 				        }elseif(isset($_POST['com'])) {
 				        	
-				        	$prodm=$DB->query('SELECT id, motif, numdec, montant, coment, typepaye, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye from decaissement where promo=:promo and motif=:motif order by(id)desc', array('promo'=>$promotion, 'motif'=>$_POST['com']));
+				        	$prodm=$DB->query('SELECT id, motif, numdec, montant, coment, typepaye, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye from decaissement where promo=:promo and motif=:motif order by(DATE_FORMAT(datepaye, \'%Y%m%d\'))desc', array('promo'=>$promotion, 'motif'=>$_POST['com']));
 
 				        }else{
 
-				        	$prodm=$DB->query('SELECT id, motif, numdec, montant, coment, typepaye, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye from decaissement where promo=:promo order by(id)desc', array('promo'=>$promotion));
+				        	$prodm=$DB->query('SELECT id, motif, numdec, montant, coment, typepaye, DATE_FORMAT(datepaye, \'%d/%m/%Y\')AS datepaye from decaissement where promo=:promo order by(DATE_FORMAT(datepaye, \'%Y%m%d\'))desc', array('promo'=>$promotion));
 				        }?>
 				    
 				    	<table class="table table-hover table-bordered table-striped table-responsive text-center">
