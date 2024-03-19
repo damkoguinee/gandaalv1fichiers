@@ -244,8 +244,8 @@ class Rapport
 
 		$prodprime=$this->DB->querys("SELECT sum(montantp) as salaire FROM primepers where promop='{$promo}' ");
 
-		$salairepaye=$prod['salaire']+$prodavance['salaire']+$prodprime['salaire'];// a revoir
-		$salairepaye=$prod['salaire'];
+		$salairepaye=$prod['salaire']+$prodavance['salaire'];// a revoir
+		// $salairepaye=$prod['salaire'];
 
 		return $salairepaye;
 
@@ -280,14 +280,10 @@ class Rapport
 	public function salairePayeEnseignant($promo){
 
 		$prod=$this->DB->querys("SELECT sum(montant) as salaire FROM payenseignant where anneescolaire='{$promo}' ");
-
 		$prodavance=$this->DB->querys("SELECT sum(montant) as salaire FROM accompte inner join enseignant on enseignant.matricule=accompte.matricule where anneescolaire='{$promo}' ");
-
 		$prodprime=$this->DB->querys("SELECT sum(montantp) as salaire FROM prime where promop='{$promo}' ");
-
-		//$salairepaye=$prod['salaire']+$prodavance['salaire']+$prodprime['salaire']; a revoir
-		$salairepaye=$prod['salaire'];
-
+		$salairepaye=$prod['salaire']+$prodavance['salaire']; 
+		// $salairepaye=$prod['salaire'];
 		return $salairepaye;
 
 	}
