@@ -84,12 +84,12 @@ if (isset($_SESSION['pseudo'])) {
 
 
     
-
+    $etat = 'actif';
     if ((isset($_GET['listad']) or isset($_GET['printnote']) or isset($_POST['semestre']) or isset($_POST['mois'])) and $_SESSION['semestre']!='choisissez le semestre') {
 
-        $prodgr=$DB->querys('SELECT codef from inscription where nomgr=:nom and annee=:promo order by (matricule)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+        $prodgr=$DB->querys('SELECT codef from inscription where etatscol=:etat and nomgr=:nom and annee=:promo order by (matricule)', array('etat'=>$etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
-        $prodmat=$DB->query('SELECT  inscription.matricule as matricule, codef, nomel, prenomel, DATE_FORMAT(naissance, \'%d/%m/%Y\')AS naissance from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+        $prodmat=$DB->query('SELECT  inscription.matricule as matricule, codef, nomel, prenomel, DATE_FORMAT(naissance, \'%d/%m/%Y\')AS naissance from inscription inner join eleve on inscription.matricule=eleve.matricule where etatscol=:etat and nomgr=:nom and annee=:promo order by (prenomel)', array('etat'=>$etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
         $prodmatiere=$DB->query('SELECT nommat, codem, coef from  matiere where codef=:nom order by(cat)', array('nom'=>$prodgr['codef']));
 
@@ -292,7 +292,7 @@ if (!isset($_GET['printnote'])){
                         <th style="height: 5px; padding-top: 5px;">Matricule</th>
                         <th style="height: 5px; padding-top: 5px;">1er Trimestre</th><?php 
                     }elseif ($i>1 and $i <=3) {?>
-                        <th style="height: 5px; padding-top: 5px; width: 70px;"><?=$i;?> ème Trimestre</th><?php
+                        <th style="height: 5px; padding-top: 5px; width: 78px;"><?=$i;?> ème Trimestre</th><?php
                     }elseif ($i==4) {?>
                         <th style="height: 5px; padding-top: 5px;">Annuel</th><?php
                     }?>

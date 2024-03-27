@@ -105,8 +105,10 @@ body{
 </style><?php
 
 if (isset($_GET['listad'])) {
+  $etat = 'actif';
+  // $prodmoyeg=$DB->querys('SELECT count(DISTINCT(matricule)) as coef from effectifn where nomgr=:nom and promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+  $prodmoyeg=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and  effectifn.nomgr=:nom and promo=:promo', array('etat' => $etat, 'annee'=> $_SESSION['promo'], 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
-  $prodmoyeg=$DB->querys('SELECT count(DISTINCT(matricule)) as coef from effectifn where nomgr=:nom and promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
 
             
@@ -116,9 +118,10 @@ if (isset($_GET['listad'])) {
       $nbrele=1;
   }
 
-  $prodmat=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+  // $prodmat=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+  $prodmat=$DB->query('SELECT  inscription.matricule as matricule, nomel, prenomel from inscription inner join eleve on inscription.matricule=eleve.matricule where etatscol=:etat and nomgr=:nom and annee=:promo order by (prenomel)', array('etat' => $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
-  $prodcount=$DB->querys('SELECT count(matricule) as countel, codef from inscription where nomgr=:nom and annee=:promo order by (matricule)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+  $prodcount=$DB->querys('SELECT count(matricule) as countel, codef from inscription where etatscol=:etat and nomgr=:nom and annee=:promo order by (matricule)', array('etat' => $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
   $prodmatiere=$DB->query('SELECT nommat, codem, coef from  matiere where codef=:nom', array('nom'=>$prodcount['codef']));
 

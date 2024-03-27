@@ -4,8 +4,8 @@ require_once "lib/html2pdf.php";
 ob_start(); ?>
 
 <?php require '_header.php';
-$etat = 'actif';
-$prodmat=$DB->querys('SELECT  codef from inscription  where etatscol=:etat and nomgr=:nom and annee=:promo ', array('etat' => $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+
+$prodmat=$DB->querys('SELECT  codef from inscription  where nomgr=:nom and annee=:promo ', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
 $prodmatiere=$DB->query('SELECT nommat, codem, coef, cat from  matiere where codef=:nom order by(cat)', array('nom'=>$prodmat['codef']));
 
@@ -107,7 +107,7 @@ body{
 </style><?php
 
 
-$prodmat=$DB->query('SELECT  inscription.matricule as matricule from inscription inner join eleve on inscription.matricule=eleve.matricule where etatscol=:etat and nomgr=:nom and annee=:promo order by (prenomel)', array('etat' => $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+$prodmat=$DB->query('SELECT  inscription.matricule as matricule from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
 foreach ($prodmat as $eleve) {
 
@@ -176,14 +176,14 @@ if (isset($_GET['mensuel'])) {
 
   }else{
 
-    $prodmat=$DB->query('SELECT  inscription.matricule as matricule from inscription inner join eleve on inscription.matricule=eleve.matricule where etatscol=:etat and nomgr=:nom and annee=:promo order by (prenomel)', array('etat'=> $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+    $prodmat=$DB->query('SELECT  inscription.matricule as matricule from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
   }
 
   //$prodmatcount=$DB->query('SELECT  inscription.matricule as matricule from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
 
   //$count=sizeof($prodmatcount);
 
-  $prodmatcount=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and  effectifn.nomgr=:nom and promo=:promo', array('etat' => $etat, 'annee'=> $_SESSION['promo'], 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+  $prodmatcount=$DB->querys('SELECT count(DISTINCT(matricule)) as coef from effectifn where nomgr=:nom and promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
                 
   if ($prodmatcount['coef']!=0) {
        $count=$prodmatcount['coef'];// nbre élève

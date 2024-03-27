@@ -44,8 +44,6 @@ foreach ($prodevoir as $devoir) {
                 if ($_SESSION['niveauclasse']=='primaire') {
 
                         $generale=($compo); //Moyenne eleve
-
-                        var_dump($generale);
                 }else{
 
                     $generale=($cours+2*$compo)/3; //Moyenne eleve
@@ -66,13 +64,14 @@ foreach ($prodevoir as $devoir) {
                     $generale=($cours); //Moyenne eleve
                 }
             }
+            $etat = 'actif';
             $moyenne+=$generale;
             if (!empty($note->id)) {
-                $prodmoymat=$DB->querys('SELECT count(matricule) as coef from effectifn where codev=:code and nomgr=:nom and promo=:promo', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
+                $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat'=>$etat, 'annee' => $_SESSION['promo'], 'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
 
                 array_push($tabcoef1, $prodmoymat['coef']);
             }else{
-                $prodmoymat=$DB->querys('SELECT count(matricule) as coef from effectifn where codev=:code and nomgr=:nom and promo=:promo', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo'])); // a supprimer dès que les notes existent
+                $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat'=>$etat, 'annee' => $_SESSION['promo'],'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo'])); // a supprimer dès que les notes existent
             }
 
         }
