@@ -117,7 +117,7 @@ if (isset($_SESSION['pseudo'])) {
                 if ((isset($_POST['groupe']) or isset($_GET['printnote']) or isset($_POST['semestre']) or isset($_POST['mois'])) and $_SESSION['semestre']!='choisissez le semestre') {
 
 
-                    $prodcount=$DB->querys('SELECT count(matricule) as countel, codef, niveau from inscription where etatscol=:etat and  nomgr=:nom and annee=:promo order by (matricule)', array('etat' => $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                    $prodcount=$DB->querys('SELECT count(matricule) as countel, codef, niveau from inscription where  nomgr=:nom and annee=:promo and etatscol=:etat order by (matricule)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
 
                     $niveauclasse=$prodcount['niveau'];
                     if ($niveauclasse=="maternelle") {
@@ -125,7 +125,7 @@ if (isset($_SESSION['pseudo'])) {
                     }
                     $_SESSION['niveauclasse']=$niveauclasse;
 
-                    $prodmoyeg=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.nomgr=:nom and promo=:promo', array('etat' => $etat, 'annee' => $_SESSION['promo'], 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                    $prodmoyeg=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where  effectifn.nomgr=:nom and inscription.nomgr=:nomIns and annee=:annee and promo=:promo and etatscol=:etat', array('nom'=>$_SESSION['groupe'], 'nomIns'=>$_SESSION['groupe'],'annee' => $_SESSION['promo'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
                 
                     if ($prodmoyeg['coef']!=0) {
                         $nbrelegen=$prodmoyeg['coef'];// nbre élève
@@ -133,11 +133,11 @@ if (isset($_SESSION['pseudo'])) {
                         $nbrelegen=1;
                     }
 
-                    $prodgr=$DB->querys('SELECT codef from inscription where etatscol=:etat and nomgr=:nom and annee=:promo order by (matricule)', array('etat' => $etat,'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                    $prodgr=$DB->querys('SELECT codef from inscription where nomgr=:nom and annee=:promo and etatscol=:etat order by (matricule)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
 
                     //$nbrele=$prodcount['countel'];//Pour avoir le nombre d'élève
 
-                    $prodmat=$DB->query('SELECT  inscription.matricule as matricule, codef, nomel, prenomel, DATE_FORMAT(naissance, \'%d/%m/%Y\')AS naissance from inscription inner join eleve on inscription.matricule=eleve.matricule where etatscol=:etat and  nomgr=:nom and annee=:promo order by (prenomel)', array('etat' => $etat, 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                    $prodmat=$DB->query('SELECT  inscription.matricule as matricule, codef, nomel, prenomel, DATE_FORMAT(naissance, \'%d/%m/%Y\')AS naissance from inscription inner join eleve on inscription.matricule=eleve.matricule where nomgr=:nom and annee=:promo and etatscol=:etat order by (prenomel)', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
 
                     $prodmatiere=$DB->query('SELECT nommat, codem, coef from  matiere where codef=:nom order by(cat)', array('nom'=>$prodgr['codef']));
 
@@ -155,20 +155,20 @@ if (isset($_SESSION['pseudo'])) {
 
                             if (isset($_POST['mois']) or isset($_GET['mois'])) {
                                                                             
-                                $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where etatscol=:etat and note.codem=:code and note.matricule=:mat and DATE_FORMAT(datedev, \'%m\')=:sem and annee=:promo and devoir.promo=:promo1', array('etat' => $etat,'code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'sem'=>$_SESSION['mois'], 'promo1'=>$_SESSION['promo']));
+                                $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where note.codem=:code and note.matricule=:mat and DATE_FORMAT(datedev, \'%m\')=:sem and annee=:promo and devoir.promo=:promo1 and etatscol=:etat', array('code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'sem'=>$_SESSION['mois'], 'promo1'=>$_SESSION['promo'], 'etat' => $etat));
 
                             }elseif (isset($_POST['semestre']) or isset($_GET['semestre'])) {
                                                                             
-                                $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where etatscol=:etat and note.codem=:code and note.matricule=:mat and trimes=:sem and annee=:promo and devoir.promo=:promo1', array('etat' => $etat,'code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'sem'=>$_SESSION['semestre'], 'promo1'=>$_SESSION['promo']));
+                                $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where note.codem=:code and note.matricule=:mat and trimes=:sem and annee=:promo and devoir.promo=:promo1 and etatscol=:etat', array('code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'sem'=>$_SESSION['semestre'], 'promo1'=>$_SESSION['promo'], 'etat' => $etat));
 
                             }else{
 
-                                $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where etatscol=:etat and note.codem=:code and note.matricule=:mat and annee=:promo and devoir.promo=:promo1', array('etat' => $etat,'code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo']));
+                                $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where note.codem=:code and note.matricule=:mat and annee=:promo and devoir.promo=:promo1 and etatscol=:etat', array('code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo'], 'etat' => $etat));
                             }
                             
                             foreach ($prodnote as $note) {// Recupération du nbre des élèves ayant été evalués
                                 if (!empty($note->id)) {
-                                    $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat' => $etat, 'annee'=> $_SESSION['promo'], 'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
+                                    $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where effectifn.codev=:code  and effectifn.nomgr=:nom and inscription.nomgr=:nomIns and annee=:annee  and promo=:promo and etatscol=:etat', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'], 'nomIns'=>$_SESSION['groupe'], 'annee'=> $_SESSION['promo'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
 
                                     array_push($tabcoef, $prodmoymat['coef']);
                                     
@@ -251,9 +251,9 @@ if (isset($_SESSION['pseudo'])) {
 
                     <div class="mx-1" ><?=$prodabs['nbreh'].' Absence(s)';?> / <?=$prodret['nbrer'].' Rétard(s)';?></div><?php
 
-                        if (!isset($_GET['printnote'])){?>
+                    if (!isset($_GET['printnote'])){?>
 
-<div class="mx-1"> Synthèse <?php
+                        <div class="mx-1"> Synthèse <?php
                             if (isset($_POST['mois'])) {?>
 
                                 <a href="bulletin.php?printnote&mois=<?=$_POST['mois'];?>&mensuel" target="_blank"><img style="height: 30px; width: 30px;" src="css/img/pdf.jpg"></a><?php
@@ -438,6 +438,7 @@ if (isset($_SESSION['pseudo'])) {
 
                         </div><?php                      
                         $prodgr=$DB->querys('SELECT codef from  groupe where nomgr=:nom and promo=:promo', array('nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                        
                         $prodevoir=$DB->query('SELECT nommat, matiere.codem as codem, coef from  matiere inner join enseignement on enseignement.codem=matiere.codem where matiere.codef=:nom and nomgr=:nomgr and promo=:promo order by(cat)', array('nom'=>$prodgr['codef'], 'nomgr'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
                         $nbreMat=sizeof($prodevoir);
                         $totalMoyenneGenerale=0;
@@ -548,7 +549,7 @@ if (isset($_SESSION['pseudo'])) {
                                                 if (!empty($note->id)) {
                                                     // $prodmoymat=$DB->querys('SELECT count(matricule) as coef from effectifn where codev=:code and nomgr=:nom and promo=:promo', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
 
-                                                    $prodmoymat=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and  effectifn.nomgr=:nom and promo=:promo', array('etat' => $etat, 'annee'=> $_SESSION['promo'], 'nom'=>$_SESSION['groupe'], 'promo'=>$_SESSION['promo']));
+                                                    $prodmoymat=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where effectifn.nomgr=:nom and inscription.nomgr=:nomIns and annee=:annee and promo=:promo and etatscol=:etat', array('nom'=>$_SESSION['groupe'], 'nomIns'=>$_SESSION['groupe'], 'annee'=> $_SESSION['promo'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
                                                     array_push($tabcoef1, $prodmoymat['coef']);
 
                                                 }
