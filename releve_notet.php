@@ -188,7 +188,7 @@ if (isset($_GET['trimestre'])) {
 
   foreach ($prodmat as $eleve) {
 
-    $prodeval=$DB->querys('SELECT note.id as id from note inner join devoir on devoir.id=codev where matricule=:mat and promo=:promo', array('mat'=>$eleve->matricule, 'promo'=>$_SESSION['promo']));
+    $prodeval=$DB->querys('SELECT note.id as id from note inner join devoir on devoir.id=codev where matricule=:mat and promo=:promo and trimes=:trimes', array('mat'=>$eleve->matricule, 'promo'=>$_SESSION['promo'], 'trimes' => $_GET['semestre'] ));
 
     if (!empty($prodeval['id'])) {?>
 

@@ -145,8 +145,6 @@ if (isset($_GET['enseignant'])) {
 
 if (isset($_GET['printnote'])) {
 	header("Content-disposition: attachment; filename=notes.csv");
-	
-
 	$newReservations=$DB->query('SELECT note.matricule as matricule, nomel, prenomel, eleve.sexe as sexe, DATE_FORMAT(eleve.naissance, \'%Y\')AS naissance,  note, compo, nomen, prenomen, nommat, nomdev, type, trimes, nomgroupe, DATE_FORMAT(datedev, \'%d/%m/%Y\')AS datepaye  from note inner join devoir on codev=devoir.id inner join matiere on matiere.codem=note.codem inner join eleve on eleve.matricule=note.matricule inner join enseignant on enseignant.matricule=note.codens where promo=:promo order by (prenomel)', array('promo'=>$_SESSION['promo']));?>
 	Ordre;"matricule";"Nom";"Prenom";"Sexe";"Ne(e)";"note de cours";"note de compo";"enseignant";"matiere";"nom du devoir";"type";"semestre";"classe";"date eval";<?php
 

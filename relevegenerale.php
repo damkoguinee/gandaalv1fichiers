@@ -308,6 +308,7 @@ if (!isset($_GET['printnote'])){
                 $prodmoy=$DB->query("SELECT * from relevegenerale inner join eleve on eleve.matricule=relevegenerale.matricule where codef='{$codef}' and trimestre='{$trimestre}' and pseudo='{$_SESSION['pseudo']}' and promo='{$_SESSION['promo']}' order by(prenomel)");
 
                 $j=sizeof($prodmoy);
+                $tab_eleve_eval_moyenne =[];
 
                 foreach ($prodmoy as $key => $value) {
 
@@ -332,20 +333,41 @@ if (!isset($_GET['printnote'])){
                         }?>
                         <td><?=number_format($value->moyenne,2,',',' ');?></td>
                     </tr><?php
-                }?>
+
+                    if (!empty($value->moyenne)) {
+                        $eleve_eval = 1;
+                    }else{
+                        $eleve_eval = 0;
+                    }
+                    $tab_eleve_eval_moyenne[]=$eleve_eval;
+                }
+                $nbre_elev_eval_moyenne = array_sum($tab_eleve_eval_moyenne);?>
                   
               </tbody>
               <thead>
                 <tr><?php 
-                    if ($i==1) {?>
-                        <th colspan="3" style="text-align: center;">Moyenne Générale de la Classe</th>
-                        <th style="text-align: right; padding-right: 10px;"><?=number_format(($moyennetrimestre1/($j)),2,',',' ');?></th><?php 
-                    }elseif ($i==2) {?>
-                        <th style="text-align: right; padding-right: 10px;"><?=number_format($moyennetrimestre2/($j),2,',',' ');?></th><?php
-                    }elseif ($i==3) {?>
-                        <th style="text-align: right; padding-right: 10px;"><?=number_format($moyennetrimestre3/($j),2,',',' ');?></th><?php
-                    }elseif ($i==4) {?>
-                        <th style="text-align: right; padding-right: 10px;"><?=number_format($moyenneannuel/($j),2,',',' ');?></th><?php
+                    if ($nbre_elev_eval_moyenne != 0) {
+                        if ($i==1) {?>
+                            <th colspan="3" style="text-align: center;">Moyenne Générale de la Classe</th>
+                            <th style="text-align: right; padding-right: 10px;"><?=number_format(($moyennetrimestre1/($nbre_elev_eval_moyenne)),2,',',' ');?></th><?php 
+                        }elseif ($i==2) {?>
+                            <th style="text-align: right; padding-right: 10px;"><?=number_format($moyennetrimestre2/($nbre_elev_eval_moyenne),2,',',' ');?></th><?php
+                        }elseif ($i==3) {?>
+                            <th style="text-align: right; padding-right: 10px;"><?=number_format($moyennetrimestre3/($nbre_elev_eval_moyenne),2,',',' ');?></th><?php
+                        }elseif ($i==4) {?>
+                            <th style="text-align: right; padding-right: 10px;"><?=number_format($moyenneannuel/($nbre_elev_eval_moyenne),2,',',' ');?></th><?php
+                        }
+                    }else{
+                        if ($i==1) {?>
+                            <th colspan="3" style="text-align: center;">Moyenne Générale de la Classe</th>
+                            <th style="text-align: right; padding-right: 10px;">0.00</th><?php 
+                        }elseif ($i==2) {?>
+                            <th style="text-align: right; padding-right: 10px;">0.00</th><?php
+                        }elseif ($i==3) {?>
+                            <th style="text-align: right; padding-right: 10px;">0.00</th><?php
+                        }elseif ($i==4) {?>
+                            <th style="text-align: right; padding-right: 10px;">0.00</th><?php
+                        }
                     }?>
                 </tr>
               </thead>

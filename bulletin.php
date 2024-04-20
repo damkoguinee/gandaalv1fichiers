@@ -348,62 +348,62 @@ if (isset($_SESSION['pseudo'])) {
 
                                 require 'moyenneecart.php';
 
-                                    $variance=0;
+                                $variance=0;
 
-                                    $moyengenerale=0;
+                                $moyengenerale=0;
 
-                                    foreach ($prodmat as $keye=> $matricule) {
+                                foreach ($prodmat as $keye=> $matricule) {
 
-                                        $totm1=0;
-                                        $coefm1=0;
-                                            
-                                        foreach ($prodmatiere as  $matiere) {
+                                    $totm1=0;
+                                    $coefm1=0;
+                                        
+                                    foreach ($prodmatiere as  $matiere) {
 
-                                            require 'requetebul.php';
-                                                    
-                                            foreach ($prodm1 as $moyenne) {
-                                                $totm1+=($moyenne->mgen*$moyenne->coef);
-
-                                                $coefm1+=$moyenne->coef;
+                                        require 'requetebul.php';
                                                 
-                                            }
+                                        foreach ($prodm1 as $moyenne) {
+                                            $totm1+=($moyenne->mgen*$moyenne->coef);
+
+                                            $coefm1+=$moyenne->coef;
+                                            
                                         }
+                                    }
 
-                                        if (!empty($coefm1)) {
+                                    if (!empty($coefm1)) {
 
-                                            $moyenmat=($totm1/$coefm1);
-                                            $moyengenerale+=$moyenmat;
+                                        $moyenmat=($totm1/$coefm1);
+                                        $moyengenerale+=$moyenmat;
 
-                                            $variance+=pow(($moyenmat-$moyenneecart),2);
+                                        $variance+=pow(($moyenmat-$moyenneecart),2);
 
-                                            ;
-                                        }?>
-
-                                        <tr>
-                                            <td><?=$keye+1;?></td>
-                                            <td height="45" style="text-align: left"><?php
-                                                if (isset($_POST['mois'])) {?>
-
-                                                    <a href="releve_note.php?mois=<?=$_POST['mois'];?>&mensuel&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
-
-                                                }elseif (isset($_POST['semestre'])) {?>
-
-                                                    <a href="releve_notet.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
-                                                }else{?>
-
-                                                    <a href="releve_notea.php?annuel&trimestre=<?=$_SESSION['prodtype'];?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;" ><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
-                                                }?>
-                                            </td>
-
-                                            <td class="text-center"><?=$matricule->naissance;?></td>
-
-                                            <td style="text-align: left"><?=strtoupper($matricule->matricule);?></td>
-                                        </tr><?php
+                                        ;
                                     }?>
+
                                     <tr>
-                                        <th style="padding-bottom: 6.5px; padding-top: 5px; text-align:right;" colspan="4">Moyenne Classe par Matière</th>
-                                    </tr><?php 
-                                    require 'moyennegenerale.php';?>
+                                        <td><?=$keye+1;?></td>
+                                        <td height="45" style="text-align: left"><?php
+                                            if (isset($_POST['mois'])) {?>
+
+                                                <a href="releve_note.php?mois=<?=$_POST['mois'];?>&mensuel&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
+
+                                            }elseif (isset($_POST['semestre'])) {?>
+
+                                                <a href="releve_notet.php?semestre=<?=$_POST['semestre'];?>&trimestre=<?=$_SESSION['prodtype'];?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;"><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
+                                            }else{?>
+
+                                                <a href="releve_notea.php?annuel&trimestre=<?=$_SESSION['prodtype'];?>&indi=<?=$matricule->matricule;?>" target="_blank" style="text-decoration: none;" ><?=ucfirst($matricule->prenomel).' '.strtoupper($matricule->nomel);?></a><?php
+                                            }?>
+                                        </td>
+
+                                        <td class="text-center"><?=$matricule->naissance;?></td>
+
+                                        <td style="text-align: left"><?=strtoupper($matricule->matricule);?></td>
+                                    </tr><?php
+                                }?>
+                                <tr>
+                                    <th style="padding-bottom: 6.5px; padding-top: 5px; text-align:right;" colspan="4">Moyenne Classe par Matière</th>
+                                </tr><?php 
+                                require 'moyennegenerale.php';?>
 
                                     <tr>
                                         <th style="padding-bottom: 6.5px; padding-top: 5px; text-align: right;" colspan="3">Moyenne Générale de la Classe</th><?php 
@@ -468,7 +468,8 @@ if (isset($_SESSION['pseudo'])) {
                                     <tbody><?php
                                         $moyenne=0;
                                         $tabcoef1=array();
-                                        foreach ($prodmat as $mat) {//prod viens en haut dans le calcul de la moyenne générale
+                                        $tab_eleve_eval = [];
+                                        foreach ($prodmat as  $mat) {//prod viens en haut dans le calcul de la moyenne générale
 
                                             if (isset($_POST['mois']) or isset($_GET['mois'])) {
                                                                                             
@@ -482,9 +483,8 @@ if (isset($_SESSION['pseudo'])) {
 
                                                 $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where note.codem=:code and note.matricule=:mat and annee=:promo and devoir.promo=:promo1', array('code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo']));
                                             }
-
-                                            foreach ($prodnote as $note) {?>
-
+                                            foreach ($prodnote as $note) {
+                                                ?>
 
                                                 <tr><?php
 
@@ -546,28 +546,37 @@ if (isset($_SESSION['pseudo'])) {
                                                     }?>
 
                                                 </tr><?php // Recupération du nbre des élèves ayant été evalués
-                                                if (!empty($note->id)) {
-                                                    // $prodmoymat=$DB->querys('SELECT count(matricule) as coef from effectifn where codev=:code and nomgr=:nom and promo=:promo', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
+                                                // if (!empty($note->id)) {
+                                                //     // $prodmoymat=$DB->querys('SELECT count(matricule) as coef from effectifn where codev=:code and nomgr=:nom and promo=:promo', array('code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
 
-                                                    $prodmoymat=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where effectifn.nomgr=:nom and inscription.nomgr=:nomIns and annee=:annee and promo=:promo and etatscol=:etat', array('nom'=>$_SESSION['groupe'], 'nomIns'=>$_SESSION['groupe'], 'annee'=> $_SESSION['promo'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
-                                                    array_push($tabcoef1, $prodmoymat['coef']);
+                                                //     $prodmoymat=$DB->querys('SELECT count(DISTINCT(effectifn.matricule)) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where effectifn.nomgr=:nom and inscription.nomgr=:nomIns and annee=:annee and promo=:promo and etatscol=:etat', array('nom'=>$_SESSION['groupe'], 'nomIns'=>$_SESSION['groupe'], 'annee'=> $_SESSION['promo'], 'promo'=>$_SESSION['promo'], 'etat' => $etat));
+                                                //     array_push($tabcoef1, $prodmoymat['coef']);
 
+                                                // }
+                                                if (!empty($generale)) {
+                                                    $eleve_eval = 1;
+                                                }else{
+                                                    $eleve_eval = 0;
                                                 }
+                                                $tab_eleve_eval[]=$eleve_eval;
+                                                $eleve_eval = $eleve_eval;
 
                                             }
                                         }
 
+
                                         //$maxcoef1=max($tabcoef1);
                                         // var_dump($prodmoymat['coef']);
+                                        $nbre_elev_eval = array_sum($tab_eleve_eval);
+                                        if ($nbre_elev_eval!=0) {
 
-
-                                        if ($prodmoymat['coef']!=0) {
-                                            
-                                            $totalMoyenneGenerale+=$moyenne/($prodmoymat['coef']);?>
+                                            $totalMoyenneGenerale+=$moyenne/($nbre_elev_eval);?>
                                             
                                             <tr>
-                                                <th id="moyenneg" style="padding-bottom: 6.5px; padding-top: 5px; padding-right: 10px; text-align: right;"><?='  '.number_format($moyenne/($prodmoymat['coef']),2,',',' ');?></th>
+                                                <th id="moyenneg" style="padding-bottom: 6.5px; padding-top: 5px; padding-right: 10px; text-align: right;"><?='  '.number_format($moyenne/($nbre_elev_eval),2,',',' ');?></th>
                                             </tr><?php
+
+                                            
                                         }?> 
                                         
 

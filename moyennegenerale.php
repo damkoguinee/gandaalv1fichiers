@@ -8,6 +8,7 @@ $totalMoyenneGenerale=0;
 foreach ($prodevoir as $devoir) {
     $moyenne=0;
     $tabcoef1=array();
+    $tab_eleve_eval_moyenne =[];
     foreach ($prodmat as $mat) {//prod viens en haut dans le calcul de la moyenne générale
 
         if (isset($_POST['mois']) or isset($_GET['mois'])) {
@@ -22,7 +23,6 @@ foreach ($prodevoir as $devoir) {
 
             $prodnote=$DB->query('SELECT devoir.id as id, sum(note*coef) as note, sum(compo*coefcom) as compo, count(coef) as coeft, sum(coef) as coef, sum(coefcom) as coefc from note inner join devoir on note.codev=devoir.id inner join inscription on note.matricule=inscription.matricule where note.codem=:code and note.matricule=:mat and annee=:promo and devoir.promo=:promo1', array('code'=>$devoir->codem, 'mat'=>$mat->matricule, 'promo'=>$_SESSION['promo'], 'promo1'=>$_SESSION['promo']));
         }
-
         foreach ($prodnote as $note) {
 
             if (!empty($note->compo)) {
@@ -66,23 +66,32 @@ foreach ($prodevoir as $devoir) {
             }
             $etat = 'actif';
             $moyenne+=$generale;
-            if (!empty($note->id)) {
-                $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat'=>$etat, 'annee' => $_SESSION['promo'], 'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
+            // if (!empty($note->id)) {
+            //     $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat'=>$etat, 'annee' => $_SESSION['promo'], 'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo']));
 
-                array_push($tabcoef1, $prodmoymat['coef']);
+            //     array_push($tabcoef1, $prodmoymat['coef']);
+            // }else{
+            //     $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat'=>$etat, 'annee' => $_SESSION['promo'],'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo'])); // a supprimer dès que les notes existent
+            // }
+
+            if (!empty($generale)) {
+                $eleve_eval = 1;
             }else{
-                $prodmoymat=$DB->querys('SELECT count(effectifn.matricule) as coef from effectifn inner join inscription on inscription.matricule = effectifn.matricule where etatscol=:etat and annee=:annee and effectifn.codev=:code and effectifn.nomgr=:nom and promo=:promo', array('etat'=>$etat, 'annee' => $_SESSION['promo'],'code'=>$note->id, 'nom'=>$_SESSION['groupe'],'promo'=>$_SESSION['promo'])); // a supprimer dès que les notes existent
+                $eleve_eval = 0;
             }
+            $tab_eleve_eval_moyenne[]=$eleve_eval;
+            
 
         }
     }
 
-    //$maxcoef1=max($tabcoef1);
-    //var_dump($prodmoymat['coef']);
+    $nbre_elev_eval_moyenne = array_sum($tab_eleve_eval_moyenne);
+
+    // $maxcoef1=max($tabcoef1);
+    // var_dump($prodmoymat['coef']." ".$devoir->nommat." ".$devoir->coef);
     
-    
-    if ($prodmoymat['coef']!=0) {
-        $totalMoyenneGenerale+=$moyenne/($prodmoymat['coef']);
+    if ($nbre_elev_eval_moyenne!=0) {
+        $totalMoyenneGenerale+=$moyenne/($nbre_elev_eval_moyenne);
     }
     
 }

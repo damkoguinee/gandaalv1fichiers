@@ -369,7 +369,7 @@ if (isset($_GET['listad'])) {
 
           <th colspan="2" height="10" style="padding-top: 10px;">Moyenne générale</th>
 
-          <th style="text-align: right; padding-right: 10px; padding-top: 10px;"><?='  '.number_format($moyengen/$nbrele,2,',',' ');?></th>
+          <th style="text-align: right; padding-right: 10px; padding-top: 10px;"><?='  '.number_format($_SESSION['moyennegenbul'],2,',',' ');?></th>
         </tr>
 
       </tbody>
