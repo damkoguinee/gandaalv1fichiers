@@ -25,8 +25,10 @@ foreach ($prodmat as $matricule) {
 
         $moyeng=$totm1/$coefm1;        
 
+        
 
-        $DB->insert('INSERT INTO rangel(matricule, moyenne, rang, pseudo) values( ?, ?, ?, ?)', array($matricule->matricule, $moyeng, 1, $_SESSION['pseudo']));
+        // $DB->insert('INSERT INTO rangel(matricule, moyenne, rang, pseudo) values( ?, ?, ?, ?)', array($matricule->matricule, $moyeng, 1, $_SESSION['pseudo']));
+        
 
         $produ=$DB->query("SELECT  moyenne, matricule from rangel where pseudo='{$_SESSION['pseudo']}' order by(moyenne)desc");
 

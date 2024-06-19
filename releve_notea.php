@@ -39,7 +39,7 @@ if ($_SESSION['niveauclasse']!='primaire') {
   if ($nbremat<13) {
     $height='15px';
     $padding='5px';
-  }elseif ($nbremat==13) {
+  }elseif ($nbremat==12) {
     $height='13px';
     $padding='5px';
   }else{
@@ -608,7 +608,7 @@ if (isset($_GET['annuel'])) {
 
                       <th style="padding-right: 10px; text-align: right;"><?=number_format($tot3,2,',',' ');?></th>
 
-                      <th style="padding-right: 10px; text-align: right;"><?=number_format(($tot1+$tot2+$tot3)/$nbreabst,2,',',' ');?></th>
+                      <th style="padding-right: 10px; text-align: right;"><?=number_format((($tot1+$tot2+$tot3)/$nbreabst),2,',',' ');?></th>
 
                       <th style="padding-right: 10px; text-align: right; border-bottom: 0px;"></th>
                       

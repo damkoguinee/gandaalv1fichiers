@@ -422,6 +422,7 @@ if (isset($_SESSION['pseudo'])) {
 
                                     <tr>
                                         <th style="padding-bottom: 6.5px; padding-top: 5px; text-align: right;" colspan="3">Moyenne la plus élevée</th><?php 
+                                        
                                         $_SESSION['moyennegenbulgrande']=$mgrande;?>
 
                                         <th><?='  '.number_format($mgrande,2,',',' ');?></th>
@@ -633,6 +634,7 @@ if (isset($_SESSION['pseudo'])) {
                                                         ?>
                                                         
                                                         <td height="45" class="text-end" ><?=number_format($totm1/$coefm1,2,',',' ');?></td><?php
+
 
                                                     }else{?>
 

@@ -160,9 +160,13 @@ foreach ($prodmat as $matricule) {
 
         $moyenmat=$prodm2t['moyenne']/$coeftgen;
     }
+    // var_dump($moyenmat, $coeftgen);
 
 
     $moyenmatar=number_format($moyenmat,2,'.','');
 
     $DB->insert('INSERT INTO relevegeneralebul(matricule, moyenne, trimestre, codef, pseudo, promo) values(?, ?, ?, ?, ?, ?)', array($matricule->matricule, $moyenmatar, 4, $matricule->codef, $_SESSION['pseudo'], $_SESSION['promo']));
+
 }
+$trime = 4;
+$moyenne_max=$DB->querys("SELECT Max(moyenne) as moyenne from relevegeneralebul  where pseudo='{$_SESSION['pseudo']}' and promo='{$_SESSION['promo']}' and trimestre = '{$trime}' ");

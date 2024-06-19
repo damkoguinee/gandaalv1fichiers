@@ -16,7 +16,7 @@
 
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="note.php?note">Notes</a></div></div>  
 
-        <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="bulletin.php?note">Bulletins</a></div></div> 
+        <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="bulletin.php?note&annuel">Bulletins</a></div></div> 
 
         <div class="row mt-3"><div class=" col text-center"><a style="width: 100%; " class="btn btn-light text-center fw-bold" href="appreciation.php?appreciation">Appréciations</a></div></div> 
 
