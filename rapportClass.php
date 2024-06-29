@@ -72,10 +72,35 @@ class Rapport
 
 
 	public function bilanInscription($cursus, $etat, $promo){
+		$etatScol = "actif";
 
-		$prod=$this->DB->querys("SELECT count(id) as nbre FROM inscription where niveau='{$cursus}' and etat='{$etat}' and annee='{$promo}'");
+		$prod=$this->DB->querys("SELECT count(id) as nbre FROM inscription where niveau='{$cursus}' and etat='{$etat}' and etatScol='{$etatScol}' and annee='{$promo}'");
 
 		return $prod['nbre'];
+
+	}
+
+	public function abandons($promo){
+		$etatScol = "inactif";
+		$prod=$this->DB->querys("SELECT count(id) as nbre FROM inscription where etatScol='{$etatScol}' and annee='{$promo}'");
+
+		return $prod;
+
+	}
+
+	public function fraisInscriptionAbandons($promo){
+		$etatScol = "inactif";
+		$prod=$this->DB->querys("SELECT sum(montant) as montant FROM payement inner join inscription on inscription.matricule = payement.matricule where etatScol='{$etatScol}' and annee='{$promo}' and promo='{$promo}' ");
+
+		return $prod;
+
+	}
+
+	public function fraisScolariteAbandons($promo){
+		$etatScol = "inactif";
+		$prod=$this->DB->querys("SELECT sum(montant) as montant FROM payementfraiscol inner join inscription on inscription.matricule = payementfraiscol.matricule where etatScol='{$etatScol}' and annee='{$promo}' and promo='{$promo}' ");
+
+		return $prod;
 
 	}
 
@@ -168,6 +193,83 @@ class Rapport
 
 	}
 
+	public function bilanInscriptionApayerAbandons($cursus, $etat, $promo){
+		$etatscol = "inactif";
+
+		$remise=0;
+
+		$prodsansremise=$this->DB->querys("SELECT count(payement.id) as nbre FROM inscription inner join payement on payement.matricule=inscription.matricule where niveau='{$cursus}' and motif='{$etat}' and Etatscol='{$etatscol}' and payement.remise='{$remise}' and annee='{$promo}' and promo='{$promo}'");
+
+		$remiseins=0;
+
+		$prodremiseins = $this->DB->query("SELECT  montant, payement.remise as remise FROM payement inner join inscription on inscription.matricule=payement.matricule WHERE  niveau='{$cursus}' and motif='{$etat}' and Etatscol='{$etatscol}' and payement.remise!='{$remiseins}' and annee='{$promo}' and promo='{$promo}'");
+
+		$totremise=0;
+
+		if ($etat=='inscription') {
+			$fraisinsrein=$this->fraisInscription($cursus, $promo)[0];
+		}else{
+			$fraisinsrein=$this->fraisInscription($cursus, $promo)[1];
+		}
+		
+
+		foreach ($prodremiseins as $valueremise) {
+
+			if ($valueremise->remise==100) {
+				$totremise+=0;
+			}else{
+
+				$totremise+=$fraisinsrein*(1-$valueremise->remise/100);
+
+			}
+
+			
+		}
+		
+
+		$prod=$this->DB->querys("SELECT sum(montant) as montant, inscription.niveau as niveau FROM payement inner join inscription on payement.matricule=inscription.matricule where niveau='{$cursus}' and Etatscol='{$etatscol}' and motif='{$etat}' and annee='{$promo}' and promo='{$promo}'");
+
+		if ($etat=='inscription' and $prod['niveau']=='creche') {
+			$fraisins=$this->fraisins(1,"inscription")['montant'];
+		}elseif ($etat=='inscription' and $prod['niveau']=='maternelle') {
+			$fraisins=$this->fraisins(2,"inscription")['montant'];
+		}elseif ($etat=='inscription' and $prod['niveau']=='primaire') {
+			$fraisins=$this->fraisins(3,"inscription")['montant'];
+		}elseif ($etat=='inscription' and $prod['niveau']=='college') {
+			$fraisins=$this->fraisins(4,"inscription")['montant'];
+		}elseif ($etat=='inscription' and $prod['niveau']=='lycee') {
+			$fraisins=$this->fraisins(5,"inscription")['montant'];
+		}else{
+			if ($prod['niveau']=='creche') {
+				$fraisins=$this->fraisins(1,"reinscription")['montant'];
+			}elseif ($prod['niveau']=='maternelle') {
+				$fraisins=$this->fraisins(2,"reinscription")['montant'];
+			}elseif ($prod['niveau']=='primaire') {
+				$fraisins=$this->fraisins(3,"reinscription")['montant'];
+			}elseif ($prod['niveau']=='college') {
+				$fraisins=$this->fraisins(4,"reinscription")['montant'];
+			}elseif ($prod['niveau']=='lycee') {
+				$fraisins=$this->fraisins(5,"reinscription")['montant'];
+			}else{
+				$fraisins=0;
+			}
+		}
+		$apayer=($prodsansremise['nbre']*$fraisins)+$totremise;
+		
+		$resteapayer=$apayer-$prod['montant'];
+
+		if ($apayer==0) {
+			$taux=0;
+		}else{
+
+			$taux=($prod['montant']/$apayer)*100;
+
+		}
+
+		return array($resteapayer, $prod['montant'], $taux);
+
+	}
+
 	public function bilanFormation(){
 
 		$prodformation=$this->DB->query('SELECT classe, nomf, niveau, codef from formation');
@@ -200,6 +302,45 @@ class Rapport
 		
 
 		$prodpayer=$this->DB->querys("SELECT sum(montant) as montant FROM payementfraiscol inner join inscription on payementfraiscol.matricule=inscription.matricule where niveau='{$cursus}' and annee='{$promo}' and promo='{$promo}'");
+
+		if ($cumulmontant==0) {
+			$taux=0;
+		}else{
+
+			$taux=($prodpayer['montant']/$cumulmontant)*100;
+
+		}
+		
+		$reste=$cumulmontant-$prodpayer['montant'];
+
+		return array($reste, $prodpayer['montant'], $taux);
+
+	}
+
+	public function bilanFraiscolAbandons($cursus, $tranche, $promo){
+
+		$etatscol ="inactif";
+		$cumulmontant=0;
+		$cumulmontantrem=0;
+		foreach ($this->bilanFormation() as $valuef) {
+			
+			$prodmontantscol = $this->DB->querys("SELECT  sum(scolarite.montant) as montant FROM scolarite  WHERE codef='{$valuef->codef}' and promo='{$promo}'");
+
+			$prodinscrit=$this->DB->query("SELECT remise FROM inscription  WHERE codef='{$valuef->codef}' and Etatscol='{$etatscol}' and niveau='{$cursus}'  and annee='{$promo}'");
+
+			foreach ($prodinscrit as $valueins) {
+
+				if ($valueins->remise==0) {
+					$cumulmontant+=$prodmontantscol['montant'];
+				}else{
+				
+					$cumulmontant+=$prodmontantscol['montant']*(1-$valueins->remise/100);
+				}
+			}
+		}
+		
+
+		$prodpayer=$this->DB->querys("SELECT sum(montant) as montant FROM payementfraiscol inner join inscription on payementfraiscol.matricule=inscription.matricule where niveau='{$cursus}' and Etatscol='{$etatscol}' and annee='{$promo}' and promo='{$promo}'");
 
 		if ($cumulmontant==0) {
 			$taux=0;
